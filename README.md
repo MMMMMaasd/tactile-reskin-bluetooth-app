@@ -3,6 +3,7 @@
 The repository is connected to Xcode, BLE App was developed in Xcode. The App can connect Reskin Sensors, monitored by Adafruit BLE microcontroller with SAM/SAMD21 help chip. The App can read data transmitted from the sensors, store it as the app's storage database, and further useful tools. 
 ## Requirements and setting-up to open in Xcode
 1. Install the latest version of Xcode: https://developer.apple.com/xcode/, in the GitHub, select: Code -> "Open with Xcode".
+<img width="468" alt="截屏2024-06-12 13 15 33" src="https://github.com/MMMMMaasd/reskin_bluetooth_app/assets/166888204/9382ea6e-c2c2-4198-af35-e057d292cbfb">
 
 2. After the system automatically directs you to the Xcode, press "trust and open", to save it on your computer. Make sure you are in the SwiftUI developing environment.
 

@@ -22,6 +22,7 @@
 		B9B046AC2C0DE7D000096E8B /* TryReadDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */; };
 		B9D072BF2C1445E700C5ECD8 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */; };
 		B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */; };
+		B9D072C32C23F6F100C5ECD8 /* deviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072C22C23F6F100C5ECD8 /* deviceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryReadDataView.swift; sourceTree = "<group>"; };
 		B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBUUIDS.swift; sourceTree = "<group>"; };
+		B9D072C22C23F6F100C5ECD8 /* deviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deviceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			children = (
 				B98D69532C04563000648D95 /* readView.swift */,
 				B98D69512C04559900648D95 /* dataStroageView.swift */,
+				B9D072C22C23F6F100C5ECD8 /* deviceView.swift */,
 				B98D69552C04569C00648D95 /* accountView.swift */,
 			);
 			path = "Preview Content";
@@ -236,7 +239,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "USBInterfaceApp" */;
+			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -296,6 +299,7 @@
 				B98D69542C04563000648D95 /* readView.swift in Sources */,
 				B9D072BF2C1445E700C5ECD8 /* BluetoothManager.swift in Sources */,
 				B98D69522C04559900648D95 /* dataStroageView.swift in Sources */,
+				B9D072C32C23F6F100C5ECD8 /* deviceView.swift in Sources */,
 				B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */,
 				B98D69582C04671200648D95 /* ViewController.swift in Sources */,
 				B9B046A82C06DFA300096E8B /* DataViewView.swift in Sources */,
@@ -603,7 +607,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "USBInterfaceApp" */ = {
+		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F7C2BFDE63C000D4DDD /* Debug */,

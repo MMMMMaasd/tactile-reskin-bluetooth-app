@@ -7,10 +7,12 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import Foundation
 
 struct RecordView : View{
     @State var showingExporter = false
     @EnvironmentObject var appStatus : AppInformation
+    @State private var fileName = ""
     var body : some View{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         NavigationView{
@@ -38,7 +40,27 @@ struct RecordView : View{
                         .background(.viewButton)
                         .cornerRadius(5)
                     }
-                    Button(action: {showingExporter.toggle()}, label: {
+                    Button(action: {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
+                        let currentDateTime = dateFormatter.string(from: Date())
+                        fileName = "\(currentDateTime).txt"
+                        do {
+                            try createFile(fileName: fileName)
+                            print("File saved successfully at \(fileName)")
+                            let url = getDocumentsDirect().appendingPathComponent(fileName)
+                            if let existingContent = readDataFromTextFile() {
+                                do {
+                                    try existingContent.write(to: url, atomically: true, encoding: .utf8)
+                                } catch {
+                                    print("Error appending to file: \(error)")
+                                }
+                            }
+                        } catch {
+                            print("Error saving file: \(error)")
+                        }
+                        showingExporter.toggle()
+                    }, label: {
                         Text("Export Data")
                         Image(systemName: "square.and.arrow.up.on.square")
                     })
@@ -84,7 +106,7 @@ struct RecordView : View{
                 .padding(.top, 10.0)
                 .padding(.bottom, 100)
             }
-            .fileExporter(isPresented: $showingExporter, document: TextFile(url: (paths[0].appendingPathComponent("data.txt")).path), contentType: .plainText) { result in
+            .fileExporter(isPresented: $showingExporter, document: TextFile(url: (paths[0].appendingPathComponent(fileName)).path), contentType: .plainText) { result in
                 switch result {
                 case .success(let url):
                     print("Saved to \(url)")
@@ -101,6 +123,29 @@ struct RecordView : View{
         return paths[0]
     }
      */
+    func createFile(fileName: String) throws {
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            let fileURL = documentsURL[0].appendingPathComponent(fileName)
+            try FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
+    }
+    
+    func getDocumentsDirect() -> URL{
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        print(paths[0].path)
+        return paths[0]
+    }
+    
+    func readDataFromTextFile() -> String? {
+        let url = getDocumentsDirect().appendingPathComponent("data.txt")
+        do {
+            let contents = try String(contentsOf: url, encoding: .utf8)
+            return contents
+        } catch {
+            print("Error reading file: \(error)")
+            return nil
+        }
+    }
+    
 }
 
 struct TextFile: FileDocument {

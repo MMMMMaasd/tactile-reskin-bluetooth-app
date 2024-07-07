@@ -7,10 +7,12 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import Foundation
 
 struct DataViewView: View {
     @EnvironmentObject var appStatus : AppInformation
     @State var showingExporter = false
+    @State private var fileName = ""
     var body: some View {
         VStack{
             Text("Content of your reading data: ")
@@ -28,20 +30,40 @@ struct DataViewView: View {
             .frame(width: 300.0, height: 400.0)
             .background(Color.gray)
         }
-        .padding(.bottom, 100)
-        HStack{
-            Text("File name: ")
+        .padding(.bottom, 40)
+        VStack{
+            Text("File name format: ")
                 .bold()
-            Text("data.txt")
+            Text("YYYY-MM-DD-hh/mm/ss.txt (current time)")
                 .bold()
                 .foregroundColor(.blue)
-            Button(action: {showingExporter.toggle()}, label: {
+            Button(action: {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
+                let currentDateTime = dateFormatter.string(from: Date())
+                fileName = "\(currentDateTime).txt"
+                do {
+                    try createFile(fileName: fileName)
+                    print("File saved successfully at \(fileName)")
+                    let url = getDocumentsDirect().appendingPathComponent(fileName)
+                    if let existingContent = readDataFromTextFile() {
+                        do {
+                            try existingContent.write(to: url, atomically: true, encoding: .utf8)
+                        } catch {
+                            print("Error appending to file: \(error)")
+                        }
+                    }
+                } catch {
+                    print("Error saving file: \(error)")
+                }
+                showingExporter.toggle()
+            }, label: {
                 Text("Export Data")
                 Image(systemName: "square.and.arrow.up.on.square")
             })
             .buttonStyle(.bordered)
         }
-        .fileExporter(isPresented: $showingExporter, document: TextFileInView(url: (getDocumentsDirect().appendingPathComponent("data.txt")).path), contentType: .plainText) { result in
+        .fileExporter(isPresented: $showingExporter, document: TextFileInView(url: (getDocumentsDirect().appendingPathComponent(fileName)).path), contentType: .plainText) { result in
             switch result {
             case .success(let url):
                 print("Saved to \(url)")
@@ -55,6 +77,18 @@ struct DataViewView: View {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
     }
+    
+    func readDataFromTextFile() -> String? {
+        let url = getDocumentsDirect().appendingPathComponent("data.txt")
+        do {
+            let contents = try String(contentsOf: url, encoding: .utf8)
+            return contents
+        } catch {
+            print("Error reading file: \(error)")
+            return nil
+        }
+    }
+    
     func getContent(new_url:URL) -> String{
         do{
             let input = try String(contentsOf: new_url.appendingPathComponent("data.txt"))
@@ -65,6 +99,13 @@ struct DataViewView: View {
         let str = "Error"
         return str
     }
+    
+    func createFile(fileName: String) throws {
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            let fileURL = documentsURL[0].appendingPathComponent(fileName)
+            try FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
+    }
+    
 }
 
 struct TextFileInView: FileDocument {

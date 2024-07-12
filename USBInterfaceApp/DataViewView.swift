@@ -9,26 +9,61 @@ import SwiftUI
 import UniformTypeIdentifiers
 import Foundation
 
+
 struct DataViewView: View {
     @EnvironmentObject var appStatus : AppInformation
     @State var showingExporter = false
     @State private var fileName = ""
+    @State private var clearRefresh = false
     var body: some View {
         VStack{
-            Text("Content of your reading data: ")
-                .bold()
-                .padding(.trailing, 100.0)
-            HStack(alignment: .firstTextBaseline){
-                let url = getDocumentsDirect()
-                let content = getContent(new_url: url)
-                Text(content)
-                    .multilineTextAlignment(.leading)
+            if(clearRefresh){
+                Text("Content of your reading data: ")
                     .bold()
-                    .foregroundColor(.white)
-            
+                    .padding(.trailing, 100.0)
+                HStack(alignment: .firstTextBaseline){
+                    let url = getDocumentsDirect()
+                    let content = getContent(new_url: url)
+                    Text(content)
+                        .multilineTextAlignment(.leading)
+                        .bold()
+                        .foregroundColor(.white)
+                
+                }
+                .frame(width: 300.0, height: 400.0)
+                .background(Color.gray)
+            }else{
+                Text("Content of your reading data: ")
+                    .bold()
+                    .padding(.trailing, 100.0)
+                HStack(alignment: .firstTextBaseline){
+                    let url = getDocumentsDirect()
+                    let content = getContent(new_url: url)
+                    Text(content)
+                        .multilineTextAlignment(.leading)
+                        .bold()
+                        .foregroundColor(.white)
+                
+                }
+                .frame(width: 300.0, height: 400.0)
+                .background(Color.gray)
             }
-            .frame(width: 300.0, height: 400.0)
-            .background(Color.gray)
+            Button(action: {
+                let data_file_url = getDocumentsDirect().appendingPathComponent("data.txt")
+                let emptyString = ""
+                do{
+                    try emptyString.write(to: data_file_url , atomically: true, encoding: .utf8)
+                }catch {
+                    print("Error appending to file: \(error)")
+                }
+                self.clearRefresh.toggle()
+            },
+                   label:{
+                Text("Clear read data")
+                Image(systemName: "eraser")
+                
+            }
+            ).padding(.top, 20.0).buttonStyle(.bordered)
         }
         .padding(.bottom, 40)
         VStack{
@@ -58,7 +93,7 @@ struct DataViewView: View {
                 }
                 showingExporter.toggle()
             }, label: {
-                Text("Export Data")
+                Text("Export data")
                 Image(systemName: "square.and.arrow.up.on.square")
             })
             .buttonStyle(.bordered)

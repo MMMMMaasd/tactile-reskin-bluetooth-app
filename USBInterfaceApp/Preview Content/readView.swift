@@ -179,7 +179,7 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
     }
     
     
-    func startRecordData() {
+    func recordSingleData() {
         if(ifConnected == true){
             guard let characteristic = rxCharacteristic else { return
             }
@@ -442,7 +442,7 @@ struct ReadView : View{
     func startRecording() {
         isReading = true
         let timer = Timer.scheduledTimer(withTimeInterval: timerInterval, repeats: true) { _ in
-            sharedBluetoothManager.startRecordData()
+            sharedBluetoothManager.recordSingleData()
         }
         recordingTimer = timer
     }

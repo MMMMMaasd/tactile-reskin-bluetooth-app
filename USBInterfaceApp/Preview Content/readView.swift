@@ -8,6 +8,9 @@
 import SwiftUI
 import UIKit
 import CoreBluetooth
+import BackgroundTasks
+import UserNotifications
+
 
 class BluetoothManager :  NSObject, ObservableObject{
     //@EnvironmentObject var appStatus : AppInformation
@@ -18,7 +21,7 @@ class BluetoothManager :  NSObject, ObservableObject{
     private var txCharacteristic: CBCharacteristic!
     private var rxCharacteristic: CBCharacteristic!
     private var characteristicValues: [String] = []
-    private var recordString: String = ""
+    @State public var recordString: String = ""
     public var ifConnected: Bool = false
     @Published var peripheralsNames: [String] = []
     
@@ -154,7 +157,7 @@ extension BluetoothManager: CBPeripheralDelegate{
 }
 
 extension BluetoothManager: CBPeripheralManagerDelegate {
-
+    
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         switch peripheral.state {
         case .poweredOn:
@@ -173,13 +176,13 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
             print("Error")
     }
   }
-    
+    /*
     func sendDataToRead() -> String? {
         return recordString
     }
+    */
     
-    
-    func recordSingleData() {
+    func recordSingleData(){
         if(ifConnected == true){
             guard let characteristic = rxCharacteristic else { return
             }
@@ -189,7 +192,7 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
         }
     }
     
-    private func characteristicPeripheralUpdate(characteristic: CBCharacteristic) {
+    private func characteristicPeripheralUpdate(characteristic: CBCharacteristic){
         var characteristicASCIIValue = NSString()
             
         guard let characteristicValue = characteristic.value,
@@ -200,24 +203,28 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
         
         if let characteristicASCIIValueStr = characteristicASCIIValue as? String {
             /*
-            characteristicValues.append(characteristicASCIIValueStr)
-            recordString = recordString + characteristicASCIIValueStr + "\n"*/
-            let url = getDocumentsDirect().appendingPathComponent("data.txt")
-            if let existingContent = readDataFromTextFile() {
-                    let combinedContent = existingContent + "\n" + characteristicASCIIValueStr
-                    do {
-                        try combinedContent.write(to: url, atomically: true, encoding: .utf8)
-                        characteristicValues.removeAll()
-                    } catch {
-                        print("Error appending to file: \(error)")
-                    }
-                } else {
-                    try? characteristicASCIIValueStr.write(to: url, atomically: true, encoding: .utf8)
-                    characteristicValues.removeAll()
-                }
+             characteristicValues.append(characteristicASCIIValueStr)
+             recordString = recordString + characteristicASCIIValueStr + "\n"*/
+             let url = getDocumentsDirect().appendingPathComponent("data.txt")
+             if let existingContent = readDataFromTextFile() {
+             let combinedContent = existingContent + "\n" + characteristicASCIIValueStr
+             do {
+             try combinedContent.write(to: url, atomically: true, encoding: .utf8)
+             characteristicValues.removeAll()
+             } catch {
+             print("Error appending to file: \(error)")
+             }
+             } else {
+             try? characteristicASCIIValueStr.write(to: url, atomically: true, encoding: .utf8)
+             characteristicValues.removeAll()
+             }
+            //recordString = recordString + "\n" + characteristicASCIIValueStr
+            print("Value Recieved: \((characteristicASCIIValue as String))")
+            /*
+            characteristicValues.removeAll()
+            return characteristicASCIIValueStr
+             */
         }
-        
-        
         /*
         if characteristicValues.count > 100 {
             let url = getDocumentsDirect().appendingPathComponent("data.txt")
@@ -231,7 +238,7 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
             }
         }
          */
-        print("Value Recieved: \((characteristicASCIIValue as String))")
+        //print("Value Recieved: \((characteristicASCIIValue as String))")
 }
 
     func writeOutgoingValue(data: String){
@@ -332,6 +339,7 @@ struct ReadView : View{
     @State private var recordingTimer: Timer?
     @State private var showSheet = false
     @State var showingAlert : Bool = false
+    @Environment(\.scenePhase) private var phase
     var body : some View{
         ZStack{
             Text("press to read data")
@@ -426,6 +434,7 @@ struct ReadView : View{
             singleBLEPeripheral(peripheral: peripheral, bluetoothManager: sharedBluetoothManager)
         }
     }
+    
     func toggleRecording() {
         if(sharedBluetoothManager.ifConnected){
             isReading = !isReading
@@ -442,6 +451,8 @@ struct ReadView : View{
     func startRecording() {
         isReading = true
         let timer = Timer.scheduledTimer(withTimeInterval: timerInterval, repeats: true) { _ in
+            //appStatus.SharedDataString += sharedBluetoothManager.recordSingleData() ?? ""
+            //appStatus.SharedDataString = sharedBluetoothManager.recordString
             sharedBluetoothManager.recordSingleData()
         }
         recordingTimer = timer
@@ -454,20 +465,13 @@ struct ReadView : View{
         }
     }
     
-    func startRecordingIfNotAlready() {
-               if isReading {
-                   return
-               }
-               startRecording()
-    }
-    
     
     func getDocumentsDirect() -> URL{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         print(paths[0].path)
         return paths[0]
     }
-    
+
 }
     
     

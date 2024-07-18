@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
-
+import BackgroundTasks
+    
 @main
 struct USBInterfaceAppApp: App {
+    //let backgroundTaskManager = BackgroundTaskManager()
+    //@Environment(\.scenePhase) private var phase
     var body: some Scene {
         @StateObject var appStatus = AppInformation()
         WindowGroup {

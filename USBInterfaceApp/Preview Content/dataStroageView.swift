@@ -56,6 +56,14 @@ struct RecordView : View{
                                     print("Error appending to file: \(error)")
                                 }
                             }
+                            
+                            /*
+                            do{
+                                try appStatus.SharedDataString.write(to: url, atomically: true, encoding: .utf8)
+                            }catch{
+                                print("Error appending to file: \(error)")
+                            }
+                             */
                         } catch {
                             print("Error saving file: \(error)")
                         }

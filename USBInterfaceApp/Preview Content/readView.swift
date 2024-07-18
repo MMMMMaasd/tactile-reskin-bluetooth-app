@@ -25,13 +25,6 @@ class BluetoothManager :  NSObject, ObservableObject{
     public var ifConnected: Bool = false
     @Published var peripheralsNames: [String] = []
     
-    /*
-    init?(appStatus: AppInformation){
-        super.init()
-        self.centralManager = CBCentralManager(delegate: self, queue: .main)
-        self.appStatus = appStatus
-    }
-     */
     override init(){
         self.appStatus = AppInformation()
         super.init()
@@ -41,11 +34,6 @@ class BluetoothManager :  NSObject, ObservableObject{
 
 extension BluetoothManager: CBCentralManagerDelegate{
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        /*
-        if(central.state == .poweredOn){
-            self.centralManager?.scanForPeripherals(withServices: nil)
-        }
-         */
         switch central.state {
                   case .poweredOff:
                       print("Is Powered Off.")
@@ -220,10 +208,6 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
              }
             //recordString = recordString + "\n" + characteristicASCIIValueStr
             print("Value Recieved: \((characteristicASCIIValue as String))")
-            /*
-            characteristicValues.removeAll()
-            return characteristicASCIIValueStr
-             */
         }
         /*
         if characteristicValues.count > 100 {
@@ -375,54 +359,6 @@ struct ReadView : View{
                     }
                 )
             }
-            /*
-            Button{
-                showSheet.toggle()
-            } label:{
-                Text("show ble device")
-                    .font(.largeTitle)
-                    .foregroundStyle(.blue)
-            }
-             */
-            //.onAppear(perform: startRecordingIfNotAlready)
-            //.onDisappear(perform: stopRecording)
-            /*
-             Button(action: toggleRecording) {
-             if isReading {
-             Image(systemName: "stop.circle")
-             .resizable()
-             .aspectRatio(contentMode: .fit)
-             .frame(height: 100)
-             .frame(width: 100)
-             .multilineTextAlignment(.center)
-             } else {
-             Image(systemName: "dot.scope")
-             .resizable()
-             .aspectRatio(contentMode: .fit)
-             .frame(height: 100)
-             .frame(width: 100)
-             .multilineTextAlignment(.center)
-             }
-             }
-             
-             .buttonStyle(.bordered)
-             .onTapGesture {
-             isReading = !isReading
-             }
-             */
-            /*
-             Button(action: {
-             bluetoothManager.toggleBluetooth()
-             }) {
-             Text(bluetoothManager.isBluetoothEnabled ? "Turn Off Bluetooth" : "Turn On Bluetooth")
-             .padding()
-             }
-             Text("Bluetooth is \(bluetoothManager.isBluetoothEnabled ? "enabled" : "disabled")")
-             .padding()
-             List(bluetoothManager.discoveredPeripherals, id: \.identifier) { peripheral in
-             Text(peripheral.name ?? "Unknown")
-             }
-             */
         }
         /*.sheet(isPresented: $showSheet){
          List(sharedBluetoothManager.peripherals, id: \.name) { peripheral in

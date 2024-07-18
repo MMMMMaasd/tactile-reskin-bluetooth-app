@@ -49,13 +49,18 @@ struct DataViewView: View {
                 .background(Color.gray)
             }
             Button(action: {
+                /*
                 let data_file_url = getDocumentsDirect().appendingPathComponent("data.txt")
+                 */
                 let emptyString = ""
+                appStatus.SharedDataString = emptyString
+                /*
                 do{
                     try emptyString.write(to: data_file_url , atomically: true, encoding: .utf8)
                 }catch {
                     print("Error appending to file: \(error)")
                 }
+                 */
                 self.clearRefresh.toggle()
             },
                    label:{
@@ -81,12 +86,19 @@ struct DataViewView: View {
                     try createFile(fileName: fileName)
                     print("File saved successfully at \(fileName)")
                     let url = getDocumentsDirect().appendingPathComponent(fileName)
+                    /*
                     if let existingContent = readDataFromTextFile() {
                         do {
                             try existingContent.write(to: url, atomically: true, encoding: .utf8)
                         } catch {
                             print("Error appending to file: \(error)")
                         }
+                    }
+                     */
+                    do{
+                        try appStatus.SharedDataString.write(to: url, atomically: true, encoding: .utf8)
+                    }catch{
+                        print("Error appending to file: \(error)")
                     }
                 } catch {
                     print("Error saving file: \(error)")

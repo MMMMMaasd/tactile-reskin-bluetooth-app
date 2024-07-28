@@ -23,6 +23,10 @@
 		B9D072BF2C1445E700C5ECD8 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */; };
 		B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */; };
 		B9D072C32C23F6F100C5ECD8 /* deviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072C22C23F6F100C5ECD8 /* deviceView.swift */; };
+		B9D8D3DE2C522E1300A7B839 /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */; };
+		B9D8D3F12C534DA800A7B839 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D8D3F02C534DA800A7B839 /* SwiftUIView.swift */; };
+		B9F3C4142C515F1A008B555A /* CameraHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F3C4132C515F1A008B555A /* CameraHome.swift */; };
+		B9F3C4182C518050008B555A /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F3C4172C518050008B555A /* CameraViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +67,10 @@
 		B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBUUIDS.swift; sourceTree = "<group>"; };
 		B9D072C22C23F6F100C5ECD8 /* deviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deviceView.swift; sourceTree = "<group>"; };
+		B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
+		B9D8D3F02C534DA800A7B839 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
+		B9F3C4132C515F1A008B555A /* CameraHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHome.swift; sourceTree = "<group>"; };
+		B9F3C4172C518050008B555A /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,12 +124,20 @@
 				B98D69632C04911F00648D95 /* Info.plist */,
 				B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */,
 				B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */,
+				B98D69572C04671200648D95 /* ViewController.swift */,
 				B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */,
 				B9104F5F2BFDE63A000D4DDD /* ContentView.swift */,
+				B98D69532C04563000648D95 /* readView.swift */,
+				B98D69512C04559900648D95 /* dataStroageView.swift */,
 				B9104F872BFDF1A3000D4DDD /* MainPage.swift */,
-				B98D69572C04671200648D95 /* ViewController.swift */,
+				B98D69552C04569C00648D95 /* accountView.swift */,
+				B9D072C22C23F6F100C5ECD8 /* deviceView.swift */,
 				B9B046A72C06DFA300096E8B /* DataViewView.swift */,
 				B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */,
+				B9F3C4172C518050008B555A /* CameraViewModel.swift */,
+				B9F3C4132C515F1A008B555A /* CameraHome.swift */,
+				B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */,
+				B9D8D3F02C534DA800A7B839 /* SwiftUIView.swift */,
 				B9104F612BFDE63C000D4DDD /* Assets.xcassets */,
 				B9104F632BFDE63C000D4DDD /* Preview Content */,
 			);
@@ -131,10 +147,6 @@
 		B9104F632BFDE63C000D4DDD /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				B98D69532C04563000648D95 /* readView.swift */,
-				B98D69512C04559900648D95 /* dataStroageView.swift */,
-				B9D072C22C23F6F100C5ECD8 /* deviceView.swift */,
-				B98D69552C04569C00648D95 /* accountView.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -295,16 +307,20 @@
 			files = (
 				B9B046AC2C0DE7D000096E8B /* TryReadDataView.swift in Sources */,
 				B9104F602BFDE63A000D4DDD /* ContentView.swift in Sources */,
+				B9D8D3F12C534DA800A7B839 /* SwiftUIView.swift in Sources */,
 				B9104F5E2BFDE63A000D4DDD /* USBInterfaceAppApp.swift in Sources */,
 				B98D69542C04563000648D95 /* readView.swift in Sources */,
 				B9D072BF2C1445E700C5ECD8 /* BluetoothManager.swift in Sources */,
 				B98D69522C04559900648D95 /* dataStroageView.swift in Sources */,
 				B9D072C32C23F6F100C5ECD8 /* deviceView.swift in Sources */,
+				B9F3C4182C518050008B555A /* CameraViewModel.swift in Sources */,
+				B9F3C4142C515F1A008B555A /* CameraHome.swift in Sources */,
 				B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */,
 				B98D69582C04671200648D95 /* ViewController.swift in Sources */,
 				B9B046A82C06DFA300096E8B /* DataViewView.swift in Sources */,
 				B98D69562C04569C00648D95 /* accountView.swift in Sources */,
 				B9104F882BFDF1A3000D4DDD /* MainPage.swift in Sources */,
+				B9D8D3DE2C522E1300A7B839 /* ARViewContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +491,9 @@
 				INFOPLIST_FILE = USBInterfaceApp/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "THis app needs access to the camera to enable Augmented Reality";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -509,6 +528,9 @@
 				INFOPLIST_FILE = USBInterfaceApp/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "THis app needs access to the camera to enable Augmented Reality";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

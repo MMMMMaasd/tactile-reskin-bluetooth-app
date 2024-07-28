@@ -10,7 +10,8 @@ import AVFoundation
 
 struct CameraView: View {
     
-    @EnvironmentObject var cameraModel : CameraViewModel
+    @ObservedObject var cameraModel : CameraViewModel
+    //let previewSize: CGSize
     
     var body: some View {
         GeometryReader{proxy in
@@ -19,6 +20,7 @@ struct CameraView: View {
             CameraPreview(size:size)
                 .environmentObject(cameraModel)
         }
+        //CameraPreview(size: previewSize)
         .onAppear(perform: cameraModel.checkPermission)
         .alert(isPresented: $cameraModel.alert){
             Alert(title: Text("Please Enable Camera and Microphoe Access"))

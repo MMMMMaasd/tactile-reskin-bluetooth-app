@@ -7,8 +7,9 @@
 
 import SwiftUI
 import AVFoundation
+import UIKit
 
-class CameraViewModel : NSObject, ObservableObject, AVCapturePhotoCaptureDelegate{
+class CameraViewModel : NSObject, ObservableObject, AVCaptureFileOutputRecordingDelegate{
     //@Published var isTaken = true
     @Published var sesson = AVCaptureSession()
     @Published var alert = false
@@ -16,6 +17,11 @@ class CameraViewModel : NSObject, ObservableObject, AVCapturePhotoCaptureDelegat
     @Published var preview : AVCaptureVideoPreviewLayer!
     //@Published var isSaved = false
     //@Published var picData = Data(count: 0)
+    
+    @Published var isRecording : Bool = false
+    @Published var recordedURLS : [URL] = []
+    @Published var previewURL : URL?
+    @Published var showPreview : Bool = false
     
     func checkPermission(){
         switch AVCaptureDevice.authorizationStatus(for: .video){
@@ -108,4 +114,31 @@ class CameraViewModel : NSObject, ObservableObject, AVCapturePhotoCaptureDelegat
         
     }
      */
+    func startRecording(){
+        let tempURL = NSTemporaryDirectory() + "\(Date()).mov"
+        output.startRecording(to: URL(fileURLWithPath: tempURL), recordingDelegate: self)
+        isRecording = true
+    }
+    
+    func stopRecording(){
+        output.stopRecording()
+        isRecording = false
+    }
+    
+    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
+        if let error = error{
+            print(error.localizedDescription)
+            return
+        }
+        
+        print(outputFileURL)
+    
+        let videoPath = outputFileURL.path
+        
+        let videoPathString = String(videoPath)
+                
+        UISaveVideoAtPathToSavedPhotosAlbum(videoPathString as String, nil, nil, nil)
+        print("saved successfully...")
+    }
+    
 }

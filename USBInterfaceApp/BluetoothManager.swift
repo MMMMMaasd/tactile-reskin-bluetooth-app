@@ -10,7 +10,7 @@ import CoreBluetooth
 
 class BluetoothManager :  NSObject, ObservableObject{
     //@EnvironmentObject var appStatus : AppInformation
-    private let appStatus: AppInformation
+    //private let appStatus: AppInformation
     private var centralManager: CBCentralManager?
     public var peripherals: [CBPeripheral] = []
     private var matchedPeripheral: CBPeripheral!
@@ -22,7 +22,7 @@ class BluetoothManager :  NSObject, ObservableObject{
     @Published var peripheralsNames: [String] = []
     
     override init(){
-        self.appStatus = AppInformation()
+        //self.appStatus = AppInformation()
         super.init()
         self.centralManager = CBCentralManager(delegate: self, queue: .main)
     }

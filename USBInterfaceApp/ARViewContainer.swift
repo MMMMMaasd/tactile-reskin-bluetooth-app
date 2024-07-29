@@ -51,11 +51,13 @@ class ARViewModel: ObservableObject{
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true){ [weak self] _ in
             self?.updateData(saveFileName: savefileName)
         }
+        isOpen = true
     }
     
     func pauseSession(){
         session.pause()
         timer?.invalidate()
+        isOpen = false
     }
     
     private func updateData(saveFileName : String){
@@ -145,6 +147,23 @@ class ARViewModel: ObservableObject{
         }
     }
     
-    
-    
+    func switchCamera(){
+        if isOpen {
+            guard var currenConfig = session.configuration else{
+                fatalError("Unexpectedly failed to get the configuration.")
+            }
+            
+            switch currenConfig {
+                    case is ARWorldTrackingConfiguration:
+                        currenConfig = ARFaceTrackingConfiguration()
+                    case is ARFaceTrackingConfiguration:
+                        currenConfig = ARWorldTrackingConfiguration()
+                    default:
+                        currenConfig = ARWorldTrackingConfiguration()
+                    }
+                    
+            session.run(currenConfig)
+        }
+        print("AR session not started yet")
+    }
 }

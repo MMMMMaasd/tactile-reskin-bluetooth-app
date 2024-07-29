@@ -25,12 +25,12 @@ struct MainPage: View {
                     .tabItem {
                         Label("read", systemImage: "dot.scope")
                 }
-                /*
-                DeviceView()
+                
+                PeripheralView()
                     .tabItem {
                         Label("ble-device", systemImage: "iphone.gen1.radiowaves.left.and.right")
                 }
-                 */
+                
                 AccountView()
                     .tabItem {
                         Label("account", systemImage:"person.circle.fill")

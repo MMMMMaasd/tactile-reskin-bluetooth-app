@@ -70,6 +70,7 @@ class AppInformation : ObservableObject{
     @Published var ifGoToNextPage = 0
     @Published var SharedDataString = ""
     @Published var ifAllowedRead = 0
+    @Published var sharedBluetoothManager =  BluetoothManager()
 }
 
 

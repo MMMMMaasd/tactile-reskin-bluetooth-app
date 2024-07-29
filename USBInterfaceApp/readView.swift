@@ -12,62 +12,6 @@ import BackgroundTasks
 import UserNotifications
 import Foundation
 
-struct singleBLEPeripheral: View {
-    let appInfo = AppInformation()
-    @ObservedObject private var bluetoothManager: BluetoothManager
-    @EnvironmentObject var appStatus: AppInformation
-    @State private var isConnected = false
-    @State private var connectAlert : Bool = false
-    let peripheral: CBPeripheral
-    
-    init(peripheral: CBPeripheral, bluetoothManager: BluetoothManager) {
-        self.peripheral = peripheral
-        self.bluetoothManager = bluetoothManager
-
-    }
-    var body: some View {
-        HStack(alignment: .firstTextBaseline) {
-                Text(peripheral.name ?? "unnamed device")
-                    .font(.headline)
-                Button(action: {
-                    if !isConnected{
-                        bluetoothManager.connectToPeripheral(peripheral: peripheral)
-                        isConnected = true
-                    }else{
-                        bluetoothManager.disconnectFromDevice()
-                        isConnected = false
-                    }
-                    /*
-                    if !isConnected{
-                        bluetoothManager.connectToPeripheral(peripheral: peripheral)
-                        isConnected = true
-                    }else {
-                        bluetoothManager.disconnectFromDevice()
-                        isConnected = false
-                    }
-                     */
-                }) {
-                    if isConnected {
-                        Text("Disconnect")
-                            .foregroundColor(.red)
-                    } else {
-                        Text("Connect")
-                            .foregroundColor(.blue)
-                    }
-                }
-                .padding(.leading, 50.0)
-                .buttonStyle(.bordered)
-            /*
-                .alert(isPresented: $connectAlert){
-                    Alert(
-                        
-                    )
-                }
-             */
-            }
-            //.onAppear(perform: loadDeviceConnectionStatus)
-        }
-}
 struct ReadView : View{
     @StateObject var arViewModel = ARViewModel()
     @StateObject var cameraModel = CameraViewModel()
@@ -110,7 +54,7 @@ struct ReadView : View{
              */
             Button(action: toggleRecording) {
                 if isReading {
-                    if(sharedBluetoothManager.ifConnected){
+                    if(appStatus.sharedBluetoothManager.ifConnected){
                         Image(systemName: "stop.circle")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -149,7 +93,9 @@ struct ReadView : View{
             .padding(.top, 600.0)
             .buttonStyle(.bordered)
             
-            Button(action:{print("flip camera")}){
+            Button(action:{
+                arViewModel.switchCamera()
+            }){
                 Image(systemName: "arrow.triangle.2.circlepath")
                     .resizable()
                     .frame(height: 35)
@@ -180,13 +126,10 @@ struct ReadView : View{
          }
      }*/
         .ignoresSafeArea()
-        List(sharedBluetoothManager.peripherals, id: \.name) { peripheral in
-            singleBLEPeripheral(peripheral: peripheral, bluetoothManager: sharedBluetoothManager)
-        }
     }
     
     func toggleRecording() {
-        if(sharedBluetoothManager.ifConnected){
+        if(appStatus.sharedBluetoothManager.ifConnected){
             isReading = !isReading
             //cameraModel.isRecording = !cameraModel.isRecording
             arViewModel.isOpen = !arViewModel.isOpen
@@ -221,7 +164,7 @@ struct ReadView : View{
         let timer = Timer.scheduledTimer(withTimeInterval: timerInterval, repeats: true) { _ in
             //appStatus.SharedDataString += sharedBluetoothManager.recordSingleData() ?? ""
             //appStatus.SharedDataString = sharedBluetoothManager.recordString
-            sharedBluetoothManager.recordSingleData()
+            appStatus.sharedBluetoothManager.recordSingleData()
         }
         recordingTimer = timer
     }

@@ -195,7 +195,36 @@ struct TextFile: FileDocument {
     }
 }
 
-
+struct VideoFile: FileDocument{
+    var url: URL
+    
+    static var readableContentTypes: [UTType] { [.mpeg4Movie] }
+    static var writableContentTypes: [UTType] { [.mpeg4Movie] }
+        
+    // Initialize with a given URL
+    init(url: URL) {
+        self.url = url
+    }
+        
+    // This is called when the system wants to read the previously saved data
+    init(configuration: ReadConfiguration) throws {
+        /*
+        if let data = configuration.file.regularFileContents {
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("mp4")
+            try data.write(to: tempURL)
+            self.url = tempURL
+        } else {
+            throw CocoaError(.fileReadUnknown)
+        }
+         */
+        self.url = URL(fileURLWithPath: "")
+    }
+        
+        // This is called when the system wants to write our video data to disk
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+            return try FileWrapper(url: url, options: .immediate)
+    }
+}
 #Preview {
     RecordView()
         .environmentObject(AppInformation())

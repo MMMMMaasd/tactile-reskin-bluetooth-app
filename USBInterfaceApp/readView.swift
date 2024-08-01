@@ -25,8 +25,10 @@ struct ReadView : View{
     @State private var showSheet = false
     @State var showingAlert : Bool = false
     @Environment(\.scenePhase) private var phase
-    @State private var fileName = ""
+    @State private var fileSetNames = [""]
     @State var showingExporter = false
+    @State var showingSelectSheet = false
+    @State var exportFileName = ""
     var body : some View{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         ZStack{
@@ -84,7 +86,7 @@ struct ReadView : View{
                 )
             }
             
-            Button(action: {showingExporter.toggle()}){
+            Button(action: {showingSelectSheet.toggle()}){
                 Text("save AR data")
                     .font(.footnote)
                     .frame(width: 80.0, height: 35.0)
@@ -106,7 +108,22 @@ struct ReadView : View{
             .buttonStyle(.bordered)
         }
         .frame(width: 10.0, height: 10.0)
-        .fileExporter(isPresented: $showingExporter, document: TextFile(url: (paths[0].appendingPathComponent(fileName)).path), contentType: .plainText) { result in
+        .actionSheet(isPresented: $showingSelectSheet){
+            ActionSheet(title: Text("Choose Export Option"), buttons: [
+                .default(Text("Save RGB Video File (.mp4)"), action: {
+                    //saveFile(targetIndex: 0)
+                    exportFileName = fileSetNames[0]
+                    showingExporter = true
+                }),
+                .default(Text("Save Depth Video File (.mp4)"), action: {
+                    //saveFile(targetIndex: 1)
+                    exportFileName = fileSetNames[1]
+                    showingExporter = true
+                }),
+                .cancel()
+            ])
+        }
+        .fileExporter(isPresented: $showingExporter, document: VideoFile(url: (paths[0].appendingPathComponent(exportFileName))), contentType: .mpeg4Movie) { result in
             switch result {
             case .success(let url):
                 print("Saved to \(url)")
@@ -114,6 +131,7 @@ struct ReadView : View{
                 print(error.localizedDescription)
             }
         }
+        .ignoresSafeArea()
         
         /*
         .onAppear{
@@ -125,9 +143,12 @@ struct ReadView : View{
              singleBLEPeripheral(peripheral: peripheral, bluetoothManager: sharedBluetoothManager)
          }
      }*/
-        .ignoresSafeArea()
     }
     
+    private func saveFile(targetIndex: Int){
+        exportFileName = fileSetNames[targetIndex]
+        showingSelectSheet.toggle()
+    }
     func toggleRecording() {
         if(appStatus.sharedBluetoothManager.ifConnected){
             isReading = !isReading
@@ -136,10 +157,11 @@ struct ReadView : View{
             if isReading && arViewModel.isOpen{
                 startRecording()
                 //cameraModel.startRecording()
+                /*
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
                 let currentDateTime = dateFormatter.string(from: Date())
-                fileName = "AR \(currentDateTime).txt"
+                fileName = "AR \(currentDateTime).mp4"
                 do {
                     try createFile(fileName: fileName)
                     print("File saved successfully at \(fileName)")
@@ -148,7 +170,9 @@ struct ReadView : View{
                     print("Error saving file: \(error)")
                     return
                 }
-                arViewModel.startSession(savefileName: fileName)
+                 */
+                fileSetNames = arViewModel.startSession()
+                print(fileSetNames)
             } else {
                 stopRecording()
                 //cameraModel.stopRecording()

@@ -221,13 +221,11 @@ class ARViewModel: ObservableObject{
         if depthVideoInput?.isReadyForMoreMediaData == true {
             guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
             
-            // Safely unwrap the pixel buffer pool
             guard let pixelBufferPool = depthPixelBufferAdapter?.pixelBufferPool else {
                 print("Depth pixel buffer pool is nil.")
                 return
             }
             
-            // Create a new pixel buffer for depth that is the correct size
             var outputBuffer: CVPixelBuffer?
             let status = CVPixelBufferPoolCreatePixelBuffer(nil, pixelBufferPool, &outputBuffer)
             guard status == kCVReturnSuccess, let depthOutputBuffer = outputBuffer else {
@@ -238,7 +236,6 @@ class ARViewModel: ObservableObject{
             CVPixelBufferLockBaseAddress(depthPixelBuffer, .readOnly)
             CVPixelBufferLockBaseAddress(depthOutputBuffer, [])
             
-            // Prepare Core Image context
             let ciImage = CIImage(cvPixelBuffer: depthPixelBuffer).transformed(by: CGAffineTransform(scaleX: CGFloat(CVPixelBufferGetWidth(depthOutputBuffer)) / CGFloat(CVPixelBufferGetWidth(depthPixelBuffer)), y: CGFloat(CVPixelBufferGetHeight(depthOutputBuffer)) / CGFloat(CVPixelBufferGetHeight(depthPixelBuffer))))
             
             let depthFilter = CIFilter(name: "CIColorControls")!
@@ -252,11 +249,9 @@ class ARViewModel: ObservableObject{
                 return
             }
             
-            // Render depth image directly to output buffer with the full size
             let context = CIContext()
             context.render(ciImageAfterFiltered, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(depthOutputBuffer), height: CVPixelBufferGetHeight(depthOutputBuffer)), colorSpace: CGColorSpaceCreateDeviceGray())
             
-            // Append the depth video frame
             depthPixelBufferAdapter?.append(depthOutputBuffer, withPresentationTime: currentTime)
             
             CVPixelBufferUnlockBaseAddress(depthOutputBuffer, [])

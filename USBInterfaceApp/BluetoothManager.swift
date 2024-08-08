@@ -177,6 +177,9 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
     }
     
     private func characteristicPeripheralUpdate(characteristic: CBCharacteristic){
+        let currentTimer = Date()
+        let dataReadTimeStamp = Int64(currentTimer.timeIntervalSince1970 * 1000)
+
         var characteristicASCIIValue = NSString()
             
         guard let characteristicValue = characteristic.value,
@@ -191,7 +194,7 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
              recordString = recordString + characteristicASCIIValueStr + "\n"*/
              let url = getDocumentsDirect().appendingPathComponent("data.txt")
              if let existingContent = readDataFromTextFile() {
-             let combinedContent = existingContent + "\n" + characteristicASCIIValueStr
+             let combinedContent = existingContent + "\n" + "<\(dataReadTimeStamp)>: " + characteristicASCIIValueStr
              do {
              try combinedContent.write(to: url, atomically: true, encoding: .utf8)
              characteristicValues.removeAll()

@@ -23,6 +23,11 @@ struct ARViewContainer : UIViewRepresentable{
         //let arView = ARView(frame: .zero)
         arView.session = session
         configureCamera(arView: arView)
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = [.horizontal, .vertical]
+        configuration.frameSemantics = [.sceneDepth]
+        configuration.isAutoFocusEnabled = false
+        session.run(configuration)
         return arView
     }
     
@@ -32,7 +37,7 @@ struct ARViewContainer : UIViewRepresentable{
                 $0.imageResolution.width == 720 && $0.imageResolution.height == 1280
             }) ?? ARWorldTrackingConfiguration.supportedVideoFormats[0]
             camera.frameSemantics = .sceneDepth
-            arView.session.run(camera)
+        arView.session.run(camera)
     }
     
     
@@ -57,29 +62,41 @@ class ARViewModel: ObservableObject{
     @Published var position: String = "N/A"
     @Published var orientation: String = "N/A"
     @Published var isOpen : Bool = false
+    @Published var rgbDirect: URL = URL(fileURLWithPath: "")
+    @Published var depthDirect: URL = URL(fileURLWithPath: "")
+    
+    public var rgbImageCount: Int = 0
+    public var depthImageCount: Int = 0
+    public var timeCount: Double = 0.0
     
     private var timer: Timer?
     private var startTime: CMTime?
     
     func startSession() -> Array<String>{
+        rgbImageCount = 0
+        depthImageCount = 0
+        timeCount = 0.0
         
-        
+        /*
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = [.horizontal, .vertical]
         configuration.frameSemantics = [.sceneDepth]
         session.run(configuration)
+        */
         
         let saveFileNames = setupRecording()
         
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true){ [weak self] _ in
             self?.updateData()
+            self?.timeCount += 1.0
+            print(self?.timeCount)
         }
         isOpen = true
         return saveFileNames
     }
     
     func pauseSession(){
-        session.pause()
+        //session.pause()
         timer?.invalidate()
         isOpen = false
         stopRecording()
@@ -89,21 +106,30 @@ class ARViewModel: ObservableObject{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
         let currentDateTime = dateFormatter.string(from: Date())
-        let rgbFileName = "AR RGB \(currentDateTime).mp4"
-        let depthFileName = "AR Depth \(currentDateTime).mp4"
+        let rgbFileName = "AR_RGB_\(currentDateTime).mp4"
+        let depthFileName = "AR_Depth_\(currentDateTime).mp4"
+        let rgbImagesDirectName = "RGB_Images_Frames \(currentDateTime)"
+        let depthImagesDirectName = "Depth_Images_Frames_\(currentDateTime)"
         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let rgbVideoURL = url[0].appendingPathComponent(rgbFileName)
         let depthVideoURL = url[0].appendingPathComponent(depthFileName)
+        let rgbImagesDirect = url[0].appendingPathComponent(rgbImagesDirectName)
+        let depthImagesDirect = url[0].appendingPathComponent(depthImagesDirectName)
         
         print(rgbVideoURL)
         print(depthVideoURL)
         
         do {
+            try FileManager.default.createDirectory(at: rgbImagesDirect, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(at: depthImagesDirect, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.removeItem(at: rgbVideoURL)
             try FileManager.default.removeItem(at: depthVideoURL)
         } catch {
             print("Error")
         }
+        
+        rgbDirect = rgbImagesDirect
+        depthDirect = depthImagesDirect
         
         do {
             assetWriter = try AVAssetWriter(outputURL: rgbVideoURL, fileType: .mp4)
@@ -149,9 +175,38 @@ class ARViewModel: ObservableObject{
             print("Failed to setup recording: \(error)")
         }
         
-        return [rgbFileName, depthFileName]
+        return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName]
     }
     
+    private func saveImage(from pixelBuffer: CVPixelBuffer, directory: URL, isDepth: Bool = false){
+            CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+            let context = CIContext()
+            let cgImage = context.createCGImage(ciImage, from: ciImage.extent)!
+            let uiImage = UIImage(cgImage: cgImage)
+            
+            if let jpegData = uiImage.jpegData(compressionQuality: 0.8) {
+                var fileName = ""
+                if(isDepth){
+                    fileName = "Depth_Image_\(depthImageCount).jpg"
+                    depthImageCount += 1
+                }else{
+                    fileName = "RGB_Image_\(rgbImageCount).jpg"
+                    rgbImageCount += 1
+                }
+                //let fileName = isDepth ? "Depth Image \(depthImageCount).jpg" : "RGB Image \(rgbImageCount).jpg"
+                let fileUrl = directory.appendingPathComponent(fileName)
+                print("File URL: \(fileUrl)\n")
+                do {
+                    try jpegData.write(to: fileUrl)
+                }catch{
+                    print(error.localizedDescription)
+                }
+            }
+            
+            CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+
+    }
     func captureVideoFrame() {
         guard let currentFrame = session.currentFrame,
         let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
@@ -164,6 +219,13 @@ class ARViewModel: ObservableObject{
     
         let rgbPixelBuffer = currentFrame.capturedImage
         guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
+        
+        /*
+        if(timeCount.truncatingRemainder(dividingBy: 0.03) == 0.0){
+            saveImage(from: rgbPixelBuffer, directory: rgbDirect)
+            saveImage(from: depthPixelBuffer, directory: depthDirect)
+        }
+        */
         
         let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
         let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
@@ -212,6 +274,10 @@ class ARViewModel: ObservableObject{
                 let context = CIContext()
 
                 context.render(transformedImage, to: outputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceRGB())
+                
+                if(timeCount.truncatingRemainder(dividingBy: 3.0) == 0.0){
+                    saveImage(from: outputBuffer, directory: rgbDirect)
+                }
                //
                 print("rgbPixelBuffer dimensions: \(CVPixelBufferGetWidth(rgbPixelBuffer)), \(CVPixelBufferGetHeight(rgbPixelBuffer))\n")
                 print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
@@ -224,6 +290,8 @@ class ARViewModel: ObservableObject{
                 CVPixelBufferUnlockBaseAddress(rgbPixelBuffer, .readOnly)
             }
         }
+        
+
 
         if depthVideoInput?.isReadyForMoreMediaData == true {
             
@@ -242,7 +310,6 @@ class ARViewModel: ObservableObject{
             CVPixelBufferLockBaseAddress(depthOutputBuffer, [])
             
             let ciImage = CIImage(cvPixelBuffer: depthPixelBuffer)
-        
             
             let depthFilter = CIFilter(name: "CIColorControls")!
             depthFilter.setValue(ciImage, forKey: kCIInputImageKey)
@@ -266,6 +333,10 @@ class ARViewModel: ObservableObject{
             
             let context = CIContext()
                 context.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceGray())
+            
+            if(timeCount.truncatingRemainder(dividingBy: 3.0) == 0.0){
+                saveImage(from: depthOutputBuffer, directory: depthDirect, isDepth: true)
+            }
             
             print("depthPixelBuffer dimensions: \(CVPixelBufferGetWidth(depthPixelBuffer)), \(CVPixelBufferGetHeight(depthPixelBuffer))\n")
             print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
@@ -384,6 +455,8 @@ class ARViewModel: ObservableObject{
     
     private func updateData(){
         captureVideoFrame()
+        guard let currentFrame = session.currentFrame else {return}
+        let cameraTransform = currentFrame.camera.transform
         /*
          let url = getDocumentsDirect().appendingPathComponent(saveFileName)
          guard let currentFrame = session.currentFrame else {return}

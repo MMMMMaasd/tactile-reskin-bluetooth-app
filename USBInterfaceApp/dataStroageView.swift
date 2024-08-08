@@ -160,7 +160,6 @@ struct TextFile: FileDocument {
     // tell the system we support only plain text
     static var readableContentTypes = [UTType.text]
 
-    // by default our document is empty
     var text = ""
     var url : String
 
@@ -184,7 +183,7 @@ struct TextFile: FileDocument {
         url = ""
     }
 
-    // this will be called when the system wants to write our data to disk
+
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         let file = try! FileWrapper(url: URL(fileURLWithPath: url), options: .immediate)
         /*
@@ -220,11 +219,144 @@ struct VideoFile: FileDocument{
         self.url = URL(fileURLWithPath: "")
     }
         
-        // This is called when the system wants to write our video data to disk
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
             return try FileWrapper(url: url, options: .immediate)
     }
 }
+
+struct ImageFile: FileDocument {
+    var url: URL
+    
+    static var readableContentTypes: [UTType] { [.jpeg] }
+    static var writableContentTypes: [UTType] { [.jpeg] }
+    
+    init(url: URL) {
+        self.url = url
+    }
+    
+    init(configuration: ReadConfiguration) throws {
+        self.url = URL(fileURLWithPath: "")
+    }
+    
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+            return try FileWrapper(url: url, options: .immediate)
+    }
+    
+        
+}
+enum FileElement {
+    case videoFile(VideoFile)
+    case textFile(TextFile)
+    case directory(SubLevelDirectory)
+}
+
+enum FileElementSub {
+    case imageFile(ImageFile)
+}
+
+struct SubLevelDirectory: FileDocument{
+    var url: URL
+    var containedFiles: [FileElementSub]
+    
+    static var readableContentTypes: [UTType] { [.folder] }
+    static var writableContentTypes: [UTType] { [.folder] }
+    
+    init(url: URL) {
+        self.url = url
+        self.containedFiles = []
+        do{
+            let contents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
+            for content in contents{
+                if content.pathExtension.lowercased() == "ipeg" || content.pathExtension.lowercased() == "jpg" {
+                    self.containedFiles.append(.imageFile(ImageFile(url: content)))
+                }
+            }
+        }catch{
+            print("Error when extract and append files to export directory")
+        }
+    }
+    
+    init(configuration: ReadConfiguration) throws {
+        self.url = URL(fileURLWithPath: "")
+        self.containedFiles = []
+    }
+    
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        let dirWrapper = FileWrapper(directoryWithFileWrappers: [:])
+        for file in containedFiles {
+            switch file {
+                /*
+                 case .videoFile(let videoFile):
+                 let fileWrapper = try videoFile.fileWrapper(configuration: configuration)
+                 dirWrapper.addFileWrapper(fileWrapper)
+                 case .textFile(let textFile):
+                 let fileWrapper = try textFile.fileWrapper(configuration: configuration)
+                 dirWrapper.addFileWrapper(fileWrapper)
+                 case .directory(let subDirectory):
+                 let subDirWrapper = try subDirectory.fileWrapper(configuration: configuration)
+                 dirWrapper.addFileWrapper(subDirWrapper)
+                 }
+                 */ // Only support image file right now
+        
+            case .imageFile(let imageFile):
+                let fileWrapper = try imageFile.fileWrapper(configuration: configuration)
+                dirWrapper.addFileWrapper(fileWrapper)
+            default:
+                continue
+            }
+        }
+        return dirWrapper
+    }
+}
+    
+    
+    struct DocumentaryFolder: FileDocument {
+        var files: [FileElement]
+        
+        
+        static var readableContentTypes: [UTType] { [.folder] }
+        static var writableContentTypes: [UTType] { [.folder] }
+        
+        
+        init(files: [FileElement]) {
+            self.files = files
+        }
+        
+        
+        init(configuration: ReadConfiguration) throws {
+            self.files = []
+            // Implement reading logic if needed
+        }
+        
+        
+        func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+            let folderWrapper = FileWrapper(directoryWithFileWrappers: [:])
+            
+            
+            for file in files {
+                switch file {
+                case .videoFile(let videoFile):
+                    let fileWrapper = try videoFile.fileWrapper(configuration: configuration)
+                    fileWrapper.preferredFilename = videoFile.url.lastPathComponent
+                    folderWrapper.addFileWrapper(fileWrapper)
+                case .textFile(let textFile):
+                    let fileWrapper = try textFile.fileWrapper(configuration: configuration)
+                    fileWrapper.preferredFilename = URL(fileURLWithPath: textFile.url).lastPathComponent
+                    folderWrapper.addFileWrapper(fileWrapper)
+                case .directory(let directory):
+                    let directoryWrapper = try directory.fileWrapper(configuration: configuration)
+                    directoryWrapper.preferredFilename = directory.url.lastPathComponent
+                    folderWrapper.addFileWrapper(directoryWrapper)
+                }
+            }
+            
+            return folderWrapper
+        }
+    }
+
+
+
+
 #Preview {
     RecordView()
         .environmentObject(AppInformation())

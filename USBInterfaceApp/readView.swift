@@ -25,7 +25,7 @@ struct ReadView : View{
     @State private var showSheet = false
     @State var showingAlert : Bool = false
     @Environment(\.scenePhase) private var phase
-    @State private var fileSetNames = [""]
+    @State private var fileSetNames = ["", "", "", "", ""]
     @State var showingExporter = false
     @State var showingSelectSheet = false
     @State var exportFileName = ""
@@ -86,7 +86,7 @@ struct ReadView : View{
                 )
             }
             
-            Button(action: {showingSelectSheet.toggle()}){
+            Button(action: {showingExporter.toggle()}){
                 Text("save AR data")
                     .font(.footnote)
                     .frame(width: 80.0, height: 35.0)
@@ -108,6 +108,7 @@ struct ReadView : View{
             .buttonStyle(.bordered)
         }
         .frame(width: 10.0, height: 10.0)
+        /*
         .actionSheet(isPresented: $showingSelectSheet){
             ActionSheet(title: Text("Choose Export Option"), buttons: [
                 .default(Text("Save RGB Video File (.mp4)"), action: {
@@ -123,7 +124,8 @@ struct ReadView : View{
                 .cancel()
             ])
         }
-        .fileExporter(isPresented: $showingExporter, document: VideoFile(url: (paths[0].appendingPathComponent(exportFileName))), contentType: .mpeg4Movie) { result in
+         */
+        .fileExporter(isPresented: $showingExporter, document: DocumentaryFolder(files: createDocumentaryFolderFiles(paths: paths, fileSetNames: fileSetNames)), contentType: .folder, defaultFilename: fileSetNames[2]) { result in
             switch result {
             case .success(let url):
                 print("Saved to \(url)")
@@ -212,6 +214,22 @@ struct ReadView : View{
             let fileURL = documentsURL[0].appendingPathComponent(fileName)
             try FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
     }
+    
+    
+    func createDocumentaryFolderFiles(paths: [URL], fileSetNames: [String]) -> [FileElement] {
+        do {
+            let rgbFile = FileElement.videoFile(VideoFile(url: (paths[0].appendingPathComponent(fileSetNames[0]))))
+            let depthFile = FileElement.videoFile(VideoFile(url: (paths[0].appendingPathComponent(fileSetNames[1]))))
+            // let text1 = FileElement.textFile(TextFile(url: "path/to/example.txt"))
+            let rgbImageFolder = FileElement.directory(SubLevelDirectory(url: (paths[0].appendingPathComponent(fileSetNames[3]))))
+            let depthImageFolder = FileElement.directory(SubLevelDirectory(url: (paths[0].appendingPathComponent(fileSetNames[4]))))
+            return [rgbFile, depthFile, rgbImageFolder, depthImageFolder]
+        } catch {
+            print("Out of Index")
+        }
+    }
+
+    
 
 }
     

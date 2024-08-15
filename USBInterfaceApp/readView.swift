@@ -25,7 +25,7 @@ struct ReadView : View{
     @State private var showSheet = false
     @State var showingAlert : Bool = false
     @Environment(\.scenePhase) private var phase
-    @State private var fileSetNames = ["", "", "", "", ""]
+    @State private var fileSetNames = ["", "", "", "", "", ""]
     @State var showingExporter = false
     @State var showingSelectSheet = false
     @State var exportFileName = ""
@@ -56,6 +56,13 @@ struct ReadView : View{
              */
             Button(action: toggleRecording) {
                 if isReading {
+                    Image(systemName: "stop.circle")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 80)
+                        .frame(width: 80)
+                        .multilineTextAlignment(.center)
+                    /*
                     if(appStatus.sharedBluetoothManager.ifConnected){
                         Image(systemName: "stop.circle")
                             .resizable()
@@ -64,6 +71,7 @@ struct ReadView : View{
                             .frame(width: 80)
                             .multilineTextAlignment(.center)
                     }
+                     */
                 } else {
                     Image(systemName: "dot.scope")
                         .resizable()
@@ -95,19 +103,67 @@ struct ReadView : View{
             .padding(.top, 600.0)
             .buttonStyle(.bordered)
             
-            Button(action:{
-                arViewModel.switchCamera()
-            }){
-                Image(systemName: "arrow.triangle.2.circlepath")
-                    .resizable()
-                    .frame(height: 35)
-                    .frame(width: 39)
+            VStack{
+                if(isReading){
+                    if(appStatus.sharedBluetoothManager.ifConnected){
+                        VStack{
+                            Text("tactile on")
+                                .font(.footnote)
+                                .foregroundColor(Color.white)
+                                .frame(width: 80.0, height: 35.0)
+                                .border(Color.green)
+                                .background(.green)
+                            Button(action:{
+                                arViewModel.switchCamera()
+                            }){
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                    .resizable()
+                                    .frame(height: 35)
+                                    .frame(width: 39)
+                            }
+                        }
+                        .padding(.leading, 250)
+                        .padding(.top, 560)
+                        .buttonStyle(.bordered)
+                    }else{
+                        VStack{
+                            Text("tactile off")
+                                .font(.footnote)
+                                .foregroundColor(Color.white)
+                                .frame(width: 80.0, height: 35.0)
+                                .border(Color.red)
+                                .background(.red)
+                            Button(action:{
+                                arViewModel.switchCamera()
+                            }){
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                    .resizable()
+                                    .frame(height: 35)
+                                    .frame(width: 39)
+                            }
+                        }
+                        .padding(.leading, 250)
+                        .padding(.top, 560)
+                        .buttonStyle(.bordered)
+                    }
+                }else{
+                    Button(action:{
+                        arViewModel.switchCamera()
+                    }){
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .resizable()
+                            .frame(height: 35)
+                            .frame(width: 39)
+                    }
+                    .padding(.leading, 250)
+                    .padding(.top, 603)
+                    .buttonStyle(.bordered)
+                }
             }
-            .padding(.leading, 250)
-            .padding(.top, 600)
-            .buttonStyle(.bordered)
+            
         }
         .frame(width: 10.0, height: 10.0)
+        
         /*
         .actionSheet(isPresented: $showingSelectSheet){
             ActionSheet(title: Text("Choose Export Option"), buttons: [
@@ -152,12 +208,13 @@ struct ReadView : View{
         showingSelectSheet.toggle()
     }
     func toggleRecording() {
-        if(appStatus.sharedBluetoothManager.ifConnected){
             isReading = !isReading
             //cameraModel.isRecording = !cameraModel.isRecording
             arViewModel.isOpen = !arViewModel.isOpen
             if isReading && arViewModel.isOpen{
-                startRecording()
+                if(appStatus.sharedBluetoothManager.ifConnected){
+                    startRecording()
+                }
                 //cameraModel.startRecording()
                 /*
                 let dateFormatter = DateFormatter()
@@ -176,14 +233,18 @@ struct ReadView : View{
                 fileSetNames = arViewModel.startSession()
                 print(fileSetNames)
             } else {
-                stopRecording()
+                if(appStatus.sharedBluetoothManager.ifConnected){
+                    stopRecording()
+                }
                 //cameraModel.stopRecording()
                 arViewModel.pauseSession()
             }
-        }else{
+        }
+    /*
+        else{
             showingAlert = true
         }
-    }
+     */
     
     func startRecording() {
         isReading = true
@@ -221,9 +282,10 @@ struct ReadView : View{
             let rgbFile = FileElement.videoFile(VideoFile(url: (paths[0].appendingPathComponent(fileSetNames[0]))))
             let depthFile = FileElement.videoFile(VideoFile(url: (paths[0].appendingPathComponent(fileSetNames[1]))))
             // let text1 = FileElement.textFile(TextFile(url: "path/to/example.txt"))
+            let poseFile = FileElement.textFile(TextFile(url: (paths[0].appendingPathComponent(fileSetNames[5]).path)))
             let rgbImageFolder = FileElement.directory(SubLevelDirectory(url: (paths[0].appendingPathComponent(fileSetNames[3]))))
             let depthImageFolder = FileElement.directory(SubLevelDirectory(url: (paths[0].appendingPathComponent(fileSetNames[4]))))
-            return [rgbFile, depthFile, rgbImageFolder, depthImageFolder]
+            return [rgbFile, depthFile, poseFile, rgbImageFolder, depthImageFolder]
         } catch {
             print("Out of Index")
         }

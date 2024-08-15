@@ -50,6 +50,8 @@ class ARViewModel: ObservableObject{
     var session = ARSession()
     private var timeInterval = 0.01
     //private var backgroundRecordingID: UUID?
+    
+    // Control the destination of rgb and depth video file
     private var assetWriter: AVAssetWriter?
     private var videoInput: AVAssetWriterInput?
     private var pixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
@@ -62,8 +64,13 @@ class ARViewModel: ObservableObject{
     @Published var position: String = "N/A"
     @Published var orientation: String = "N/A"
     @Published var isOpen : Bool = false
+    
+    // Control the destination of rgb images directory and depth images directory
     @Published var rgbDirect: URL = URL(fileURLWithPath: "")
     @Published var depthDirect: URL = URL(fileURLWithPath: "")
+    // Control the destination of pose data text file
+    @Published var poseURL: URL = URL(fileURLWithPath: "")
+    @Published var globalPoseFileName: String = ""
     
     public var rgbImageCount: Int = 0
     public var depthImageCount: Int = 0
@@ -103,6 +110,7 @@ class ARViewModel: ObservableObject{
     }
     
     func setupRecording() -> Array<String>{
+        // Determine all the destinated file saving URL or this recording by its start time
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
         let currentDateTime = dateFormatter.string(from: Date())
@@ -110,18 +118,20 @@ class ARViewModel: ObservableObject{
         let depthFileName = "AR_Depth_\(currentDateTime).mp4"
         let rgbImagesDirectName = "RGB_Images_Frames \(currentDateTime)"
         let depthImagesDirectName = "Depth_Images_Frames_\(currentDateTime)"
+        let poseFileName = "AR_Pose_\(currentDateTime).txt"
         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let rgbVideoURL = url[0].appendingPathComponent(rgbFileName)
         let depthVideoURL = url[0].appendingPathComponent(depthFileName)
         let rgbImagesDirect = url[0].appendingPathComponent(rgbImagesDirectName)
         let depthImagesDirect = url[0].appendingPathComponent(depthImagesDirectName)
-        
+        let poseTextURL = url[0].appendingPathComponent(poseFileName)
         print(rgbVideoURL)
         print(depthVideoURL)
         
         do {
             try FileManager.default.createDirectory(at: rgbImagesDirect, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.createDirectory(at: depthImagesDirect, withIntermediateDirectories: true, attributes: nil)
+            try createFile(fileName: poseFileName)
             try FileManager.default.removeItem(at: rgbVideoURL)
             try FileManager.default.removeItem(at: depthVideoURL)
         } catch {
@@ -130,8 +140,11 @@ class ARViewModel: ObservableObject{
         
         rgbDirect = rgbImagesDirect
         depthDirect = depthImagesDirect
+        poseURL = poseTextURL
+        globalPoseFileName = poseFileName
         
         do {
+            // Determine which video file url the assetWriter will write into
             assetWriter = try AVAssetWriter(outputURL: rgbVideoURL, fileType: .mp4)
             
             let videoSettings: [String: Any] = [
@@ -175,7 +188,7 @@ class ARViewModel: ObservableObject{
             print("Failed to setup recording: \(error)")
         }
         
-        return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName]
+        return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName, poseFileName]
     }
     
     private func saveImage(from pixelBuffer: CVPixelBuffer, directory: URL, isDepth: Bool = false){
@@ -350,96 +363,6 @@ class ARViewModel: ObservableObject{
 
     }
     
-    /*
-    private func createRGBDFrame(rgb: CVPixelBuffer, depth: CVPixelBuffer) -> CVPixelBuffer? {
-        guard CVPixelBufferLockBaseAddress(rgb, .readOnly) == kCVReturnSuccess else {
-            print("Failed to lock base address for RGB buffer")
-            return nil
-        }
-        guard CVPixelBufferLockBaseAddress(depth, .readOnly) == kCVReturnSuccess else {
-            print("Failed to lock base address for depth buffer")
-            CVPixelBufferUnlockBaseAddress(rgb, .readOnly)
-            return nil
-        }
-        
-        let rgbWidth = CVPixelBufferGetWidth(rgb)
-        let rgbHeight = CVPixelBufferGetHeight(rgb)
-        
-        let depthWidth = CVPixelBufferGetWidth(depth)
-        let depthHeight = CVPixelBufferGetHeight(depth)
-        
-        guard depthWidth > 0, depthHeight > 0 else {
-            print("Depth buffer dimensions are invalid")
-            CVPixelBufferUnlockBaseAddress(rgb, .readOnly)
-            CVPixelBufferUnlockBaseAddress(depth, .readOnly)
-            return nil
-        }
-        
-        let rgbdWidth = rgbWidth * 2
-        let rgbdHeight = rgbHeight
-        
-        var rgbdPixelBuffer: CVPixelBuffer?
-        let attributes = [
-            kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
-            kCVPixelBufferWidthKey as String: rgbdWidth,
-            kCVPixelBufferHeightKey as String: rgbdHeight
-        ] as CFDictionary
-        
-        guard CVPixelBufferCreate(kCFAllocatorDefault, rgbdWidth, rgbdHeight, kCMPixelFormat_32BGRA, attributes, &rgbdPixelBuffer) == kCVReturnSuccess,
-              let rgbdBuffer = rgbdPixelBuffer,
-              CVPixelBufferLockBaseAddress(rgbdBuffer, []) == kCVReturnSuccess else {
-            print("Failed to create or lock base address for RGBD buffer")
-            CVPixelBufferUnlockBaseAddress(rgb, .readOnly)
-            CVPixelBufferUnlockBaseAddress(depth, .readOnly)
-            return nil
-        }
-        
-        let rgbBaseAddress = CVPixelBufferGetBaseAddress(rgb)!
-        let depthBaseAddress = CVPixelBufferGetBaseAddress(depth)!
-        let rgbdBaseAddress = CVPixelBufferGetBaseAddress(rgbdBuffer)!
-        
-        let bytesPerRowRGB = CVPixelBufferGetBytesPerRow(rgb)
-        let bytesPerRowDepth = CVPixelBufferGetBytesPerRow(depth)
-        let bytesPerRowRGBD = CVPixelBufferGetBytesPerRow(rgbdBuffer)
-        
-        // Write RGB data to the left half
-        for y in 0..<rgbHeight {
-            let dest = rgbdBaseAddress.advanced(by: y * bytesPerRowRGBD)
-            let src = rgbBaseAddress.advanced(by: y * bytesPerRowRGB)
-            memcpy(dest, src, bytesPerRowRGB)
-        }
-        
-        // Scale depth data and write it to the right half
-        for y in 0..<rgbdHeight {
-            let depthY = min((y * depthHeight) / rgbHeight, depthHeight - 1)
-            let depthRowBase = depthBaseAddress.advanced(by: depthY * bytesPerRowDepth)
-            for x in 0..<rgbWidth {
-                let depthX = min((x * depthWidth) / rgbWidth, depthWidth - 1)
-                let depthPixelPointer = depthRowBase.advanced(by: depthX * MemoryLayout<Float>.size)
-                let rgbdPixelPointer = rgbdBaseAddress.advanced(by: (y * bytesPerRowRGBD) + ((x + rgbWidth) * 4)) // 4 bytes for BGRA
-                
-                let depthValue = depthPixelPointer.load(fromByteOffset: 0, as: Float.self)
-                let isDepthValueValid = !depthValue.isNaN && !depthValue.isInfinite
-                
-                // Map depth to grayscale
-                let normalizedDepthValue = isDepthValueValid ? min(max(depthValue, 0.0), 5.0) : 0.0
-                let grayValue = UInt8(255 * (1 - (normalizedDepthValue / 5.0)))
-                
-                rgbdPixelPointer.storeBytes(of: grayValue, as: UInt8.self) // Blue
-                rgbdPixelPointer.advanced(by: 1).storeBytes(of: grayValue, as: UInt8.self) // Green
-                rgbdPixelPointer.advanced(by: 2).storeBytes(of: grayValue, as: UInt8.self) // Red
-                rgbdPixelPointer.advanced(by: 3).storeBytes(of: 255, as: UInt8.self) // Alpha
-            }
-        }
-        
-        CVPixelBufferUnlockBaseAddress(rgb, .readOnly)
-        CVPixelBufferUnlockBaseAddress(depth, .readOnly)
-        CVPixelBufferUnlockBaseAddress(rgbdBuffer, [])
-        
-        return rgbdPixelBuffer
-    }
-
-*/
 
     func stopRecording(){
         videoInput?.markAsFinished()
@@ -457,68 +380,34 @@ class ARViewModel: ObservableObject{
         captureVideoFrame()
         guard let currentFrame = session.currentFrame else {return}
         let cameraTransform = currentFrame.camera.transform
-        /*
-         let url = getDocumentsDirect().appendingPathComponent(saveFileName)
-         guard let currentFrame = session.currentFrame else {return}
-         
-         let image = currentFrame.capturedImage
-         let pixelBuffer = CVPixelBufferGetBaseAddress(image)
-         let width = CVPixelBufferGetWidth(image)
-         let height = CVPixelBufferGetHeight(image)
-         
-         rgbValue = "RGB: [0, 0, 0]\n"
-         
-         print(rgbValue)
-         
-         if let depthData = currentFrame.sceneDepth{
-             let centerX = width/2
-             let centerY = height/2
-             let depthMap = depthData.depthMap
-             CVPixelBufferLockBaseAddress(depthMap, [])
-             
-             let pixelPointer = CVPixelBufferGetBaseAddress(depthMap)
-             let pixelBytesPerWor = CVPixelBufferGetBytesPerRow(depthMap)
-             let depth = pixelPointer?.load(fromByteOffset: centerY * pixelBytesPerWor + centerX * MemoryLayout<Float>.stride, as: Float.self)
-             let depthFormatType = CVPixelBufferGetPixelFormatType(depthMap)
-             print("n\(depthFormatType)\n")
-             //kCVPixelFormatType_DepthFloat32
-             depthValue = "Depth: \(depth) meters \n"
-             CVPixelBufferUnlockBaseAddress(depthMap, [])
-         }else{
-             depthValue = "Depth: N/A meters \n"
-         }
-         
-         print(depthValue)
-         
-         let cameraTransform = currentFrame.camera.transform
-         let NewPosition = SIMD3<Float>(cameraTransform.columns.3.x, cameraTransform.columns.3.y, cameraTransform.columns.3.z)
-         let NewOrientation = matrix_float3x3(
-             SIMD3<Float>(cameraTransform.columns.0.x, cameraTransform.columns.0.y, cameraTransform.columns.0.z),
-             SIMD3<Float>(cameraTransform.columns.1.x, cameraTransform.columns.1.y, cameraTransform.columns.1.z),
-             SIMD3<Float>(cameraTransform.columns.2.x, cameraTransform.columns.2.y, cameraTransform.columns.2.z)
-         )
-
-         
-         //position = "Position: (\(cameraTransform.columns.3.x), \(cameraTransform.columns.3.y), \(cameraTransform.columns.3.z))"
-         //orientation = "Orientation: (\(cameraTransform.columns.2.x), \(cameraTransform.columns.2.y), \(cameraTransform.columns.2.z))"
-         print("Position: \(position)\n")
-         print("Orientation: \(orientation)\n")
-         position = "Position: " + NewPosition.description + "\n"
-         orientation = "Orientation: " + NewOrientation.debugDescription + "\n"
-         let dateFormatter = DateFormatter()
-         dateFormatter.dateFormat = "HH:mm:ss"
-         let currentDateTime = dateFormatter.string(from: Date())
-         let arData = ""
-         
-         if let existingARData = readDataFromTextFile(fileName: saveFileName) {
-             do {
-                 let arData = existingARData + "\n" + currentDateTime + "\n" + rgbValue + depthValue + position + orientation
-                 try arData.write(to: url, atomically: true, encoding: .utf8)
-             } catch {
-                 print("Error appending to file: \(error)")
-             }
-         }
-         */
+        // Get the orientation matrix
+        let rotationMatrx = matrix_float3x3(SIMD3<Float>(cameraTransform.columns.0.x, cameraTransform.columns.0.y, cameraTransform.columns.0.z),
+                                            SIMD3<Float>(cameraTransform.columns.1.x, cameraTransform.columns.1.y, cameraTransform.columns.1.z),
+                                            SIMD3<Float>(cameraTransform.columns.2.x, cameraTransform.columns.2.y, cameraTransform.columns.2.z))
+        // Transform the orientation matrix to unit quaternion
+        let quaternion = simd_quaternion(rotationMatrx)
+        // Extract the value
+        let orientationX = quaternion.vector.x
+        let orientationY = quaternion.vector.y
+        let orientationZ = quaternion.vector.z
+        let orientationW = quaternion.vector.w
+        // Use the last column's vlaue, which is the representation of translation
+        let translationX = cameraTransform.columns.3.x
+        let translationY = cameraTransform.columns.3.y
+        let translationZ = cameraTransform.columns.3.z
+        
+        let pose = [orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ]
+        
+        if let exisitingFileData = readDataFromTextFile(fileName: globalPoseFileName) {
+            do {
+                let newAppendingPoseData = exisitingFileData + pose.description + "\n"
+                try newAppendingPoseData.description.write(to: poseURL, atomically: true, encoding: .utf8)
+            } catch {
+                print("Error when writing to the pose text file\n")
+            }
+        } else {
+            print("Error when reading existed pose data file\n")
+        }
     }
     
     func getDocumentsDirect() -> URL{
@@ -545,7 +434,6 @@ class ARViewModel: ObservableObject{
     }
     
     func switchCamera(){
-        if isOpen {
             guard var currenConfig = session.configuration else{
                 fatalError("Unexpectedly failed to get the configuration.")
             }
@@ -560,7 +448,6 @@ class ARViewModel: ObservableObject{
                     }
                     
             session.run(currenConfig)
-        }
-        print("AR session not started yet")
+        //print("AR session not started yet")
     }
 }

@@ -68,8 +68,20 @@ struct singleBLEPeripheral: View {
 struct PeripheralView: View {
     @EnvironmentObject var appStatus : AppInformation
     var body: some View {
-        List(appStatus.sharedBluetoothManager.peripherals, id: \.name) { peripheral in
-            singleBLEPeripheral(peripheral: peripheral, bluetoothManager: appStatus.sharedBluetoothManager)
+        VStack{
+            /*
+            Text("BLE-devices")
+                .fontWeight(.black)
+                .foregroundColor(Color.black)
+                .frame(width: 500.0, height: 130)
+                .ignoresSafeArea()
+                .background(.tabBackground)
+                .padding(.bottom, 10)
+             */
+            List(appStatus.sharedBluetoothManager.peripherals, id: \.name) { peripheral in
+                singleBLEPeripheral(peripheral: peripheral, bluetoothManager: appStatus.sharedBluetoothManager)
+            }
+            
         }
     }
 }

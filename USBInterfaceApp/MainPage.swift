@@ -33,7 +33,7 @@ struct MainPage: View {
                 
                 AccountView()
                     .tabItem {
-                        Label("account", systemImage:"person.circle.fill")
+                        Label("settings", systemImage: "gear")
             
                     }
             }

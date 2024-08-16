@@ -20,7 +20,7 @@ struct ReadView : View{
     @ObservedObject var sharedBluetoothManager =  BluetoothManager()
     @ObservedObject private var bluetoothManager = BluetoothManager()
     @State private var isReading = false
-    private let timerInterval: TimeInterval = 0.1
+    //private let timerInterval: TimeInterval = 0.1
     @State private var recordingTimer: Timer?
     @State private var showSheet = false
     @State var showingAlert : Bool = false
@@ -248,7 +248,7 @@ struct ReadView : View{
     
     func startRecording() {
         isReading = true
-        let timer = Timer.scheduledTimer(withTimeInterval: timerInterval, repeats: true) { _ in
+        let timer = Timer.scheduledTimer(withTimeInterval: appStatus.tactileRecordTimeInterval, repeats: true) { _ in
             //appStatus.SharedDataString += sharedBluetoothManager.recordSingleData() ?? ""
             //appStatus.SharedDataString = sharedBluetoothManager.recordString
             appStatus.sharedBluetoothManager.recordSingleData()

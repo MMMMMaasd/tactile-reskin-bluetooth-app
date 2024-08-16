@@ -31,6 +31,13 @@ struct RecordView : View{
                     }
                  */
                 VStack{
+                    Text("Data storage")
+                        .fontWeight(.black)
+                        .foregroundColor(Color.black)
+                        .frame(width: 500.0, height: 140)
+                        .ignoresSafeArea()
+                        .background(.tabBackground)
+                        .padding(.bottom, 192)
                     NavigationLink(destination: DataViewView()){
                         HStack{
                             Text("View your data")
@@ -74,7 +81,6 @@ struct RecordView : View{
                     })
                     .buttonStyle(.bordered)
                 }
-                .padding(.top, 300.0)
                 VStack{
                     Text("Need helps for understanding?")
                         .font(.headline)

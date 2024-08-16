@@ -48,6 +48,9 @@ struct ARViewContainer : UIViewRepresentable{
 
 class ARViewModel: ObservableObject{
     var session = ARSession()
+    // 100 FPS: 0.01
+    // 60 FPS: 0.017
+    // 30 FPS: 0.033
     private var timeInterval = 0.01
     //private var backgroundRecordingID: UUID?
     

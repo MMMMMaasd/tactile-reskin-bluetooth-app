@@ -254,7 +254,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLApp" */;
+			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -635,7 +635,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLApp" */ = {
+		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F7C2BFDE63C000D4DDD /* Debug */,

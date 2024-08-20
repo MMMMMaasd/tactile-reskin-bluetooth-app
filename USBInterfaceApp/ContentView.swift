@@ -72,6 +72,7 @@ class AppInformation : ObservableObject{
     @Published var ifAllowedRead = 0
     @Published var sharedBluetoothManager =  BluetoothManager()
     @Published var tactileRecordTimeInterval: Double = 0.1
+    @Published var animationFPS: Double = 60.0
 }
 
 

@@ -48,10 +48,13 @@ struct ARViewContainer : UIViewRepresentable{
 
 class ARViewModel: ObservableObject{
     var session = ARSession()
-    // 100 FPS: 0.01
-    // 60 FPS: 0.017
-    // 30 FPS: 0.033
-    private var timeInterval = 0.01
+    // 100 FPS: 0.01 (Not sure if its possible)
+    // 60 FPS: 0.017 : (1.0/60.0)
+    // 30 FPS: 0.033 : (1.0/30.0)
+    // 25 FPS: 0.04
+
+    public var timeInterval = (1.0/60.0)
+    public var userFPS = 60.0
     //private var backgroundRecordingID: UUID?
     
     // Control the destination of rgb and depth video file
@@ -291,7 +294,9 @@ class ARViewModel: ObservableObject{
 
                 context.render(transformedImage, to: outputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceRGB())
                 
-                if(timeCount.truncatingRemainder(dividingBy: 3.0) == 0.0){
+                print(timeCount.truncatingRemainder(dividingBy: (userFPS/30)))
+                if(timeCount.truncatingRemainder(dividingBy: (userFPS/30)) == 0.0){
+                    print("YEsssssssssss")
                     saveImage(from: outputBuffer, directory: rgbDirect)
                 }
                //

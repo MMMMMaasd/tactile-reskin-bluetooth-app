@@ -208,6 +208,8 @@ struct ReadView : View{
         showingSelectSheet.toggle()
     }
     func toggleRecording() {
+        arViewModel.timeInterval = (1.0/appStatus.animationFPS)
+        arViewModel.userFPS = appStatus.animationFPS
             isReading = !isReading
             //cameraModel.isRecording = !cameraModel.isRecording
             arViewModel.isOpen = !arViewModel.isOpen

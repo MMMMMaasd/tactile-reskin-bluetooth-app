@@ -48,7 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B9104F5A2BFDE63A000D4DDD /* USBInterfaceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USBInterfaceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReskinBLEApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppApp.swift; sourceTree = "<group>"; };
 		B9104F5F2BFDE63A000D4DDD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B9104F612BFDE63C000D4DDD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -104,8 +104,8 @@
 			isa = PBXGroup;
 			children = (
 				B9104F5C2BFDE63A000D4DDD /* ReskinBLEApp */,
-				B9104F6D2BFDE63C000D4DDD /* USBInterfaceAppTests */,
-				B9104F772BFDE63C000D4DDD /* USBInterfaceAppUITests */,
+				B9104F6D2BFDE63C000D4DDD /* ReskinBLEAppTests */,
+				B9104F772BFDE63C000D4DDD /* ReskinBLEAppUITests */,
 				B9104F5B2BFDE63A000D4DDD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,7 +113,7 @@
 		B9104F5B2BFDE63A000D4DDD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B9104F5A2BFDE63A000D4DDD /* USBInterfaceApp.app */,
+				B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */,
 				B9104F6A2BFDE63C000D4DDD /* ReskinBLEAppTests.xctest */,
 				B9104F742BFDE63C000D4DDD /* ReskinBLEAppUITests.xctest */,
 			);
@@ -154,29 +154,29 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		B9104F6D2BFDE63C000D4DDD /* USBInterfaceAppTests */ = {
+		B9104F6D2BFDE63C000D4DDD /* ReskinBLEAppTests */ = {
 			isa = PBXGroup;
 			children = (
 				B9104F6E2BFDE63C000D4DDD /* USBInterfaceAppTests.swift */,
 			);
-			path = USBInterfaceAppTests;
+			path = ReskinBLEAppTests;
 			sourceTree = "<group>";
 		};
-		B9104F772BFDE63C000D4DDD /* USBInterfaceAppUITests */ = {
+		B9104F772BFDE63C000D4DDD /* ReskinBLEAppUITests */ = {
 			isa = PBXGroup;
 			children = (
 				B9104F782BFDE63C000D4DDD /* USBInterfaceAppUITests.swift */,
 				B9104F7A2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift */,
 			);
-			path = USBInterfaceAppUITests;
+			path = ReskinBLEAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B9104F592BFDE63A000D4DDD /* USBInterfaceApp */ = {
+		B9104F592BFDE63A000D4DDD /* ReskinBLEApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "USBInterfaceApp" */;
+			buildConfigurationList = B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEApp" */;
 			buildPhases = (
 				B9104F562BFDE63A000D4DDD /* Sources */,
 				B9104F572BFDE63A000D4DDD /* Frameworks */,
@@ -186,11 +186,11 @@
 			);
 			dependencies = (
 			);
-			name = USBInterfaceApp;
+			name = ReskinBLEApp;
 			packageProductDependencies = (
 			);
 			productName = USBInterfaceApp;
-			productReference = B9104F5A2BFDE63A000D4DDD /* USBInterfaceApp.app */;
+			productReference = B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 		B9104F692BFDE63C000D4DDD /* ReskinBLEAppTests */ = {
@@ -254,7 +254,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "USBInterfaceApp" */;
+			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -271,7 +271,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B9104F592BFDE63A000D4DDD /* USBInterfaceApp */,
+				B9104F592BFDE63A000D4DDD /* ReskinBLEApp */,
 				B9104F692BFDE63C000D4DDD /* ReskinBLEAppTests */,
 				B9104F732BFDE63C000D4DDD /* ReskinBLEAppUITests */,
 			);
@@ -350,12 +350,12 @@
 /* Begin PBXTargetDependency section */
 		B9104F6C2BFDE63C000D4DDD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B9104F592BFDE63A000D4DDD /* USBInterfaceApp */;
+			target = B9104F592BFDE63A000D4DDD /* ReskinBLEApp */;
 			targetProxy = B9104F6B2BFDE63C000D4DDD /* PBXContainerItemProxy */;
 		};
 		B9104F762BFDE63C000D4DDD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B9104F592BFDE63A000D4DDD /* USBInterfaceApp */;
+			target = B9104F592BFDE63A000D4DDD /* ReskinBLEApp */;
 			targetProxy = B9104F752BFDE63C000D4DDD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -488,11 +488,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"USBInterfaceApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ReskinBLEApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 2S4WVQA973;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = USBInterfaceApp/Info.plist;
+				INFOPLIST_FILE = ReskinBLEApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ReskinBLEApp;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "";
@@ -526,11 +526,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"USBInterfaceApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ReskinBLEApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 2S4WVQA973;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = USBInterfaceApp/Info.plist;
+				INFOPLIST_FILE = ReskinBLEApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ReskinBLEApp;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "";
@@ -635,7 +635,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "USBInterfaceApp" */ = {
+		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F7C2BFDE63C000D4DDD /* Debug */,
@@ -644,7 +644,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "USBInterfaceApp" */ = {
+		B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F7F2BFDE63C000D4DDD /* Debug */,

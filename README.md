@@ -46,3 +46,18 @@ The published version has not been finished yet since we didn't apply to publish
 5. Xcode will certainly warn you to change your iPhone to developer mode, change it to develop mode, and then re-open your device (How to change to develop mode? https://developer.apple.com/documentation/xcode/enabling-developer-mode-on-a-device), now you should be able to connect!
  
 6. Important: This way of connection will only create a temporary version of this app, it will be disabled after the next few days. You need to re-simulate the app to keep track of it. 
+
+## Contact me
+Any more questions about tactile-reskin-BLE? Contact me:
+mail address: zb2253@nyu.edu
+Substitute address: michkoo@163.com
+
+App designer:
+Zeyu (Michael) Bian
+
+Special thanks to:
+Raunaq Bhirangi
+Haritheja Etukuru
+
+App is belong to: 
+New York University, CILVR Research Group 

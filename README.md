@@ -60,4 +60,5 @@ Raunaq Bhirangi
 Haritheja Etukuru
 
 App is belong to: 
-New York University, CILVR Research Group 
+New York University, CILVR Research Group: https://wp.nyu.edu/cilvr/
+

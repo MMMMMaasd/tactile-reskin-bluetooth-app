@@ -48,7 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReskinBLEApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9104F5A2BFDE63A000D4DDD /* USBInterfaceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USBInterfaceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppApp.swift; sourceTree = "<group>"; };
 		B9104F5F2BFDE63A000D4DDD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B9104F612BFDE63C000D4DDD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -103,7 +103,7 @@
 		B9104F512BFDE63A000D4DDD = {
 			isa = PBXGroup;
 			children = (
-				B9104F5C2BFDE63A000D4DDD /* USBInterfaceApp */,
+				B9104F5C2BFDE63A000D4DDD /* ReskinBLEApp */,
 				B9104F6D2BFDE63C000D4DDD /* USBInterfaceAppTests */,
 				B9104F772BFDE63C000D4DDD /* USBInterfaceAppUITests */,
 				B9104F5B2BFDE63A000D4DDD /* Products */,
@@ -113,14 +113,14 @@
 		B9104F5B2BFDE63A000D4DDD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */,
+				B9104F5A2BFDE63A000D4DDD /* USBInterfaceApp.app */,
 				B9104F6A2BFDE63C000D4DDD /* ReskinBLEAppTests.xctest */,
 				B9104F742BFDE63C000D4DDD /* ReskinBLEAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B9104F5C2BFDE63A000D4DDD /* USBInterfaceApp */ = {
+		B9104F5C2BFDE63A000D4DDD /* ReskinBLEApp */ = {
 			isa = PBXGroup;
 			children = (
 				B98D69632C04911F00648D95 /* Info.plist */,
@@ -144,7 +144,7 @@
 				B9104F612BFDE63C000D4DDD /* Assets.xcassets */,
 				B9104F632BFDE63C000D4DDD /* Preview Content */,
 			);
-			path = USBInterfaceApp;
+			path = ReskinBLEApp;
 			sourceTree = "<group>";
 		};
 		B9104F632BFDE63C000D4DDD /* Preview Content */ = {
@@ -174,9 +174,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B9104F592BFDE63A000D4DDD /* ReskinBLEApp */ = {
+		B9104F592BFDE63A000D4DDD /* USBInterfaceApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEApp" */;
+			buildConfigurationList = B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "USBInterfaceApp" */;
 			buildPhases = (
 				B9104F562BFDE63A000D4DDD /* Sources */,
 				B9104F572BFDE63A000D4DDD /* Frameworks */,
@@ -186,11 +186,11 @@
 			);
 			dependencies = (
 			);
-			name = ReskinBLEApp;
+			name = USBInterfaceApp;
 			packageProductDependencies = (
 			);
 			productName = USBInterfaceApp;
-			productReference = B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */;
+			productReference = B9104F5A2BFDE63A000D4DDD /* USBInterfaceApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 		B9104F692BFDE63C000D4DDD /* ReskinBLEAppTests */ = {
@@ -254,7 +254,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */;
+			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "USBInterfaceApp" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -271,7 +271,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B9104F592BFDE63A000D4DDD /* ReskinBLEApp */,
+				B9104F592BFDE63A000D4DDD /* USBInterfaceApp */,
 				B9104F692BFDE63C000D4DDD /* ReskinBLEAppTests */,
 				B9104F732BFDE63C000D4DDD /* ReskinBLEAppUITests */,
 			);
@@ -350,12 +350,12 @@
 /* Begin PBXTargetDependency section */
 		B9104F6C2BFDE63C000D4DDD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B9104F592BFDE63A000D4DDD /* ReskinBLEApp */;
+			target = B9104F592BFDE63A000D4DDD /* USBInterfaceApp */;
 			targetProxy = B9104F6B2BFDE63C000D4DDD /* PBXContainerItemProxy */;
 		};
 		B9104F762BFDE63C000D4DDD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B9104F592BFDE63A000D4DDD /* ReskinBLEApp */;
+			target = B9104F592BFDE63A000D4DDD /* USBInterfaceApp */;
 			targetProxy = B9104F752BFDE63C000D4DDD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -572,7 +572,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/USBInterfaceApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/USBInterfaceApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReskinBLEApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReskinBLEApp";
 			};
 			name = Debug;
 		};
@@ -592,7 +592,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/USBInterfaceApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/USBInterfaceApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReskinBLEApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReskinBLEApp";
 			};
 			name = Release;
 		};
@@ -635,7 +635,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */ = {
+		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "USBInterfaceApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F7C2BFDE63C000D4DDD /* Debug */,
@@ -644,7 +644,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEApp" */ = {
+		B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "USBInterfaceApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F7F2BFDE63C000D4DDD /* Debug */,

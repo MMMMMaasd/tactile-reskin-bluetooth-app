@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import USBInterfaceApp
+@testable import ReskinBLEApp
 
 final class USBInterfaceAppTests: XCTestCase {
 

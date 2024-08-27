@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/bianzeyu/Desktop/USBInterfaceApp/ReskinBLEApp.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>

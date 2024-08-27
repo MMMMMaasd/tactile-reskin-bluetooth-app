@@ -19,6 +19,11 @@ struct AccountView : View{
                 .ignoresSafeArea()
                 .background(.tabBackground)
                 .padding(.bottom, 600)
+            Text("General")
+                .fontWeight(.light)
+                .foregroundColor(Color.black)
+                .padding(.bottom, 435)
+                .padding(.trailing, 305)
             HStack{
                     Text("Animation Rate")
                        
@@ -30,7 +35,7 @@ struct AccountView : View{
             .frame(width: 400.0, height: 40.0)
             .background(.tabBackground)
             .padding(.trailing, 5)
-            .padding(.bottom, 390.0)
+            .padding(.bottom, 370.0)
             
             HStack{
                     Text("Tactile data reading frequency")

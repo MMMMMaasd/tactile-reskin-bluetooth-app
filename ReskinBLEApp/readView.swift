@@ -11,6 +11,7 @@ import CoreBluetooth
 import BackgroundTasks
 import UserNotifications
 import Foundation
+import AVFoundation
 
 struct ReadView : View{
     @StateObject var arViewModel = ARViewModel()
@@ -28,6 +29,7 @@ struct ReadView : View{
     @State private var fileSetNames = ["", "", "", "", "", ""]
     @State var showingExporter = false
     @State var showingSelectSheet = false
+    @State var openFlash = true
     @State var exportFileName = ""
     var body : some View{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -82,6 +84,7 @@ struct ReadView : View{
                }
             }
             .padding(.top, 580.0)
+            .padding(.leading, 20)
             .buttonStyle(.bordered)
             
             .alert(isPresented: $showingAlert){
@@ -113,6 +116,7 @@ struct ReadView : View{
                                 .frame(width: 80.0, height: 35.0)
                                 .border(Color.green)
                                 .background(.green)
+                            /*
                             Button(action:{
                                 arViewModel.switchCamera()
                             }){
@@ -120,6 +124,20 @@ struct ReadView : View{
                                     .resizable()
                                     .frame(height: 35)
                                     .frame(width: 39)
+                            }
+                             */
+                            Button(action: toggleFlash){
+                                if(openFlash){
+                                    Image(systemName: "flashlight.off.fill")
+                                        .resizable()
+                                        .frame(height: 35)
+                                        .frame(width: 20)
+                                }else{
+                                    Image(systemName: "flashlight.on.fill")
+                                        .resizable()
+                                        .frame(height: 35)
+                                        .frame(width: 20)
+                                }
                             }
                         }
                         .padding(.leading, 250)
@@ -133,6 +151,7 @@ struct ReadView : View{
                                 .frame(width: 80.0, height: 35.0)
                                 .border(Color.red)
                                 .background(.red)
+                            /*
                             Button(action:{
                                 arViewModel.switchCamera()
                             }){
@@ -141,12 +160,27 @@ struct ReadView : View{
                                     .frame(height: 35)
                                     .frame(width: 39)
                             }
+                            */
+                            Button(action: toggleFlash){
+                                if(openFlash){
+                                    Image(systemName: "flashlight.off.fill")
+                                        .resizable()
+                                        .frame(height: 35)
+                                        .frame(width: 20)
+                                }else{
+                                    Image(systemName: "flashlight.on.fill")
+                                        .resizable()
+                                        .frame(height: 35)
+                                        .frame(width: 20)
+                                }
+                            }
                         }
                         .padding(.leading, 250)
                         .padding(.top, 560)
                         .buttonStyle(.bordered)
                     }
                 }else{
+                    /*
                     Button(action:{
                         arViewModel.switchCamera()
                     }){
@@ -154,6 +188,19 @@ struct ReadView : View{
                             .resizable()
                             .frame(height: 35)
                             .frame(width: 39)
+                    }*/
+                    Button(action: toggleFlash){
+                        if(openFlash){
+                            Image(systemName: "flashlight.off.fill")
+                                .resizable()
+                                .frame(height: 35)
+                                .frame(width: 20)
+                        }else{
+                            Image(systemName: "flashlight.on.fill")
+                                .resizable()
+                                .frame(height: 35)
+                                .frame(width: 20)
+                        }
                     }
                     .padding(.leading, 250)
                     .padding(.top, 603)
@@ -233,6 +280,7 @@ struct ReadView : View{
                 }
                  */
                 fileSetNames = arViewModel.startSession()
+                
                 print(fileSetNames)
             } else {
                 if(appStatus.sharedBluetoothManager.ifConnected){
@@ -248,6 +296,27 @@ struct ReadView : View{
         }
      */
     
+    func toggleFlash() {
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video)
+        else {return}
+        if device.hasTorch {
+            do {
+                try device.lockForConfiguration()
+                if openFlash == true { device.torchMode = .on // set on
+                } else {
+                    device.torchMode = .off // set off
+                }
+                device.unlockForConfiguration()
+            } catch {
+                print("Flash could not be used")
+            }
+        } else {
+            print("Flash is not available")
+        }
+        openFlash = !openFlash
+    }
+
+        
     func startRecording() {
         isReading = true
         let timer = Timer.scheduledTimer(withTimeInterval: appStatus.tactileRecordTimeInterval, repeats: true) { _ in

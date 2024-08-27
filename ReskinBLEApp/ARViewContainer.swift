@@ -85,7 +85,46 @@ class ARViewModel: ObservableObject{
     private var timer: Timer?
     private var startTime: CMTime?
     
+    /*
+    func startCountdown(arView: ARView, completion: @escaping () -> Array<String>) {
+            var countdown = 3
+            let countdownLabel = UILabel()
+            countdownLabel.font = UIFont.boldSystemFont(ofSize: 100)
+            countdownLabel.textColor = .white
+            countdownLabel.textAlignment = .center
+            countdownLabel.frame = arView.bounds
+            arView.addSubview(countdownLabel)
+        
+            func showCountdown(number: Int) {
+                countdownLabel.text = "\(number)"
+            }
+
+            func removeCountdown() {
+                countdownLabel.removeFromSuperview()
+            }
+
+            let countdownTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+                showCountdown(number: countdown)
+                if countdown == 0 {
+                    timer.invalidate()
+                    removeCountdown()
+                    completion() // Start the recording after countdown
+                } else {
+                    countdown -= 1
+                }
+            }
+            
+            countdownTimer.fire()
+        }
+    func startSession(arView: ARView) -> Array<String>{
+          startCountdown(arView: arView) { [weak self] in
+              return self?.beginRecording() ?? ["", "", "", "", "", ""]
+          }
+        return ["", "", "", "", "", ""]
+      }
+*/
     func startSession() -> Array<String>{
+
         rgbImageCount = 0
         depthImageCount = 0
         timeCount = 0.0

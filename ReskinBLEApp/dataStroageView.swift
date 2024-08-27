@@ -40,10 +40,10 @@ struct RecordView : View{
                         .padding(.bottom, 192)
                     NavigationLink(destination: DataViewView()){
                         HStack{
-                            Text("View your data")
+                            Text("View recorded tactile data")
                             Image(systemName: "doc.text")
                         }
-                        .frame(width: 150.0, height: 45)
+                        .frame(width: 250.0, height: 45)
                         .background(.viewButton)
                         .cornerRadius(5)
                     }
@@ -76,7 +76,7 @@ struct RecordView : View{
                         }
                         showingExporter.toggle()
                     }, label: {
-                        Text("Export Data")
+                        Text("Export recorded tactile data")
                         Image(systemName: "square.and.arrow.up.on.square")
                     })
                     .buttonStyle(.bordered)

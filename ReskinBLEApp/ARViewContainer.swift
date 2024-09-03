@@ -34,7 +34,7 @@ struct ARViewContainer : UIViewRepresentable{
     func configureCamera(arView: ARView) {
             guard let camera = arView.session.configuration as? ARWorldTrackingConfiguration else { return }
             camera.videoFormat = ARWorldTrackingConfiguration.supportedVideoFormats.first(where: {
-                $0.imageResolution.width == 720 && $0.imageResolution.height == 1280
+                $0.imageResolution.width == 720 && $0.imageResolution.height == 960
             }) ?? ARWorldTrackingConfiguration.supportedVideoFormats[0]
             camera.frameSemantics = .sceneDepth
         arView.session.run(camera)
@@ -198,7 +198,7 @@ class ARViewModel: ObservableObject{
             let videoSettings: [String: Any] = [
                 AVVideoCodecKey: AVVideoCodecType.h264,
                 AVVideoWidthKey: 720,
-                AVVideoHeightKey: 1280,
+                AVVideoHeightKey: 960,
                 AVVideoScalingModeKey: AVVideoScalingModeResizeAspectFill
             ]
             
@@ -209,7 +209,7 @@ class ARViewModel: ObservableObject{
             let rgbAttributes: [String: Any] = [
                 kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32ARGB),
                 kCVPixelBufferWidthKey as String: 720,
-                kCVPixelBufferHeightKey as String: 1280
+                kCVPixelBufferHeightKey as String: 960
                 
             ]
             pixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput!, sourcePixelBufferAttributes: rgbAttributes)
@@ -225,7 +225,7 @@ class ARViewModel: ObservableObject{
             let depthAttributes: [String: Any] = [
                 kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA),
                 kCVPixelBufferWidthKey as String: 720,
-                kCVPixelBufferHeightKey as String: 1280
+                kCVPixelBufferHeightKey as String: 960
             ]
             
             depthPixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: depthVideoInput!, sourcePixelBufferAttributes: depthAttributes)
@@ -292,7 +292,7 @@ class ARViewModel: ObservableObject{
         let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
         // let viewPort = windowScene.bounds
         //let viewPortSize = windowScene.bounds.size
-        let viewPortSize = CGSize(width: 720, height: 1280)
+        let viewPortSize = CGSize(width: 720, height: 960)
         
         //guard let rgbdPixelBuffer = createRGBDFrame(rgb: rgbPixelBuffer, depth: depthPixelBuffer) else {return}
         if let videoInput = videoInput, videoInput.isReadyForMoreMediaData == true {

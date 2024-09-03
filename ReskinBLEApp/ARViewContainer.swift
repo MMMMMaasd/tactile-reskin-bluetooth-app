@@ -81,6 +81,7 @@ class ARViewModel: ObservableObject{
     public var rgbImageCount: Int = 0
     public var depthImageCount: Int = 0
     public var timeCount: Double = 0.0
+    public var recordTimestamp: Double = 0.0
     
     private var timer: Timer?
     private var startTime: CMTime?
@@ -128,6 +129,7 @@ class ARViewModel: ObservableObject{
         rgbImageCount = 0
         depthImageCount = 0
         timeCount = 0.0
+        recordTimestamp = 0.0
         
         /*
         let configuration = ARWorldTrackingConfiguration()
@@ -140,6 +142,7 @@ class ARViewModel: ObservableObject{
         
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true){ [weak self] _ in
             self?.updateData()
+            self?.recordTimestamp += self?.timeInterval ?? 0.0
             self?.timeCount += 1.0
             print(self?.timeCount)
         }
@@ -163,7 +166,7 @@ class ARViewModel: ObservableObject{
         let depthFileName = "AR_Depth_\(currentDateTime).mp4"
         let rgbImagesDirectName = "RGB_Images_Frames \(currentDateTime)"
         let depthImagesDirectName = "Depth_Images_Frames_\(currentDateTime)"
-        let poseFileName = "AR_Pose_\(currentDateTime).txt"
+        let poseFileName = "AR_Pose_with_Time_\(currentDateTime).txt"
         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let rgbVideoURL = url[0].appendingPathComponent(rgbFileName)
         let depthVideoURL = url[0].appendingPathComponent(depthFileName)
@@ -332,12 +335,14 @@ class ARViewModel: ObservableObject{
                 let context = CIContext()
 
                 context.render(transformedImage, to: outputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceRGB())
-                
+                /*
                 print(timeCount.truncatingRemainder(dividingBy: (userFPS/30)))
                 if(timeCount.truncatingRemainder(dividingBy: (userFPS/30)) == 0.0){
                     print("YEsssssssssss")
                     saveImage(from: outputBuffer, directory: rgbDirect)
                 }
+                 */
+               saveImage(from: outputBuffer, directory: rgbDirect)
                //
                 print("rgbPixelBuffer dimensions: \(CVPixelBufferGetWidth(rgbPixelBuffer)), \(CVPixelBufferGetHeight(rgbPixelBuffer))\n")
                 print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
@@ -394,9 +399,12 @@ class ARViewModel: ObservableObject{
             let context = CIContext()
                 context.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceGray())
             
-            if(timeCount.truncatingRemainder(dividingBy: 3.0) == 0.0){
+            /*
+            if(timeCount.truncatingRemainder(dividingBy: (userFPS/30)) == 0.0){
                 saveImage(from: depthOutputBuffer, directory: depthDirect, isDepth: true)
             }
+            */
+            saveImage(from: depthOutputBuffer, directory: depthDirect, isDepth: true)
             
             print("depthPixelBuffer dimensions: \(CVPixelBufferGetWidth(depthPixelBuffer)), \(CVPixelBufferGetHeight(depthPixelBuffer))\n")
             print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
@@ -434,20 +442,21 @@ class ARViewModel: ObservableObject{
         // Transform the orientation matrix to unit quaternion
         let quaternion = simd_quaternion(rotationMatrx)
         // Extract the value
-        let orientationX = quaternion.vector.x
-        let orientationY = quaternion.vector.y
-        let orientationZ = quaternion.vector.z
-        let orientationW = quaternion.vector.w
+        let orientationY = quaternion.vector.x
+        let orientationX = -(quaternion.vector.y)
+        let orientationW = quaternion.vector.z
+        let orientationZ = -(quaternion.vector.w)
         // Use the last column's vlaue, which is the representation of translation
         let translationX = cameraTransform.columns.3.x
         let translationY = cameraTransform.columns.3.y
         let translationZ = cameraTransform.columns.3.z
         
-        let pose = [orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ]
+        
+        let poseWithTime = [recordTimestamp, orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ] as [Any]
         
         if let exisitingFileData = readDataFromTextFile(fileName: globalPoseFileName) {
             do {
-                let newAppendingPoseData = exisitingFileData + pose.description + "\n"
+                let newAppendingPoseData = exisitingFileData + poseWithTime.description + "\n"
                 try newAppendingPoseData.description.write(to: poseURL, atomically: true, encoding: .utf8)
             } catch {
                 print("Error when writing to the pose text file\n")

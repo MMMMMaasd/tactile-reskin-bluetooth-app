@@ -43,7 +43,7 @@ struct ReadView : View{
              */
             ARViewContainer(session: arViewModel.session)
                 .edgesIgnoringSafeArea(.all)
-                .frame(width: 350.0, height: 550.0)
+                .frame(width: 400.0, height: 550.0)
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 .padding(.bottom, 100.0)
              

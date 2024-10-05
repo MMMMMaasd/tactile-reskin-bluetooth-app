@@ -13,6 +13,7 @@ import AVFoundation
 import CoreMedia
 import CoreImage
 import UIKit
+import CoreImage.CIFilterBuiltins
 
 struct ARViewContainer : UIViewRepresentable{
     var session: ARSession
@@ -55,6 +56,7 @@ class ARViewModel: ObservableObject{
 
     public var timeInterval = (1.0/60.0)
     public var userFPS = 60.0
+    public var isColorMapOpened = false
     //private var backgroundRecordingID: UUID?
     
     // Control the destination of rgb and depth video file
@@ -64,6 +66,9 @@ class ARViewModel: ObservableObject{
     private var depthAssetWriter: AVAssetWriter?
     private var depthVideoInput: AVAssetWriterInput?
     private var depthPixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
+    private var coloredAssetWriter: AVAssetWriter?
+    private var coloredVideoInput: AVAssetWriterInput?
+    private var coloredPixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
     
     @Published var rgbValue: String = "N/A"
     @Published var depthValue: String = "N/A"
@@ -76,6 +81,7 @@ class ARViewModel: ObservableObject{
     @Published var depthDirect: URL = URL(fileURLWithPath: "")
     // Control the destination of pose data text file
     @Published var poseURL: URL = URL(fileURLWithPath: "")
+    @Published var generalURL: URL = URL(fileURLWithPath: "")
     @Published var globalPoseFileName: String = ""
     
     public var rgbImageCount: Int = 0
@@ -164,24 +170,40 @@ class ARViewModel: ObservableObject{
         let currentDateTime = dateFormatter.string(from: Date())
         let rgbFileName = "AR_RGB_\(currentDateTime).mp4"
         let depthFileName = "AR_Depth_\(currentDateTime).mp4"
+        // let colorMapFileName = "AR_Colored_\(currentDateTime).mp4"
         let rgbImagesDirectName = "RGB_Images_Frames \(currentDateTime)"
-        let depthImagesDirectName = "Depth_Images_Frames_\(currentDateTime)"
+        var depthImagesDirectName = "Depth_Images_Frames_\(currentDateTime)"
+        if isColorMapOpened {
+            depthImagesDirectName = "Depth_Colored_Images_Frames_\(currentDateTime)"
+        }
         let poseFileName = "AR_Pose_with_Time_\(currentDateTime).txt"
+        let generalDataRecordDirectName = "Recorded Data_\(currentDateTime)"
+        let tactileDataFileName = "Tactile_\(currentDateTime).txt"
+        
         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let rgbVideoURL = url[0].appendingPathComponent(rgbFileName)
-        let depthVideoURL = url[0].appendingPathComponent(depthFileName)
-        let rgbImagesDirect = url[0].appendingPathComponent(rgbImagesDirectName)
-        let depthImagesDirect = url[0].appendingPathComponent(depthImagesDirectName)
-        let poseTextURL = url[0].appendingPathComponent(poseFileName)
+        let generalDataRecordDirectURL = url[0].appendingPathComponent(generalDataRecordDirectName)
+        let rgbVideoURL = generalDataRecordDirectURL.appendingPathComponent(rgbFileName)
+        let depthVideoURL = generalDataRecordDirectURL.appendingPathComponent(depthFileName)
+        // let coloredVideoURL = generalDataRecordDirectURL.appendingPathComponent(colorMapFileName)
+        let rgbImagesDirect = generalDataRecordDirectURL.appendingPathComponent(rgbImagesDirectName)
+        let depthImagesDirect = generalDataRecordDirectURL.appendingPathComponent(depthImagesDirectName)
+        let poseTextURL = generalDataRecordDirectURL.appendingPathComponent(poseFileName)
+        let tactileDataFileURL = generalDataRecordDirectURL.appendingPathComponent(tactileDataFileName)
         print(rgbVideoURL)
         print(depthVideoURL)
         
         do {
+            try FileManager.default.createDirectory(at: generalDataRecordDirectURL, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.createDirectory(at: rgbImagesDirect, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.createDirectory(at: depthImagesDirect, withIntermediateDirectories: true, attributes: nil)
-            try createFile(fileName: poseFileName)
+            try createFile(targetURL: generalDataRecordDirectURL, fileName: poseFileName)
+            try createFile(targetURL: generalDataRecordDirectURL, fileName: tactileDataFileName)
+            /*
             try FileManager.default.removeItem(at: rgbVideoURL)
             try FileManager.default.removeItem(at: depthVideoURL)
+             */
+            // try FileManager.default.removeItem(at: coloredVideoURL)
+            
         } catch {
             print("Error")
         }
@@ -190,9 +212,12 @@ class ARViewModel: ObservableObject{
         depthDirect = depthImagesDirect
         poseURL = poseTextURL
         globalPoseFileName = poseFileName
+        generalURL = generalDataRecordDirectURL
         
         do {
             // Determine which video file url the assetWriter will write into
+            
+            // RGB
             assetWriter = try AVAssetWriter(outputURL: rgbVideoURL, fileType: .mp4)
             
             let videoSettings: [String: Any] = [
@@ -217,6 +242,7 @@ class ARViewModel: ObservableObject{
             startTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
             assetWriter?.startSession(atSourceTime: startTime!)
             
+            // Depth
             depthAssetWriter = try AVAssetWriter(outputURL: depthVideoURL, fileType: .mp4)
             depthVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
             depthVideoInput?.expectsMediaDataInRealTime = true
@@ -232,11 +258,30 @@ class ARViewModel: ObservableObject{
             
             depthAssetWriter?.startWriting()
             depthAssetWriter?.startSession(atSourceTime: startTime!)
+            
+            // Colormap
+            /*
+            coloredAssetWriter = try AVAssetWriter(outputURL: coloredVideoURL, fileType: .mp4)
+            coloredVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
+            coloredVideoInput?.expectsMediaDataInRealTime = true
+            coloredAssetWriter?.add(coloredVideoInput!)
+            
+            let coloredAttributes: [String: Any] = [
+                kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA),
+                kCVPixelBufferWidthKey as String: 720,
+                kCVPixelBufferHeightKey as String: 960
+            ]
+            
+            coloredPixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: coloredVideoInput!, sourcePixelBufferAttributes: coloredAttributes)
+            
+            coloredAssetWriter?.startWriting()
+            coloredAssetWriter?.startSession(atSourceTime: startTime!)
+            */
         } catch {
             print("Failed to setup recording: \(error)")
         }
         
-        return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName, poseFileName]
+        return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName, poseFileName, generalDataRecordDirectName, tactileDataFileName]
     }
     
     private func saveImage(from pixelBuffer: CVPixelBuffer, directory: URL, isDepth: Bool = false){
@@ -280,7 +325,7 @@ class ARViewModel: ObservableObject{
     
         let rgbPixelBuffer = currentFrame.capturedImage
         guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
-        
+    
         /*
         if(timeCount.truncatingRemainder(dividingBy: 0.03) == 0.0){
             saveImage(from: rgbPixelBuffer, directory: rgbDirect)
@@ -387,6 +432,37 @@ class ARViewModel: ObservableObject{
                 return
             }
             
+            /*
+            let gradientFilter = CIFilter.linearGradient()
+            gradientFilter.point0 = CGPoint(x: 0, y: 0)
+            gradientFilter.point1 = CGPoint(x: depthSize.width, y: depthSize.height)
+            gradientFilter.color0 = CIColor(red: 1, green: 1, blue: 0)
+            gradientFilter.color1 = CIColor(red: 0, green: 0, blue: 1)
+            guard let gradientImage = gradientFilter.outputImage else {
+                print("Failed to get output image from gradient filter.")
+                return
+            }
+            
+            let colorMapFilter = CIFilter.colorMap()
+            colorMapFilter.inputImage = ciImageAfterFiltered
+            colorMapFilter.gradientImage = gradientImage
+            guard let ciImageAfterMapped = colorMapFilter.outputImage else {
+                print("Failed to get output image from color map filter.")
+                return
+            }
+            */
+            
+            var ciImageToRender = ciImageAfterFiltered
+            
+            if(isColorMapOpened){
+                let falseColorFilter = CIFilter.falseColor()
+                falseColorFilter.color0 = CIColor(red: 1, green: 1, blue: 0)
+                falseColorFilter.color1 = CIColor(red: 0, green: 0, blue: 1)
+                falseColorFilter.inputImage = ciImageAfterFiltered
+                ciImageToRender = falseColorFilter.outputImage!
+            }
+        
+            
             let normalizeTransform = CGAffineTransform(scaleX: 1.0/depthSize.width, y: 1.0/depthSize.height)
             let flipTransform = (orientation.isPortrait) ? CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1) : .identity
             let displayTransform = currentFrame.displayTransform(for: orientation, viewportSize: viewPortSize)
@@ -394,10 +470,14 @@ class ARViewModel: ObservableObject{
             let cropRect = CGRect(
                 x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height
             )
-            let transformedImage = ciImageAfterFiltered.transformed(by: normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)).cropped(to: cropRect)
+            let transformedImage = ciImageToRender.transformed(by: normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)).cropped(to: cropRect)
             
             let context = CIContext()
+            if(isColorMapOpened) {
+                context.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceRGB())
+            } else {
                 context.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceGray())
+            }
             
             /*
             if(timeCount.truncatingRemainder(dividingBy: (userFPS/30)) == 0.0){
@@ -414,6 +494,62 @@ class ARViewModel: ObservableObject{
             
             CVPixelBufferUnlockBaseAddress(depthOutputBuffer, [])
             CVPixelBufferUnlockBaseAddress(depthPixelBuffer, .readOnly)
+        }
+        
+        // Processing Colormap Depth Frame
+           
+            
+        if coloredVideoInput?.isReadyForMoreMediaData == true {
+            guard let colorPixelBufferPool = coloredPixelBufferAdapter?.pixelBufferPool else {
+                print("Depth pixel buffer pool is nil.")
+                return
+            }
+            
+            var colorOutputPixelBuffer: CVPixelBuffer?
+            let colorStatus = CVPixelBufferPoolCreatePixelBuffer(nil, colorPixelBufferPool, &colorOutputPixelBuffer)
+            guard colorStatus == kCVReturnSuccess, let colorOutputBuffer = colorOutputPixelBuffer else {
+                print("Unable to create output pixel buffer for color map.")
+                return
+            }
+            
+            CVPixelBufferLockBaseAddress(depthPixelBuffer, .readOnly)
+            CVPixelBufferLockBaseAddress(colorOutputBuffer, [])
+            
+            let colorCiImage = CIImage(cvPixelBuffer: depthPixelBuffer)
+            
+            let gradientColors = [CIColor(red: 0, green: 0, blue: 1), CIColor(red: 1, green: 1, blue: 0)]
+            let gradientFilter = CIFilter(name: "CILinearGradient")!
+            gradientFilter.setValue(CIColor(red: 0, green: 0, blue: 1), forKey: "inputColor0")
+            gradientFilter.setValue(CIColor(red: 1, green: 0, blue: 0), forKey: "inputColor1")
+            gradientFilter.setValue(CIVector(x: 0, y: 0), forKey: "inputPoint0")
+            gradientFilter.setValue(CIVector(x: depthSize.width, y: depthSize.height), forKey: "inputPoint1")
+                    
+            let gradientImage = gradientFilter.outputImage!.cropped(to: CGRect(origin: .zero, size: depthSize))
+            
+            let colorMapFilter = CIFilter(name: "CIColorControls")!
+            colorMapFilter.setValue(colorCiImage, forKey: kCIInputImageKey)
+            
+            guard let colorCiImageAfterFiltered = colorMapFilter.outputImage else {
+                print("Failed to get output image from color map filter.")
+                return
+            }
+            
+            let normalizeTransform = CGAffineTransform(scaleX: 1.0/depthSize.width, y: 1.0/depthSize.height)
+            let flipTransform = (orientation.isPortrait) ? CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1) : .identity
+            let displayTransform = currentFrame.displayTransform(for: orientation, viewportSize: viewPortSize)
+            let toViewPortTransform = CGAffineTransform(scaleX: viewPortSize.width, y: viewPortSize.height)
+            let cropRect = CGRect(
+                x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height
+            )
+            let transformedImage = colorCiImageAfterFiltered.transformed(by: normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)).cropped(to: cropRect)
+            
+            let colorContext = CIContext()
+            colorContext.render(transformedImage, to: colorOutputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceRGB())
+            
+            coloredPixelBufferAdapter?.append(colorOutputBuffer, withPresentationTime: currentTime)
+            CVPixelBufferUnlockBaseAddress(colorOutputBuffer, [])
+            CVPixelBufferUnlockBaseAddress(depthPixelBuffer, .readOnly)
+            
         }
 
     }
@@ -451,10 +587,12 @@ class ARViewModel: ObservableObject{
         let translationY = cameraTransform.columns.3.y
         let translationZ = cameraTransform.columns.3.z
         
+        let currentTimer = Date()
+        let dataReadTimeStamp = Int64(currentTimer.timeIntervalSince1970 * 1000)
         
-        let poseWithTime = [recordTimestamp, orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ] as [Any]
+        let poseWithTime = ["<\(dataReadTimeStamp)>", orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ] as [Any]
         
-        if let exisitingFileData = readDataFromTextFile(fileName: globalPoseFileName) {
+        if let exisitingFileData = readDataFromTextFile(targetURL: generalURL, fileName: globalPoseFileName) {
             do {
                 let newAppendingPoseData = exisitingFileData + poseWithTime.description + "\n"
                 try newAppendingPoseData.description.write(to: poseURL, atomically: true, encoding: .utf8)
@@ -472,15 +610,14 @@ class ARViewModel: ObservableObject{
         return paths[0]
     }
     
-    func createFile(fileName: String) throws {
-            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            let fileURL = documentsURL[0].appendingPathComponent(fileName)
+    func createFile(targetURL: URL, fileName: String) throws {
+            let fileURL = targetURL.appendingPathComponent(fileName)
             try FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
     }
     
-    func readDataFromTextFile(fileName : String) -> String? {
-        let url = getDocumentsDirect().appendingPathComponent(fileName)
+    func readDataFromTextFile(targetURL: URL, fileName : String) -> String? {
         do {
+            let url = targetURL.appendingPathComponent(fileName)
             let contents = try String(contentsOf: url, encoding: .utf8)
             return contents
         } catch {

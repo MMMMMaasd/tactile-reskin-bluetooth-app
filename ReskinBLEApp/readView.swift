@@ -26,13 +26,13 @@ struct ReadView : View{
     @State private var showSheet = false
     @State var showingAlert : Bool = false
     @Environment(\.scenePhase) private var phase
-    @State private var fileSetNames = ["", "", "", "", "", ""]
+    @State private var fileSetNames = ["", "", "", "", "", "", "", ""]
     @State var showingExporter = false
     @State var showingSelectSheet = false
     @State var openFlash = true
     @State var exportFileName = ""
     var body : some View{
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        var paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         ZStack{
             /*
             CameraView(cameraModel: cameraModel)
@@ -90,21 +90,58 @@ struct ReadView : View{
             .alert(isPresented: $showingAlert){
                 Alert(title: Text("Warning")
                     .foregroundColor(.red),
-                      message: Text("No available bluetooth device connected, you need to connect to a device first!"),
-                      dismissButton: .destructive(Text("Ok")){
-                    showingAlert = false
-                    }
+                      message: Text("Your last recorded data will all be deleted, are you sure?"),
+                      primaryButton: .destructive(Text("Yes")) {
+                                  showingAlert = false
+                                  deleteRecordedData(url: paths, targetDirect: fileSetNames[6])
+                              },
+                              secondaryButton: .cancel(Text("No")) {
+                                  showingAlert = false
+                                  
+                              }
                 )
             }
-            
-            Button(action: {showingExporter.toggle()}){
-                Text("save AR data")
-                    .font(.footnote)
-                    .frame(width: 80.0, height: 35.0)
+            VStack{
+                Button(action: {
+                    showingExporter.toggle()
+                    if(appStatus.hapticFeedbackLevel == "medium") {
+                        let impact = UIImpactFeedbackGenerator(style: .medium)
+                        impact.impactOccurred()
+                    } else if (appStatus.hapticFeedbackLevel == "heavy") {
+                        let impact = UIImpactFeedbackGenerator(style: .heavy)
+                        impact.impactOccurred()
+                    } else if (appStatus.hapticFeedbackLevel == "light") {
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                    }}){
+                    Text("Export to local")
+                        .font(.footnote)
+                        .frame(width: 80.0, height: 35.0)
+                }
+                .padding(.trailing, 250.0)
+                .padding(.top, 590.0)
+                .buttonStyle(.bordered)
+                Button(action: {
+                    showingAlert = true
+                    if(appStatus.hapticFeedbackLevel == "medium") {
+                        let impact = UIImpactFeedbackGenerator(style: .medium)
+                        impact.impactOccurred()
+                    } else if (appStatus.hapticFeedbackLevel == "heavy") {
+                        let impact = UIImpactFeedbackGenerator(style: .heavy)
+                        impact.impactOccurred()
+                    } else if (appStatus.hapticFeedbackLevel == "light") {
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                    }}){
+                    Text("Delete last record")
+                        .font(.footnote)
+                        .frame(width: 80.0, height: 35.0)
+                        .foregroundStyle(.red)
+                }
+                .padding(.trailing, 250.0)
+                .buttonStyle(.bordered)
+                
             }
-            .padding(.trailing, 250.0)
-            .padding(.top, 600.0)
-            .buttonStyle(.bordered)
             
             VStack{
                 if(isReading){
@@ -255,14 +292,17 @@ struct ReadView : View{
         showingSelectSheet.toggle()
     }
     func toggleRecording() {
+        arViewModel.isColorMapOpened = appStatus.colorMapTrigger
+        print(appStatus.colorMapTrigger)
         arViewModel.timeInterval = (1.0/appStatus.animationFPS)
         arViewModel.userFPS = appStatus.animationFPS
             isReading = !isReading
             //cameraModel.isRecording = !cameraModel.isRecording
             arViewModel.isOpen = !arViewModel.isOpen
             if isReading && arViewModel.isOpen{
+                fileSetNames = arViewModel.startSession()
                 if(appStatus.sharedBluetoothManager.ifConnected){
-                    startRecording()
+                    startRecording(targetURL: fileSetNames[6], targetFile: fileSetNames[7])
                 }
                 //cameraModel.startRecording()
                 /*
@@ -279,7 +319,6 @@ struct ReadView : View{
                     return
                 }
                  */
-                fileSetNames = arViewModel.startSession()
                 
                 print(fileSetNames)
             } else {
@@ -288,7 +327,19 @@ struct ReadView : View{
                 }
                 //cameraModel.stopRecording()
                 arViewModel.pauseSession()
+                
             }
+        if(appStatus.hapticFeedbackLevel == "medium") {
+            let impact = UIImpactFeedbackGenerator(style: .medium)
+            impact.impactOccurred()
+        } else if (appStatus.hapticFeedbackLevel == "heavy") {
+            let impact = UIImpactFeedbackGenerator(style: .heavy)
+            impact.impactOccurred()
+        } else if (appStatus.hapticFeedbackLevel == "light") {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+        }
+                    
         }
     /*
         else{
@@ -314,15 +365,25 @@ struct ReadView : View{
             print("Flash is not available")
         }
         openFlash = !openFlash
+        if(appStatus.hapticFeedbackLevel == "medium") {
+            let impact = UIImpactFeedbackGenerator(style: .medium)
+            impact.impactOccurred()
+        } else if (appStatus.hapticFeedbackLevel == "heavy") {
+            let impact = UIImpactFeedbackGenerator(style: .heavy)
+            impact.impactOccurred()
+        } else if (appStatus.hapticFeedbackLevel == "light") {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+        }
     }
 
         
-    func startRecording() {
+    func startRecording(targetURL: String, targetFile: String) {
         isReading = true
         let timer = Timer.scheduledTimer(withTimeInterval: appStatus.tactileRecordTimeInterval, repeats: true) { _ in
             //appStatus.SharedDataString += sharedBluetoothManager.recordSingleData() ?? ""
             //appStatus.SharedDataString = sharedBluetoothManager.recordString
-            appStatus.sharedBluetoothManager.recordSingleData()
+            appStatus.sharedBluetoothManager.recordSingleData(targetURL: targetURL, targetFile: targetFile)
         }
         recordingTimer = timer
     }
@@ -334,12 +395,13 @@ struct ReadView : View{
         }
     }
     
-    
+    /*
     func getDocumentsDirect() -> URL{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         print(paths[0].path)
         return paths[0]
     }
+    */
     
     func createFile(fileName: String) throws {
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -350,15 +412,26 @@ struct ReadView : View{
     
     func createDocumentaryFolderFiles(paths: [URL], fileSetNames: [String]) -> [FileElement] {
         do {
-            let rgbFile = FileElement.videoFile(VideoFile(url: (paths[0].appendingPathComponent(fileSetNames[0]))))
-            let depthFile = FileElement.videoFile(VideoFile(url: (paths[0].appendingPathComponent(fileSetNames[1]))))
+            let targetpath = paths[0].appendingPathComponent(fileSetNames[6])
+            let rgbFile = FileElement.videoFile(VideoFile(url: (targetpath.appendingPathComponent(fileSetNames[0]))))
+            let depthFile = FileElement.videoFile(VideoFile(url: (targetpath.appendingPathComponent(fileSetNames[1]))))
             // let text1 = FileElement.textFile(TextFile(url: "path/to/example.txt"))
-            let poseFile = FileElement.textFile(TextFile(url: (paths[0].appendingPathComponent(fileSetNames[5]).path)))
-            let rgbImageFolder = FileElement.directory(SubLevelDirectory(url: (paths[0].appendingPathComponent(fileSetNames[3]))))
-            let depthImageFolder = FileElement.directory(SubLevelDirectory(url: (paths[0].appendingPathComponent(fileSetNames[4]))))
+            let poseFile = FileElement.textFile(TextFile(url: (targetpath.appendingPathComponent(fileSetNames[5]).path)))
+            let rgbImageFolder = FileElement.directory(SubLevelDirectory(url: (targetpath.appendingPathComponent(fileSetNames[3]))))
+            let depthImageFolder = FileElement.directory(SubLevelDirectory(url: (targetpath.appendingPathComponent(fileSetNames[4]))))
             return [rgbFile, depthFile, poseFile, rgbImageFolder, depthImageFolder]
         } catch {
             print("Out of Index")
+        }
+    }
+    
+    func deleteRecordedData(url: [URL], targetDirect: String){
+        do {
+            let urlToDelete = url[0].appendingPathComponent(targetDirect)
+            try FileManager.default.removeItem(at: urlToDelete)
+            print("Successfully deleted file!")
+        } catch {
+            print("Error deleting file: \(error)")
         }
     }
 

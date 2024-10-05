@@ -31,13 +31,6 @@ struct RecordView : View{
                     }
                  */
                 VStack{
-                    Text("Data storage")
-                        .fontWeight(.black)
-                        .foregroundColor(Color.black)
-                        .frame(width: 500.0, height: 140)
-                        .ignoresSafeArea()
-                        .background(.tabBackground)
-                        .padding(.bottom, 192)
                     NavigationLink(destination: DataViewView()){
                         HStack{
                             Text("View recorded tactile data")
@@ -74,6 +67,16 @@ struct RecordView : View{
                         } catch {
                             print("Error saving file: \(error)")
                         }
+                        if(appStatus.hapticFeedbackLevel == "medium") {
+                            let impact = UIImpactFeedbackGenerator(style: .medium)
+                            impact.impactOccurred()
+                        } else if (appStatus.hapticFeedbackLevel == "heavy") {
+                            let impact = UIImpactFeedbackGenerator(style: .heavy)
+                            impact.impactOccurred()
+                        } else if (appStatus.hapticFeedbackLevel == "light") {
+                            let impact = UIImpactFeedbackGenerator(style: .light)
+                            impact.impactOccurred()
+                        }
                         showingExporter.toggle()
                     }, label: {
                         Text("Export recorded tactile data")
@@ -81,44 +84,6 @@ struct RecordView : View{
                     })
                     .buttonStyle(.bordered)
                 }
-                VStack{
-                    Text("Need helps for understanding?")
-                        .font(.headline)
-                        .padding(.top, 150)
-                        .bold()
-                    Link(destination: URL(string: "https://reskin.dev/")!, label: {
-                        HStack{
-                            Text("More about Reskin -> ")
-                                .bold()
-                            Image("ReskinPicture")
-                                .resizable()
-                                .frame(width: 40.0, height: 40.0)
-                                .cornerRadius(20)
-                                
-                        }
-                        .frame(width: 280, height: 50)
-                        .foregroundColor(.white)
-                        .background(Color.blue)
-                        .cornerRadius(12)
-                    })
-                    Link(destination: URL(string: "https://github.com/raunaqbhirangi/reskin_sensor")!, label: {
-                        HStack{
-                            Text("Reskin Library -> ")
-                                .bold()
-                            Image("GithubLogo")
-                                .resizable()
-                                .padding(.bottom, 3.0)
-                                .frame(width: 50.0, height: 50.0)
-                                .cornerRadius(12)
-                        }
-                        .frame(width: 280, height: 50)
-                        .foregroundColor(.white)
-                        .background(Color.black)
-                        .cornerRadius(12)
-                    })
-                }
-                .padding(.top, 10.0)
-                .padding(.bottom, 100)
             }
             .fileExporter(isPresented: $showingExporter, document: TextFile(url: (paths[0].appendingPathComponent(fileName)).path), contentType: .plainText) { result in
                 switch result {

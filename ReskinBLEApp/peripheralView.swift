@@ -42,6 +42,16 @@ struct singleBLEPeripheral: View {
                         isConnected = false
                     }
                      */
+                    if(appStatus.hapticFeedbackLevel == "medium") {
+                        let impact = UIImpactFeedbackGenerator(style: .medium)
+                        impact.impactOccurred()
+                    } else if (appStatus.hapticFeedbackLevel == "heavy") {
+                        let impact = UIImpactFeedbackGenerator(style: .heavy)
+                        impact.impactOccurred()
+                    } else if (appStatus.hapticFeedbackLevel == "light") {
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                    }
                 }) {
                     if isConnected {
                         Text("Disconnect")

@@ -19,7 +19,19 @@ struct ContentView: View {
                     .font(.title)
                     .multilineTextAlignment(.center)
                     .bold()
-                Button(action: {appStatus.ifGoToNextPage = 1}) {
+                Button(action: {
+                    appStatus.ifGoToNextPage = 1
+                    if(appStatus.hapticFeedbackLevel == "medium") {
+                        let impact = UIImpactFeedbackGenerator(style: .medium)
+                        impact.impactOccurred()
+                    } else if (appStatus.hapticFeedbackLevel == "heavy") {
+                        let impact = UIImpactFeedbackGenerator(style: .heavy)
+                        impact.impactOccurred()
+                    } else if (appStatus.hapticFeedbackLevel == "light") {
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                    }
+                }) {
                     Image("StartButton")
                         .resizable()
                         .frame(width: 150, height: 150)
@@ -73,6 +85,8 @@ class AppInformation : ObservableObject{
     @Published var sharedBluetoothManager =  BluetoothManager()
     @Published var tactileRecordTimeInterval: Double = 0.1
     @Published var animationFPS: Double = 60.0
+    @Published var hapticFeedbackLevel: String = "medium"
+    @Published var colorMapTrigger: Bool = false
 }
 
 

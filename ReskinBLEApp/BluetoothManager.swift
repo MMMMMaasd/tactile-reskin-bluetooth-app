@@ -166,17 +166,17 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
     }
     */
     
-    func recordSingleData(){
+    func recordSingleData(targetURL: String, targetFile: String){
         if(ifConnected == true){
             guard let characteristic = rxCharacteristic else { return
             }
             
 
-            characteristicPeripheralUpdate(characteristic: characteristic)
+            characteristicPeripheralUpdate(targetURL: targetURL, targetFile: targetFile, characteristic: characteristic)
         }
     }
     
-    private func characteristicPeripheralUpdate(characteristic: CBCharacteristic){
+    private func characteristicPeripheralUpdate(targetURL: String, targetFile: String, characteristic: CBCharacteristic){
         let currentTimer = Date()
         let dataReadTimeStamp = Int64(currentTimer.timeIntervalSince1970 * 1000)
 
@@ -192,11 +192,12 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
             /*
              characteristicValues.append(characteristicASCIIValueStr)
              recordString = recordString + characteristicASCIIValueStr + "\n"*/
-             let url = getDocumentsDirect().appendingPathComponent("data.txt")
-             if let existingContent = readDataFromTextFile() {
+             let url = getDocumentsDirect().appendingPathComponent(targetURL)
+             let targeturl = url.appendingPathComponent(targetFile)
+             if let existingContent = readDataFromTextFile(targetURL: targetURL, targetFile: targetFile) {
              let combinedContent = existingContent + "\n" + "<\(dataReadTimeStamp)>: " + characteristicASCIIValueStr
              do {
-             try combinedContent.write(to: url, atomically: true, encoding: .utf8)
+             try combinedContent.write(to: targeturl, atomically: true, encoding: .utf8)
              characteristicValues.removeAll()
              } catch {
              print("Error appending to file: \(error)")
@@ -243,10 +244,11 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
         return paths[0]
     }
     
-    func readDataFromTextFile() -> String? {
-        let url = getDocumentsDirect().appendingPathComponent("data.txt")
+    func readDataFromTextFile(targetURL: String, targetFile: String) -> String? {
+        let url = getDocumentsDirect().appendingPathComponent(targetURL)
+        let targeturl = url.appendingPathComponent(targetFile)
         do {
-            let contents = try String(contentsOf: url, encoding: .utf8)
+            let contents = try String(contentsOf: targeturl, encoding: .utf8)
             return contents
         } catch {
             print("Error reading file: \(error)")

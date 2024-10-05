@@ -1,0 +1,989 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		93B6DFE95E4C7FAC0F9196277FABCFC0 /* WebRTC */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 2F8F81F57575E808E0DB4E5F255CC41F /* Build configuration list for PBXAggregateTarget "WebRTC" */;
+			buildPhases = (
+			);
+			dependencies = (
+			);
+			name = WebRTC;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		0730924112D69E6FD61FAC1522BA6489 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		29836B29E10C3FD9D9A0024B3309ED9C /* Pods-ReskinBLEApp-ReskinBLEAppUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C5F39066B62CC2F338E0B8E71A7265F5 /* Pods-ReskinBLEApp-ReskinBLEAppUITests-dummy.m */; };
+		2FDA6FBCA7AF3288D25B12FFEE04803E /* Pods-ReskinBLEAppTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AAFC21444CED5A8DC62ADFBF980DC95 /* Pods-ReskinBLEAppTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C854B0E3622CF6544D9928A3AEC906C /* Pods-ReskinBLEApp-ReskinBLEAppUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 162EFE62FEEA243576B7786E5B1975AC /* Pods-ReskinBLEApp-ReskinBLEAppUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C2F2797A7D5E1059135DB36AA937144 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		B847B58696F08DA855173E3E459DA1E1 /* Pods-ReskinBLEApp-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FA3E3AE97E7A8A1417C172A4A6A54B15 /* Pods-ReskinBLEApp-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C68513B3B35B5922C757CFC8DB8E5074 /* Pods-ReskinBLEAppTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9840D20E138231D594F729FEDA844F9D /* Pods-ReskinBLEAppTests-dummy.m */; };
+		D3204ED3E1F3856C0AD4F082F4E6CD0A /* Pods-ReskinBLEApp-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D6D1FA2FEB8E698793DAD386C0DD75 /* Pods-ReskinBLEApp-dummy.m */; };
+		F7411DF5B135A727DD8CF30F2FE3CF1F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		22749161B1898B840A98E6DD78B87B66 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93B6DFE95E4C7FAC0F9196277FABCFC0;
+			remoteInfo = WebRTC;
+		};
+		592FB37369AA0EBFBE227C15B0880DBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93B6DFE95E4C7FAC0F9196277FABCFC0;
+			remoteInfo = WebRTC;
+		};
+		EA3B9AC0D65FFF380C4117A630387353 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EEBF7A523567F42F08A09B9CD395DFFD;
+			remoteInfo = "Pods-ReskinBLEApp";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		06E43112CF7363133E7ACE36CA11152D /* RTCMetricsSampleInfo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMetricsSampleInfo.h; path = WebRTC.framework/Headers/RTCMetricsSampleInfo.h; sourceTree = "<group>"; };
+		074E253F10F355740AC257AA0B464358 /* RTCRtpParameters.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCRtpParameters.h; path = WebRTC.framework/Headers/RTCRtpParameters.h; sourceTree = "<group>"; };
+		09E8A0BDB7F42F3556FCB0C2709E8FF3 /* RTCSessionDescription.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCSessionDescription.h; path = WebRTC.framework/Headers/RTCSessionDescription.h; sourceTree = "<group>"; };
+		0A8CC611A0758BB9C78DE1FE1CA76B31 /* RTCDispatcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCDispatcher.h; path = WebRTC.framework/Headers/RTCDispatcher.h; sourceTree = "<group>"; };
+		110B9602C265AAB526E5ED0A18A3E32E /* Pods-ReskinBLEApp */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-ReskinBLEApp"; path = Pods_ReskinBLEApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		12ABEF0B2FB33313F3B857D4E95F6595 /* WebRTC.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WebRTC.h; path = WebRTC.framework/Headers/WebRTC.h; sourceTree = "<group>"; };
+		162EFE62FEEA243576B7786E5B1975AC /* Pods-ReskinBLEApp-ReskinBLEAppUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ReskinBLEApp-ReskinBLEAppUITests-umbrella.h"; sourceTree = "<group>"; };
+		174399231CA7E3192967214254D16716 /* RTCFileLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCFileLogger.h; path = WebRTC.framework/Headers/RTCFileLogger.h; sourceTree = "<group>"; };
+		1903211B996FE4639943EAFD5B7758FF /* RTCVideoDecoderVP8.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoDecoderVP8.h; path = WebRTC.framework/Headers/RTCVideoDecoderVP8.h; sourceTree = "<group>"; };
+		2034D284E85A43E1B92CBD07C3979460 /* RTCCameraVideoCapturer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCCameraVideoCapturer.h; path = WebRTC.framework/Headers/RTCCameraVideoCapturer.h; sourceTree = "<group>"; };
+		2639775990962F860D1F0B63C9CED6DF /* RTCVideoViewShading.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoViewShading.h; path = WebRTC.framework/Headers/RTCVideoViewShading.h; sourceTree = "<group>"; };
+		2A06395E9A7C63CE99E26F532D68B3E7 /* Pods-ReskinBLEApp-ReskinBLEAppUITests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-ReskinBLEApp-ReskinBLEAppUITests"; path = Pods_ReskinBLEApp_ReskinBLEAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A74B768104C27C998101497DB0AD008 /* RTCVideoCodec.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoCodec.h; path = WebRTC.framework/Headers/RTCVideoCodec.h; sourceTree = "<group>"; };
+		2AAFC21444CED5A8DC62ADFBF980DC95 /* Pods-ReskinBLEAppTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ReskinBLEAppTests-umbrella.h"; sourceTree = "<group>"; };
+		2AE40BC0E95EF9A84E1EA15879D8D7A7 /* RTCVideoCodecH264.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoCodecH264.h; path = WebRTC.framework/Headers/RTCVideoCodecH264.h; sourceTree = "<group>"; };
+		2B6E883C051EC0520F499C61C579D0B0 /* RTCAVFoundationVideoSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCAVFoundationVideoSource.h; path = WebRTC.framework/Headers/RTCAVFoundationVideoSource.h; sourceTree = "<group>"; };
+		2D9057CAEE3F65401D0FC56E88C95DED /* Pods-ReskinBLEApp-ReskinBLEAppUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ReskinBLEApp-ReskinBLEAppUITests-frameworks.sh"; sourceTree = "<group>"; };
+		2FC8132ED8A73383D450B453F3950855 /* RTCVideoEncoderVP8.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoEncoderVP8.h; path = WebRTC.framework/Headers/RTCVideoEncoderVP8.h; sourceTree = "<group>"; };
+		3067A9B1AF598F5D58B9CC16B1ED7D80 /* Pods-ReskinBLEAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ReskinBLEAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		30E012CCCEF77C892A65E401BBFC2FD9 /* RTCConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCConfiguration.h; path = WebRTC.framework/Headers/RTCConfiguration.h; sourceTree = "<group>"; };
+		32EE3A46A2D8A88C4B6EC6EA1ED939ED /* Pods-ReskinBLEAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ReskinBLEAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		34C3B3D9E6A4DE8530BC887D22293637 /* Pods-ReskinBLEAppTests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ReskinBLEAppTests-Info.plist"; sourceTree = "<group>"; };
+		3A9AF13157F5CA48851F7C8AEBBEACE4 /* RTCAudioSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCAudioSession.h; path = WebRTC.framework/Headers/RTCAudioSession.h; sourceTree = "<group>"; };
+		3B065CD947484938BA33ED5E9B8AB76B /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebRTC.framework; sourceTree = "<group>"; };
+		4904FA852C1FDCF0C54E7ED950FF498B /* RTCCameraPreviewView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCCameraPreviewView.h; path = WebRTC.framework/Headers/RTCCameraPreviewView.h; sourceTree = "<group>"; };
+		4C275D9B0C44687CEDBF8FD5DA382745 /* Pods-ReskinBLEAppTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ReskinBLEAppTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		528BEEC17C3E8E06B6A71ADB11166088 /* Pods-ReskinBLEApp-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ReskinBLEApp-acknowledgements.markdown"; sourceTree = "<group>"; };
+		56F658F45BBD5755DA904C015ACB0B41 /* RTCTracing.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCTracing.h; path = WebRTC.framework/Headers/RTCTracing.h; sourceTree = "<group>"; };
+		5F97BB1D1CFA8C7B7B06007E518FC378 /* RTCMediaStream.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMediaStream.h; path = WebRTC.framework/Headers/RTCMediaStream.h; sourceTree = "<group>"; };
+		60166634AFF125B211F8123E61A0EA0E /* RTCSSLAdapter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCSSLAdapter.h; path = WebRTC.framework/Headers/RTCSSLAdapter.h; sourceTree = "<group>"; };
+		6369CD429B61A9017B407A8FCABDB2AB /* RTCLogging.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCLogging.h; path = WebRTC.framework/Headers/RTCLogging.h; sourceTree = "<group>"; };
+		6460AB844D2AEB1961D40598C3744B2D /* Pods-ReskinBLEAppTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ReskinBLEAppTests.modulemap"; sourceTree = "<group>"; };
+		68081AF9B251D00D919F75B39360419C /* RTCAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCAudioSource.h; path = WebRTC.framework/Headers/RTCAudioSource.h; sourceTree = "<group>"; };
+		6F2427EC7B694514A89F1E393D03FA15 /* RTCLegacyStatsReport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCLegacyStatsReport.h; path = WebRTC.framework/Headers/RTCLegacyStatsReport.h; sourceTree = "<group>"; };
+		6F3A8F4178826356B3BB9CCED9E28699 /* Pods-ReskinBLEAppTests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-ReskinBLEAppTests"; path = Pods_ReskinBLEAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FD358FCED562C1B92426ADA3806CF02 /* Pods-ReskinBLEApp-ReskinBLEAppUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ReskinBLEApp-ReskinBLEAppUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		73E24E94A15F78590D43084F55400863 /* RTCMTLVideoView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMTLVideoView.h; path = WebRTC.framework/Headers/RTCMTLVideoView.h; sourceTree = "<group>"; };
+		743E23E8F050C208E8C1CD2C4FACFC22 /* RTCVideoSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoSource.h; path = WebRTC.framework/Headers/RTCVideoSource.h; sourceTree = "<group>"; };
+		7B8B7CE40441C51DE9EF773D81E301A2 /* RTCVideoRenderer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoRenderer.h; path = WebRTC.framework/Headers/RTCVideoRenderer.h; sourceTree = "<group>"; };
+		81492033CDC13C1F1528585EE93953FE /* RTCPeerConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCPeerConnection.h; path = WebRTC.framework/Headers/RTCPeerConnection.h; sourceTree = "<group>"; };
+		816C3DCB0F079C86B7B0C26C57449B28 /* RTCVideoTrack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoTrack.h; path = WebRTC.framework/Headers/RTCVideoTrack.h; sourceTree = "<group>"; };
+		822BE1046414A16B54C479939A3CAA7F /* RTCPeerConnectionFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCPeerConnectionFactory.h; path = WebRTC.framework/Headers/RTCPeerConnectionFactory.h; sourceTree = "<group>"; };
+		83978110BE02C778A3E21A0B15B38D79 /* RTCVideoEncoderVP9.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoEncoderVP9.h; path = WebRTC.framework/Headers/RTCVideoEncoderVP9.h; sourceTree = "<group>"; };
+		91223F6B3321A8CABC83EBC6B40728F7 /* RTCVideoFrame.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoFrame.h; path = WebRTC.framework/Headers/RTCVideoFrame.h; sourceTree = "<group>"; };
+		95E2CE23E37C2F5B41140487CC343130 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		96049889B297E435FEFACDD557A2D558 /* Pods-ReskinBLEApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ReskinBLEApp.debug.xcconfig"; sourceTree = "<group>"; };
+		9840D20E138231D594F729FEDA844F9D /* Pods-ReskinBLEAppTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ReskinBLEAppTests-dummy.m"; sourceTree = "<group>"; };
+		99BD10CCF089465CA28B1739E529E4AC /* Pods-ReskinBLEApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ReskinBLEApp.release.xcconfig"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A0F5F6A00201AC4D26CBA81258E70E8F /* RTCVideoFrameBuffer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoFrameBuffer.h; path = WebRTC.framework/Headers/RTCVideoFrameBuffer.h; sourceTree = "<group>"; };
+		A3B6090557CCE8419FF4ECB0D764233A /* Pods-ReskinBLEAppTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ReskinBLEAppTests-acknowledgements.plist"; sourceTree = "<group>"; };
+		A4BFF0E4F3B007D4A722AA0F216D5357 /* RTCAudioTrack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCAudioTrack.h; path = WebRTC.framework/Headers/RTCAudioTrack.h; sourceTree = "<group>"; };
+		A6199CC1D483DE9262E6712D7E5BD8F8 /* RTCVideoDecoderVP9.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoDecoderVP9.h; path = WebRTC.framework/Headers/RTCVideoDecoderVP9.h; sourceTree = "<group>"; };
+		A65B6485F27E5EAF5412843001879324 /* RTCEAGLVideoView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCEAGLVideoView.h; path = WebRTC.framework/Headers/RTCEAGLVideoView.h; sourceTree = "<group>"; };
+		A6AB65B3F4075837742DB6D0F698F51B /* RTCIceCandidate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCIceCandidate.h; path = WebRTC.framework/Headers/RTCIceCandidate.h; sourceTree = "<group>"; };
+		AA160EF769089686DF93ED8AA262BD8C /* WebRTC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WebRTC.release.xcconfig; sourceTree = "<group>"; };
+		AD485B20F917821F127560BC1FE7F399 /* RTCVideoCapturer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoCapturer.h; path = WebRTC.framework/Headers/RTCVideoCapturer.h; sourceTree = "<group>"; };
+		AF1A45C20FDF06235ED09E1AA546AA68 /* Pods-ReskinBLEApp-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ReskinBLEApp-frameworks.sh"; sourceTree = "<group>"; };
+		BE12629C60FBCEB1B16FC81EA4C0B354 /* RTCFieldTrials.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCFieldTrials.h; path = WebRTC.framework/Headers/RTCFieldTrials.h; sourceTree = "<group>"; };
+		C3D6D1FA2FEB8E698793DAD386C0DD75 /* Pods-ReskinBLEApp-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ReskinBLEApp-dummy.m"; sourceTree = "<group>"; };
+		C5B20791D07F9D8C9D1BEF0E5AD040F7 /* RTCRtpEncodingParameters.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCRtpEncodingParameters.h; path = WebRTC.framework/Headers/RTCRtpEncodingParameters.h; sourceTree = "<group>"; };
+		C5F39066B62CC2F338E0B8E71A7265F5 /* Pods-ReskinBLEApp-ReskinBLEAppUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ReskinBLEApp-ReskinBLEAppUITests-dummy.m"; sourceTree = "<group>"; };
+		CB46F7C20625AE5F1651AA1C3665C351 /* RTCMediaConstraints.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMediaConstraints.h; path = WebRTC.framework/Headers/RTCMediaConstraints.h; sourceTree = "<group>"; };
+		D0DBB12FCA19173B6C122343674FA30F /* Pods-ReskinBLEApp.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ReskinBLEApp.modulemap"; sourceTree = "<group>"; };
+		D1665780A9DE436CE4E43570ECCFB6F0 /* RTCAudioSessionConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCAudioSessionConfiguration.h; path = WebRTC.framework/Headers/RTCAudioSessionConfiguration.h; sourceTree = "<group>"; };
+		D214FB40BA6ABD6168082EA56F9840CE /* Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig"; sourceTree = "<group>"; };
+		D5DD99C376DAB35DC0AA4E5DE9DD1BFF /* UIDevice+RTCDevice.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIDevice+RTCDevice.h"; path = "WebRTC.framework/Headers/UIDevice+RTCDevice.h"; sourceTree = "<group>"; };
+		D633615F6257671858695369A0181A47 /* WebRTC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WebRTC.debug.xcconfig; sourceTree = "<group>"; };
+		D736C51D3445E4C3946BC24FAF5EF53B /* Pods-ReskinBLEApp-ReskinBLEAppUITests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ReskinBLEApp-ReskinBLEAppUITests-Info.plist"; sourceTree = "<group>"; };
+		D8AA4CF873BB1BB43E12455425AED62C /* RTCIceServer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCIceServer.h; path = WebRTC.framework/Headers/RTCIceServer.h; sourceTree = "<group>"; };
+		DCB6F6391A8974D99744C9C7AD7E76A6 /* RTCIntervalRange.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCIntervalRange.h; path = WebRTC.framework/Headers/RTCIntervalRange.h; sourceTree = "<group>"; };
+		DD50D0FC0777443826FC11F9A2747BAA /* RTCDataChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCDataChannel.h; path = WebRTC.framework/Headers/RTCDataChannel.h; sourceTree = "<group>"; };
+		E47978F82CBFB0833D4598FBEF925E99 /* RTCMediaSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMediaSource.h; path = WebRTC.framework/Headers/RTCMediaSource.h; sourceTree = "<group>"; };
+		E49760B83F9ECFAD989486F503B4A149 /* RTCDataChannelConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCDataChannelConfiguration.h; path = WebRTC.framework/Headers/RTCDataChannelConfiguration.h; sourceTree = "<group>"; };
+		E4C92C34490EE41846D7DE07CF88F120 /* RTCMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMacros.h; path = WebRTC.framework/Headers/RTCMacros.h; sourceTree = "<group>"; };
+		EE259C8375E9DC37C450590407FDC86C /* RTCRtpSender.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCRtpSender.h; path = WebRTC.framework/Headers/RTCRtpSender.h; sourceTree = "<group>"; };
+		EFA86326AA2E3F320A549D5DD3400A41 /* Pods-ReskinBLEApp-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ReskinBLEApp-acknowledgements.plist"; sourceTree = "<group>"; };
+		F57B6D546FC6C93F3C6342BC5F1ACD24 /* RTCRtpReceiver.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCRtpReceiver.h; path = WebRTC.framework/Headers/RTCRtpReceiver.h; sourceTree = "<group>"; };
+		FA3E3AE97E7A8A1417C172A4A6A54B15 /* Pods-ReskinBLEApp-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ReskinBLEApp-umbrella.h"; sourceTree = "<group>"; };
+		FB74374A78F5EA457690CF04122C5A50 /* RTCRtpCodecParameters.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCRtpCodecParameters.h; path = WebRTC.framework/Headers/RTCRtpCodecParameters.h; sourceTree = "<group>"; };
+		FC370EE7BDD4426DD018F5A0C58F0E04 /* Pods-ReskinBLEApp-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ReskinBLEApp-Info.plist"; sourceTree = "<group>"; };
+		FCE29AE157B9646C482B2C544EB463F8 /* Pods-ReskinBLEApp-ReskinBLEAppUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ReskinBLEApp-ReskinBLEAppUITests-acknowledgements.plist"; sourceTree = "<group>"; };
+		FE12A36CABC6D771D6955CAC52FB9F80 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ReskinBLEApp-ReskinBLEAppUITests.modulemap"; sourceTree = "<group>"; };
+		FE7A2C679B7724FA70FC0BA10BC7AE66 /* RTCMetrics.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMetrics.h; path = WebRTC.framework/Headers/RTCMetrics.h; sourceTree = "<group>"; };
+		FED3C06B3696B1EC4DDEB6F92E925D8D /* RTCMediaStreamTrack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMediaStreamTrack.h; path = WebRTC.framework/Headers/RTCMediaStreamTrack.h; sourceTree = "<group>"; };
+		FF0E6725C3EE619B5ACFDFAFCA6AEE70 /* RTCVideoCodecFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoCodecFactory.h; path = WebRTC.framework/Headers/RTCVideoCodecFactory.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4B6F4441994BF11047CBA1AA740A8F01 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0730924112D69E6FD61FAC1522BA6489 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DBB32BEBE6DB2153C6D1AB8DE333834 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C2F2797A7D5E1059135DB36AA937144 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E29D1D50C90D1F0FBBF06F3235B2DC41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7411DF5B135A727DD8CF30F2FE3CF1F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		136B9E8A98BB90A9DD936145BA38A982 /* Pods-ReskinBLEApp-ReskinBLEAppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				FE12A36CABC6D771D6955CAC52FB9F80 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.modulemap */,
+				6FD358FCED562C1B92426ADA3806CF02 /* Pods-ReskinBLEApp-ReskinBLEAppUITests-acknowledgements.markdown */,
+				FCE29AE157B9646C482B2C544EB463F8 /* Pods-ReskinBLEApp-ReskinBLEAppUITests-acknowledgements.plist */,
+				C5F39066B62CC2F338E0B8E71A7265F5 /* Pods-ReskinBLEApp-ReskinBLEAppUITests-dummy.m */,
+				2D9057CAEE3F65401D0FC56E88C95DED /* Pods-ReskinBLEApp-ReskinBLEAppUITests-frameworks.sh */,
+				D736C51D3445E4C3946BC24FAF5EF53B /* Pods-ReskinBLEApp-ReskinBLEAppUITests-Info.plist */,
+				162EFE62FEEA243576B7786E5B1975AC /* Pods-ReskinBLEApp-ReskinBLEAppUITests-umbrella.h */,
+				95E2CE23E37C2F5B41140487CC343130 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig */,
+				D214FB40BA6ABD6168082EA56F9840CE /* Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig */,
+			);
+			name = "Pods-ReskinBLEApp-ReskinBLEAppUITests";
+			path = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests";
+			sourceTree = "<group>";
+		};
+		392E969C1F05BA9EAA89F29370615ED6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				110B9602C265AAB526E5ED0A18A3E32E /* Pods-ReskinBLEApp */,
+				2A06395E9A7C63CE99E26F532D68B3E7 /* Pods-ReskinBLEApp-ReskinBLEAppUITests */,
+				6F3A8F4178826356B3BB9CCED9E28699 /* Pods-ReskinBLEAppTests */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4620963E6153F80DF95BD6C4497A73FB /* Pods-ReskinBLEAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				6460AB844D2AEB1961D40598C3744B2D /* Pods-ReskinBLEAppTests.modulemap */,
+				4C275D9B0C44687CEDBF8FD5DA382745 /* Pods-ReskinBLEAppTests-acknowledgements.markdown */,
+				A3B6090557CCE8419FF4ECB0D764233A /* Pods-ReskinBLEAppTests-acknowledgements.plist */,
+				9840D20E138231D594F729FEDA844F9D /* Pods-ReskinBLEAppTests-dummy.m */,
+				34C3B3D9E6A4DE8530BC887D22293637 /* Pods-ReskinBLEAppTests-Info.plist */,
+				2AAFC21444CED5A8DC62ADFBF980DC95 /* Pods-ReskinBLEAppTests-umbrella.h */,
+				32EE3A46A2D8A88C4B6EC6EA1ED939ED /* Pods-ReskinBLEAppTests.debug.xcconfig */,
+				3067A9B1AF598F5D58B9CC16B1ED7D80 /* Pods-ReskinBLEAppTests.release.xcconfig */,
+			);
+			name = "Pods-ReskinBLEAppTests";
+			path = "Target Support Files/Pods-ReskinBLEAppTests";
+			sourceTree = "<group>";
+		};
+		557E886DDD078519145B4B023F7FCF86 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A2A233B900EDCFAE583381C4188021EE /* WebRTC */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		69154E3B73CB7EC3C64C604EDFD14EAE /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				829F4ED61260AEFBB3DC8687D00C00CB /* Pods-ReskinBLEApp */,
+				136B9E8A98BB90A9DD936145BA38A982 /* Pods-ReskinBLEApp-ReskinBLEAppUITests */,
+				4620963E6153F80DF95BD6C4497A73FB /* Pods-ReskinBLEAppTests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		829F4ED61260AEFBB3DC8687D00C00CB /* Pods-ReskinBLEApp */ = {
+			isa = PBXGroup;
+			children = (
+				D0DBB12FCA19173B6C122343674FA30F /* Pods-ReskinBLEApp.modulemap */,
+				528BEEC17C3E8E06B6A71ADB11166088 /* Pods-ReskinBLEApp-acknowledgements.markdown */,
+				EFA86326AA2E3F320A549D5DD3400A41 /* Pods-ReskinBLEApp-acknowledgements.plist */,
+				C3D6D1FA2FEB8E698793DAD386C0DD75 /* Pods-ReskinBLEApp-dummy.m */,
+				AF1A45C20FDF06235ED09E1AA546AA68 /* Pods-ReskinBLEApp-frameworks.sh */,
+				FC370EE7BDD4426DD018F5A0C58F0E04 /* Pods-ReskinBLEApp-Info.plist */,
+				FA3E3AE97E7A8A1417C172A4A6A54B15 /* Pods-ReskinBLEApp-umbrella.h */,
+				96049889B297E435FEFACDD557A2D558 /* Pods-ReskinBLEApp.debug.xcconfig */,
+				99BD10CCF089465CA28B1739E529E4AC /* Pods-ReskinBLEApp.release.xcconfig */,
+			);
+			name = "Pods-ReskinBLEApp";
+			path = "Target Support Files/Pods-ReskinBLEApp";
+			sourceTree = "<group>";
+		};
+		A2A233B900EDCFAE583381C4188021EE /* WebRTC */ = {
+			isa = PBXGroup;
+			children = (
+				3A9AF13157F5CA48851F7C8AEBBEACE4 /* RTCAudioSession.h */,
+				D1665780A9DE436CE4E43570ECCFB6F0 /* RTCAudioSessionConfiguration.h */,
+				68081AF9B251D00D919F75B39360419C /* RTCAudioSource.h */,
+				A4BFF0E4F3B007D4A722AA0F216D5357 /* RTCAudioTrack.h */,
+				2B6E883C051EC0520F499C61C579D0B0 /* RTCAVFoundationVideoSource.h */,
+				4904FA852C1FDCF0C54E7ED950FF498B /* RTCCameraPreviewView.h */,
+				2034D284E85A43E1B92CBD07C3979460 /* RTCCameraVideoCapturer.h */,
+				30E012CCCEF77C892A65E401BBFC2FD9 /* RTCConfiguration.h */,
+				DD50D0FC0777443826FC11F9A2747BAA /* RTCDataChannel.h */,
+				E49760B83F9ECFAD989486F503B4A149 /* RTCDataChannelConfiguration.h */,
+				0A8CC611A0758BB9C78DE1FE1CA76B31 /* RTCDispatcher.h */,
+				A65B6485F27E5EAF5412843001879324 /* RTCEAGLVideoView.h */,
+				BE12629C60FBCEB1B16FC81EA4C0B354 /* RTCFieldTrials.h */,
+				174399231CA7E3192967214254D16716 /* RTCFileLogger.h */,
+				A6AB65B3F4075837742DB6D0F698F51B /* RTCIceCandidate.h */,
+				D8AA4CF873BB1BB43E12455425AED62C /* RTCIceServer.h */,
+				DCB6F6391A8974D99744C9C7AD7E76A6 /* RTCIntervalRange.h */,
+				6F2427EC7B694514A89F1E393D03FA15 /* RTCLegacyStatsReport.h */,
+				6369CD429B61A9017B407A8FCABDB2AB /* RTCLogging.h */,
+				E4C92C34490EE41846D7DE07CF88F120 /* RTCMacros.h */,
+				CB46F7C20625AE5F1651AA1C3665C351 /* RTCMediaConstraints.h */,
+				E47978F82CBFB0833D4598FBEF925E99 /* RTCMediaSource.h */,
+				5F97BB1D1CFA8C7B7B06007E518FC378 /* RTCMediaStream.h */,
+				FED3C06B3696B1EC4DDEB6F92E925D8D /* RTCMediaStreamTrack.h */,
+				FE7A2C679B7724FA70FC0BA10BC7AE66 /* RTCMetrics.h */,
+				06E43112CF7363133E7ACE36CA11152D /* RTCMetricsSampleInfo.h */,
+				73E24E94A15F78590D43084F55400863 /* RTCMTLVideoView.h */,
+				81492033CDC13C1F1528585EE93953FE /* RTCPeerConnection.h */,
+				822BE1046414A16B54C479939A3CAA7F /* RTCPeerConnectionFactory.h */,
+				FB74374A78F5EA457690CF04122C5A50 /* RTCRtpCodecParameters.h */,
+				C5B20791D07F9D8C9D1BEF0E5AD040F7 /* RTCRtpEncodingParameters.h */,
+				074E253F10F355740AC257AA0B464358 /* RTCRtpParameters.h */,
+				F57B6D546FC6C93F3C6342BC5F1ACD24 /* RTCRtpReceiver.h */,
+				EE259C8375E9DC37C450590407FDC86C /* RTCRtpSender.h */,
+				09E8A0BDB7F42F3556FCB0C2709E8FF3 /* RTCSessionDescription.h */,
+				60166634AFF125B211F8123E61A0EA0E /* RTCSSLAdapter.h */,
+				56F658F45BBD5755DA904C015ACB0B41 /* RTCTracing.h */,
+				AD485B20F917821F127560BC1FE7F399 /* RTCVideoCapturer.h */,
+				2A74B768104C27C998101497DB0AD008 /* RTCVideoCodec.h */,
+				FF0E6725C3EE619B5ACFDFAFCA6AEE70 /* RTCVideoCodecFactory.h */,
+				2AE40BC0E95EF9A84E1EA15879D8D7A7 /* RTCVideoCodecH264.h */,
+				1903211B996FE4639943EAFD5B7758FF /* RTCVideoDecoderVP8.h */,
+				A6199CC1D483DE9262E6712D7E5BD8F8 /* RTCVideoDecoderVP9.h */,
+				2FC8132ED8A73383D450B453F3950855 /* RTCVideoEncoderVP8.h */,
+				83978110BE02C778A3E21A0B15B38D79 /* RTCVideoEncoderVP9.h */,
+				91223F6B3321A8CABC83EBC6B40728F7 /* RTCVideoFrame.h */,
+				A0F5F6A00201AC4D26CBA81258E70E8F /* RTCVideoFrameBuffer.h */,
+				7B8B7CE40441C51DE9EF773D81E301A2 /* RTCVideoRenderer.h */,
+				743E23E8F050C208E8C1CD2C4FACFC22 /* RTCVideoSource.h */,
+				816C3DCB0F079C86B7B0C26C57449B28 /* RTCVideoTrack.h */,
+				2639775990962F860D1F0B63C9CED6DF /* RTCVideoViewShading.h */,
+				D5DD99C376DAB35DC0AA4E5DE9DD1BFF /* UIDevice+RTCDevice.h */,
+				12ABEF0B2FB33313F3B857D4E95F6595 /* WebRTC.h */,
+				F7DE0F3E8F5B13463C03505858C73BA5 /* Frameworks */,
+				DDBFC47DF58DD766687094FB37BE181C /* Support Files */,
+			);
+			name = WebRTC;
+			path = WebRTC;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
+				557E886DDD078519145B4B023F7FCF86 /* Pods */,
+				392E969C1F05BA9EAA89F29370615ED6 /* Products */,
+				69154E3B73CB7EC3C64C604EDFD14EAE /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				578452D2E740E91742655AC8F1636D1F /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DDBFC47DF58DD766687094FB37BE181C /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				D633615F6257671858695369A0181A47 /* WebRTC.debug.xcconfig */,
+				AA160EF769089686DF93ED8AA262BD8C /* WebRTC.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/WebRTC";
+			sourceTree = "<group>";
+		};
+		F7DE0F3E8F5B13463C03505858C73BA5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B065CD947484938BA33ED5E9B8AB76B /* WebRTC.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		06583AD98843EB98AC6AD6B20D139E00 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B847B58696F08DA855173E3E459DA1E1 /* Pods-ReskinBLEApp-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4185A3309348FBF6FCE46D9A0E519E2B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C854B0E3622CF6544D9928A3AEC906C /* Pods-ReskinBLEApp-ReskinBLEAppUITests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1D3770E8F84CFA0E08051929C19C173 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2FDA6FBCA7AF3288D25B12FFEE04803E /* Pods-ReskinBLEAppTests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		099604A02C9C6E8B31AC44B671AAB733 /* Pods-ReskinBLEAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02CFC02E763D14F6A392202EC69F3F20 /* Build configuration list for PBXNativeTarget "Pods-ReskinBLEAppTests" */;
+			buildPhases = (
+				F1D3770E8F84CFA0E08051929C19C173 /* Headers */,
+				133017962B379B2933FEB82E0099C1FC /* Sources */,
+				E29D1D50C90D1F0FBBF06F3235B2DC41 /* Frameworks */,
+				AEC2470E19465768AC04B95D60042D06 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0A16002939684B78A530419128B5B9D3 /* PBXTargetDependency */,
+			);
+			name = "Pods-ReskinBLEAppTests";
+			productName = Pods_ReskinBLEAppTests;
+			productReference = 6F3A8F4178826356B3BB9CCED9E28699 /* Pods-ReskinBLEAppTests */;
+			productType = "com.apple.product-type.framework";
+		};
+		E9102CD424603116EA558B1B82C73C84 /* Pods-ReskinBLEApp-ReskinBLEAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20C90599705FBDE9873EE00C7F8304E8 /* Build configuration list for PBXNativeTarget "Pods-ReskinBLEApp-ReskinBLEAppUITests" */;
+			buildPhases = (
+				4185A3309348FBF6FCE46D9A0E519E2B /* Headers */,
+				4940F855D7AB57EBF491C268F70E097A /* Sources */,
+				4B6F4441994BF11047CBA1AA740A8F01 /* Frameworks */,
+				E33606AAE26E15FD4F54454B0111F5BE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				150B0132F2D8EB9CCAB83BEE5493CD12 /* PBXTargetDependency */,
+			);
+			name = "Pods-ReskinBLEApp-ReskinBLEAppUITests";
+			productName = Pods_ReskinBLEApp_ReskinBLEAppUITests;
+			productReference = 2A06395E9A7C63CE99E26F532D68B3E7 /* Pods-ReskinBLEApp-ReskinBLEAppUITests */;
+			productType = "com.apple.product-type.framework";
+		};
+		EEBF7A523567F42F08A09B9CD395DFFD /* Pods-ReskinBLEApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4A2B11C5C785EF32F33336227D4CB8DF /* Build configuration list for PBXNativeTarget "Pods-ReskinBLEApp" */;
+			buildPhases = (
+				06583AD98843EB98AC6AD6B20D139E00 /* Headers */,
+				C1E7E4572470A80F16D09B19846B87D6 /* Sources */,
+				4DBB32BEBE6DB2153C6D1AB8DE333834 /* Frameworks */,
+				D1F4292423C1086EBF4A71D552673F61 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F79A21AF4FB07E623FEE36600C44EABA /* PBXTargetDependency */,
+			);
+			name = "Pods-ReskinBLEApp";
+			productName = Pods_ReskinBLEApp;
+			productReference = 110B9602C265AAB526E5ED0A18A3E32E /* Pods-ReskinBLEApp */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			minimizedProjectReferenceProxies = 0;
+			productRefGroup = 392E969C1F05BA9EAA89F29370615ED6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EEBF7A523567F42F08A09B9CD395DFFD /* Pods-ReskinBLEApp */,
+				E9102CD424603116EA558B1B82C73C84 /* Pods-ReskinBLEApp-ReskinBLEAppUITests */,
+				099604A02C9C6E8B31AC44B671AAB733 /* Pods-ReskinBLEAppTests */,
+				93B6DFE95E4C7FAC0F9196277FABCFC0 /* WebRTC */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AEC2470E19465768AC04B95D60042D06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1F4292423C1086EBF4A71D552673F61 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E33606AAE26E15FD4F54454B0111F5BE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		133017962B379B2933FEB82E0099C1FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C68513B3B35B5922C757CFC8DB8E5074 /* Pods-ReskinBLEAppTests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4940F855D7AB57EBF491C268F70E097A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29836B29E10C3FD9D9A0024B3309ED9C /* Pods-ReskinBLEApp-ReskinBLEAppUITests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C1E7E4572470A80F16D09B19846B87D6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3204ED3E1F3856C0AD4F082F4E6CD0A /* Pods-ReskinBLEApp-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0A16002939684B78A530419128B5B9D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ReskinBLEApp";
+			target = EEBF7A523567F42F08A09B9CD395DFFD /* Pods-ReskinBLEApp */;
+			targetProxy = EA3B9AC0D65FFF380C4117A630387353 /* PBXContainerItemProxy */;
+		};
+		150B0132F2D8EB9CCAB83BEE5493CD12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WebRTC;
+			target = 93B6DFE95E4C7FAC0F9196277FABCFC0 /* WebRTC */;
+			targetProxy = 22749161B1898B840A98E6DD78B87B66 /* PBXContainerItemProxy */;
+		};
+		F79A21AF4FB07E623FEE36600C44EABA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WebRTC;
+			target = 93B6DFE95E4C7FAC0F9196277FABCFC0 /* WebRTC */;
+			targetProxy = 592FB37369AA0EBFBE227C15B0880DBF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		05E7487970A1EC2032107ED0F780771D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA160EF769089686DF93ED8AA262BD8C /* WebRTC.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0EBF974483F34033E70120DACF62C05B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D214FB40BA6ABD6168082EA56F9840CE /* Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		31983331A21B4CFB3F634EE4C23DE36B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 95E2CE23E37C2F5B41140487CC343130 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		39F5B7CD9D2655A0D1F7D42E37920E8B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		61B88A21D8C4AE4913D26B4C85182093 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D633615F6257671858695369A0181A47 /* WebRTC.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		823193EE800D4012607EA64D1E932CD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3067A9B1AF598F5D58B9CC16B1ED7D80 /* Pods-ReskinBLEAppTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ReskinBLEAppTests/Pods-ReskinBLEAppTests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ReskinBLEAppTests/Pods-ReskinBLEAppTests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		8827AEA7DB158019ADB0CA5C062711DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 32EE3A46A2D8A88C4B6EC6EA1ED939ED /* Pods-ReskinBLEAppTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ReskinBLEAppTests/Pods-ReskinBLEAppTests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ReskinBLEAppTests/Pods-ReskinBLEAppTests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B9137D0C06559EDCAF0E1C914B94FD39 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 99BD10CCF089465CA28B1739E529E4AC /* Pods-ReskinBLEApp.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ReskinBLEApp/Pods-ReskinBLEApp-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ReskinBLEApp/Pods-ReskinBLEApp.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		C873D3C071BDDC046D6E8F63C69C2591 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		D7044E75F459360A60336A607CC56140 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 96049889B297E435FEFACDD557A2D558 /* Pods-ReskinBLEApp.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ReskinBLEApp/Pods-ReskinBLEApp-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ReskinBLEApp/Pods-ReskinBLEApp.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		02CFC02E763D14F6A392202EC69F3F20 /* Build configuration list for PBXNativeTarget "Pods-ReskinBLEAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8827AEA7DB158019ADB0CA5C062711DF /* Debug */,
+				823193EE800D4012607EA64D1E932CD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20C90599705FBDE9873EE00C7F8304E8 /* Build configuration list for PBXNativeTarget "Pods-ReskinBLEApp-ReskinBLEAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31983331A21B4CFB3F634EE4C23DE36B /* Debug */,
+				0EBF974483F34033E70120DACF62C05B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2F8F81F57575E808E0DB4E5F255CC41F /* Build configuration list for PBXAggregateTarget "WebRTC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61B88A21D8C4AE4913D26B4C85182093 /* Debug */,
+				05E7487970A1EC2032107ED0F780771D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				39F5B7CD9D2655A0D1F7D42E37920E8B /* Debug */,
+				C873D3C071BDDC046D6E8F63C69C2591 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4A2B11C5C785EF32F33336227D4CB8DF /* Build configuration list for PBXNativeTarget "Pods-ReskinBLEApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7044E75F459360A60336A607CC56140 /* Debug */,
+				B9137D0C06559EDCAF0E1C914B94FD39 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}

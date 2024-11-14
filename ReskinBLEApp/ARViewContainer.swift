@@ -15,33 +15,42 @@ import CoreImage
 import UIKit
 import CoreImage.CIFilterBuiltins
 
-struct ARViewContainer : UIViewRepresentable{
+
+
+struct ARViewContainer: UIViewRepresentable {
     var session: ARSession
     typealias UIViewType = ARView
     
     func makeUIView(context: Context) -> ARView {
-        let arView = ARView(frame: .zero, cameraMode: .ar, automaticallyConfigureSession: true)
-        //let arView = ARView(frame: .zero)
+        // Initialize the ARView
+        let arView = ARView(frame: .zero, cameraMode: .ar)
         arView.session = session
-        configureCamera(arView: arView)
+        
+        // Create and configure the AR session configuration
         let configuration = ARWorldTrackingConfiguration()
+        
+        // Loop through available video formats and select the wide-angle camera format
+        for videoFormat in ARWorldTrackingConfiguration.supportedVideoFormats {
+            if videoFormat.captureDeviceType == .builtInWideAngleCamera {
+                print("Wide-angle camera selected: \(videoFormat)")
+                configuration.videoFormat = videoFormat
+                break
+            } else {
+                print("Unsupported video format: \(videoFormat.captureDeviceType)")
+            }
+        }
+        
+        // Set the session configuration properties
+        configuration.frameSemantics = .sceneDepth
         configuration.planeDetection = [.horizontal, .vertical]
-        configuration.frameSemantics = [.sceneDepth]
         configuration.isAutoFocusEnabled = false
-        session.run(configuration)
+        
+        // Run the session with the configuration
+        arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        
+        
         return arView
     }
-    
-    func configureCamera(arView: ARView) {
-            guard let camera = arView.session.configuration as? ARWorldTrackingConfiguration else { return }
-            camera.videoFormat = ARWorldTrackingConfiguration.supportedVideoFormats.first(where: {
-                $0.imageResolution.width == 720 && $0.imageResolution.height == 960
-            }) ?? ARWorldTrackingConfiguration.supportedVideoFormats[0]
-            camera.frameSemantics = .sceneDepth
-        arView.session.run(camera)
-    }
-    
-    
     func updateUIView(_ uiView: ARView, context: Context) {}
     
     func destroyUIView(_ uiView: ARView, context: Context) {
@@ -58,8 +67,8 @@ class ARViewModel: ObservableObject{
     // 30 FPS: 0.033 : (1.0/30.0)
     // 25 FPS: 0.04
 
-    public var timeInterval = (1.0/30.0)
-    public var userFPS = 30.0
+    public var timeInterval = (1.0/60.0)
+    public var userFPS = 60.0
     public var isColorMapOpened = false
     //private var backgroundRecordingID: UUID?
     
@@ -390,7 +399,7 @@ class ARViewModel: ObservableObject{
     }
     
     func captureVideoFrame() {
-        let targetFrameRate: TimeInterval = 1.0 / 30.0
+        let targetFrameRate: TimeInterval = 1.0 / 60.0
         guard let currentFrame = session.currentFrame else {return}
         let currentTimestamp = CACurrentMediaTime()
             if currentTimestamp - lastFrameTimestamp < targetFrameRate {

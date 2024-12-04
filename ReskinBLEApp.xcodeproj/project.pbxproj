@@ -17,11 +17,12 @@
 		B9104F6F2BFDE63C000D4DDD /* USBInterfaceAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F6E2BFDE63C000D4DDD /* USBInterfaceAppTests.swift */; };
 		B9104F792BFDE63C000D4DDD /* USBInterfaceAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F782BFDE63C000D4DDD /* USBInterfaceAppUITests.swift */; };
 		B9104F7B2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F7A2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift */; };
-		B9104F882BFDF1A3000D4DDD /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F872BFDF1A3000D4DDD /* MainPage.swift */; };
 		B98D69522C04559900648D95 /* dataStroageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69512C04559900648D95 /* dataStroageView.swift */; };
 		B98D69542C04563000648D95 /* readView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69532C04563000648D95 /* readView.swift */; };
 		B98D69562C04569C00648D95 /* accountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69552C04569C00648D95 /* accountView.swift */; };
 		B98D69582C04671200648D95 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69572C04671200648D95 /* ViewController.swift */; };
+		B9944A342CFE983300232FBB /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9944A332CFE982E00232FBB /* MainPage.swift */; };
+		B9944A362CFE989100232FBB /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9944A352CFE988E00232FBB /* MainView.swift */; };
 		B9B046A82C06DFA300096E8B /* DataViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B046A72C06DFA300096E8B /* DataViewView.swift */; };
 		B9B046AC2C0DE7D000096E8B /* TryReadDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */; };
 		B9BDD0652C573EA20061475C /* peripheralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BDD0642C573EA20061475C /* peripheralView.swift */; };
@@ -70,12 +71,14 @@
 		B9104F742BFDE63C000D4DDD /* ReskinBLEAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReskinBLEAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9104F782BFDE63C000D4DDD /* USBInterfaceAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppUITests.swift; sourceTree = "<group>"; };
 		B9104F7A2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		B9104F872BFDF1A3000D4DDD /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
 		B98D69512C04559900648D95 /* dataStroageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataStroageView.swift; sourceTree = "<group>"; };
 		B98D69532C04563000648D95 /* readView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = readView.swift; sourceTree = "<group>"; };
 		B98D69552C04569C00648D95 /* accountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accountView.swift; sourceTree = "<group>"; };
 		B98D69572C04671200648D95 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B98D69632C04911F00648D95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B9944A272CFE8B4F00232FBB /* NSBluetoothAlwaysUsageDescription.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = NSBluetoothAlwaysUsageDescription.txt; sourceTree = "<group>"; };
+		B9944A332CFE982E00232FBB /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
+		B9944A352CFE988E00232FBB /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		B9B046A72C06DFA300096E8B /* DataViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewView.swift; sourceTree = "<group>"; };
 		B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryReadDataView.swift; sourceTree = "<group>"; };
 		B9BDD0642C573EA20061475C /* peripheralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = peripheralView.swift; sourceTree = "<group>"; };
@@ -145,6 +148,7 @@
 		B9104F512BFDE63A000D4DDD = {
 			isa = PBXGroup;
 			children = (
+				B9944A272CFE8B4F00232FBB /* NSBluetoothAlwaysUsageDescription.txt */,
 				B9104F5C2BFDE63A000D4DDD /* ReskinBLEApp */,
 				B9104F6D2BFDE63C000D4DDD /* ReskinBLEAppTests */,
 				B9104F772BFDE63C000D4DDD /* ReskinBLEAppUITests */,
@@ -175,12 +179,13 @@
 				B9104F5F2BFDE63A000D4DDD /* ContentView.swift */,
 				B98D69532C04563000648D95 /* readView.swift */,
 				B98D69512C04559900648D95 /* dataStroageView.swift */,
-				B9104F872BFDF1A3000D4DDD /* MainPage.swift */,
 				B98D69552C04569C00648D95 /* accountView.swift */,
 				B9D072C22C23F6F100C5ECD8 /* deviceView.swift */,
 				B9B046A72C06DFA300096E8B /* DataViewView.swift */,
 				B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */,
 				B9F3C4172C518050008B555A /* CameraViewModel.swift */,
+				B9944A332CFE982E00232FBB /* MainPage.swift */,
+				B9944A352CFE988E00232FBB /* MainView.swift */,
 				B9F3C4132C515F1A008B555A /* CameraHome.swift */,
 				B905B27E2C8A706A006F994E /* WebRTCManager.swift */,
 				B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */,
@@ -472,11 +477,12 @@
 				B9F3C4182C518050008B555A /* CameraViewModel.swift in Sources */,
 				B9F3C4142C515F1A008B555A /* CameraHome.swift in Sources */,
 				B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */,
+				B9944A362CFE989100232FBB /* MainView.swift in Sources */,
 				B98D69582C04671200648D95 /* ViewController.swift in Sources */,
+				B9944A342CFE983300232FBB /* MainPage.swift in Sources */,
 				B9B046A82C06DFA300096E8B /* DataViewView.swift in Sources */,
 				B98D69562C04569C00648D95 /* accountView.swift in Sources */,
 				B905B27F2C8A706A006F994E /* WebRTCManager.swift in Sources */,
-				B9104F882BFDF1A3000D4DDD /* MainPage.swift in Sources */,
 				B9D8D3DE2C522E1300A7B839 /* ARViewContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

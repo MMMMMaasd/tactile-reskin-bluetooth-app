@@ -54,10 +54,10 @@ struct singleBLEPeripheral: View {
                     }
                 }) {
                     if isConnected {
-                        Text("Disconnect")
+                        Text("Stop a Touch")
                             .foregroundColor(.red)
                     } else {
-                        Text("Connect")
+                        Text("Start a Touch")
                             .foregroundColor(.blue)
                     }
                 }

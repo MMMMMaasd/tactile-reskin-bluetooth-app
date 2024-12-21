@@ -12,6 +12,7 @@ struct MainPage: View {
     var body: some View {
         TabView{
             Group{
+                /*
                 RecordView()
                     /*
                         .navigationTitle("Data")
@@ -21,14 +22,15 @@ struct MainPage: View {
                     .tabItem {
                         Label("data stroage", systemImage: "externaldrive.fill.badge.person.crop")
                 }
-                ReadView()
-                    .tabItem {
-                        Label("read", systemImage: "dot.scope")
-                }
-                
+                 */
                 PeripheralView()
                     .tabItem {
                         Label("ble-device", systemImage: "iphone.gen1.radiowaves.left.and.right")
+                }
+                
+                ReadView()
+                    .tabItem {
+                        Label("read", systemImage: "dot.scope")
                 }
                 
                 AccountView()

@@ -112,6 +112,9 @@ class ARViewModel: ObservableObject{
     private let assetWritingSemaphore = DispatchSemaphore(value: 1)
     
     private var lastFrameTimestamp: TimeInterval = 0
+    @Published var recordFrameRate: String = "Unknown"
+    @Published var totalFramesCounter: Double = 0
+    
     
     init() {
         self.ciContext = CIContext()
@@ -160,6 +163,7 @@ class ARViewModel: ObservableObject{
         depthImageCount = 0
         timeCount = 0.0
         recordTimestamp = 0.0
+        totalFramesCounter = 0.0
         
         /*
         let configuration = ARWorldTrackingConfiguration()
@@ -173,7 +177,7 @@ class ARViewModel: ObservableObject{
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true){ [weak self] _ in
             self?.captureVideoFrame()
             self?.recordTimestamp += self?.timeInterval ?? 0.0
-            self?.timeCount += 1.0
+            self?.timeCount += 1.0 / 60.0
             print(self?.timeCount)
         }
         isOpen = true
@@ -191,7 +195,7 @@ class ARViewModel: ObservableObject{
     func setupRecording() -> Array<String>{
         // Determine all the destinated file saving URL or this recording by its start time
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
+        dateFormatter.dateFormat = "yyyy-MM-dd-HH_mm_ss"
         let currentDateTime = dateFormatter.string(from: Date())
         let rgbFileName = "RGB_\(currentDateTime).mp4"
         let depthFileName = "Depth_\(currentDateTime).mp4"
@@ -399,47 +403,18 @@ class ARViewModel: ObservableObject{
     }
     
     func captureVideoFrame() {
-        let targetFrameRate: TimeInterval = 1.0 / 60.0
+        self.totalFramesCounter += 1
+//        let targetFrameRate: TimeInterval = 1.0 / 60.0
         guard let currentFrame = session.currentFrame else {return}
-        let currentTimestamp = CACurrentMediaTime()
-            if currentTimestamp - lastFrameTimestamp < targetFrameRate {
-                return
-        }
         
-        lastFrameTimestamp = currentTimestamp
+//        let currentTimestamp = CACurrentMediaTime()
+//            if currentTimestamp - lastFrameTimestamp < targetFrameRate {
+//                return
+//        }
+//        print(currentTimestamp)
+//        lastFrameTimestamp = currentTimestamp
+        var imgSuccessFlag = true
         
-        let cameraTransform = currentFrame.camera.transform
-        // Get the orientation matrix
-        let rotationMatrx = matrix_float3x3(SIMD3<Float>(cameraTransform.columns.0.x, cameraTransform.columns.0.y, cameraTransform.columns.0.z),
-                                            SIMD3<Float>(cameraTransform.columns.1.x, cameraTransform.columns.1.y, cameraTransform.columns.1.z),
-                                            SIMD3<Float>(cameraTransform.columns.2.x, cameraTransform.columns.2.y, cameraTransform.columns.2.z))
-        // Transform the orientation matrix to unit quaternion
-        let quaternion = simd_quaternion(rotationMatrx)
-        // Extract the value
-        let orientationY = quaternion.vector.x
-        let orientationX = -(quaternion.vector.y)
-        let orientationW = quaternion.vector.z
-        let orientationZ = -(quaternion.vector.w)
-        // Use the last column's vlaue, which is the representation of translation
-        let translationX = cameraTransform.columns.3.x
-        let translationY = cameraTransform.columns.3.y
-        let translationZ = cameraTransform.columns.3.z
-        
-        let currentTimer = Date()
-        let dataReadTimeStamp = Int64(currentTimer.timeIntervalSince1970 * 1000)
-        
-        let poseWithTime = ["<\(dataReadTimeStamp)>", orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ] as [Any]
-        
-        if let exisitingFileData = readDataFromTextFile(targetURL: generalURL, fileName: globalPoseFileName) {
-            do {
-                let newAppendingPoseData = exisitingFileData + poseWithTime.description + "\n"
-                try newAppendingPoseData.description.write(to: poseURL, atomically: true, encoding: .utf8)
-            } catch {
-                print("Error when writing to the pose text file\n")
-            }
-        } else {
-            print("Error when reading existed pose data file\n")
-        }
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
             return
         }
@@ -518,9 +493,9 @@ class ARViewModel: ObservableObject{
                     defer { self.assetWritingSemaphore.signal() }
                     
                     //
-                    print("rgbPixelBuffer dimensions: \(CVPixelBufferGetWidth(rgbPixelBuffer)), \(CVPixelBufferGetHeight(rgbPixelBuffer))\n")
-                    print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
-                    print("outputBuffer dimensions: \(CVPixelBufferGetWidth(outputBuffer)), \(CVPixelBufferGetHeight(outputBuffer))\n")
+//                    print("rgbPixelBuffer dimensions: \(CVPixelBufferGetWidth(rgbPixelBuffer)), \(CVPixelBufferGetHeight(rgbPixelBuffer))\n")
+//                    print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
+//                    print("outputBuffer dimensions: \(CVPixelBufferGetWidth(outputBuffer)), \(CVPixelBufferGetHeight(outputBuffer))\n")
                     //print("Transform: \(transform)\n")
 
                     
@@ -528,9 +503,11 @@ class ARViewModel: ObservableObject{
                         if !success {
                             print("Failed to append pixel buffer. Pixel buffer adapter state: \(self.pixelBufferAdapter?.assetWriterInput.isReadyForMoreMediaData), Time: \(currentTime)")
                             print(self.assetWriter?.error);
+                            imgSuccessFlag = false
                         }
                     } else {
                         print("Failed to append pixel buffer: Pixel buffer adapter is nil.")
+                        imgSuccessFlag = false
                     }
                     
                     // self.saveImage(from: outputBuffer, isDepth: false)
@@ -624,9 +601,9 @@ class ARViewModel: ObservableObject{
                  */
                 // self.saveImage(from: depthOutputBuffer, isDepth: true)
                 
-                print("depthPixelBuffer dimensions: \(CVPixelBufferGetWidth(depthPixelBuffer)), \(CVPixelBufferGetHeight(depthPixelBuffer))\n")
-                print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
-                print("depthOutputBuffer dimensions: \(CVPixelBufferGetWidth(depthOutputBuffer)), \(CVPixelBufferGetHeight(depthOutputBuffer))\n")
+//                print("depthPixelBuffer dimensions: \(CVPixelBufferGetWidth(depthPixelBuffer)), \(CVPixelBufferGetHeight(depthPixelBuffer))\n")
+//                print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
+//                print("depthOutputBuffer dimensions: \(CVPixelBufferGetWidth(depthOutputBuffer)), \(CVPixelBufferGetHeight(depthOutputBuffer))\n")
                 
                 self.depthPixelBufferAdapter?.append(depthOutputBuffer, withPresentationTime: currentTime)
                 
@@ -637,7 +614,60 @@ class ARViewModel: ObservableObject{
             // Processing Colormap Depth Frame
                         
         }
-
+        if !imgSuccessFlag {return}
+        print("Did not return", imgSuccessFlag)
+        let cameraTransform = currentFrame.camera.transform
+//        print(cameraTransform.columns.3)
+        // Get the orientation matrix
+        let rotationMatrx = matrix_float3x3(SIMD3<Float>(cameraTransform.columns.0.x, cameraTransform.columns.0.y, cameraTransform.columns.0.z),
+                                            SIMD3<Float>(cameraTransform.columns.1.x, cameraTransform.columns.1.y, cameraTransform.columns.1.z),
+                                            SIMD3<Float>(cameraTransform.columns.2.x, cameraTransform.columns.2.y, cameraTransform.columns.2.z))
+//        print(cameraTransform)
+//        print(rotationMatrx)
+//        print(cameraTransform.columns.3)
+        // Transform the orientation matrix to unit quaternion
+        let quaternion = simd_quaternion(rotationMatrx)
+        print(quaternion)
+        // Extract the value
+        let orientationY = quaternion.vector.y
+        let orientationX = (quaternion.vector.x)
+        let orientationW = quaternion.vector.w
+        let orientationZ = (quaternion.vector.z)
+        
+//        let orientationY = quaternion.vector.x
+//        let orientationX = -(quaternion.vector.y)
+//        let orientationW = quaternion.vector.z
+//        let orientationZ = -(quaternion.vector.w)
+        // Use the last column's vlaue, which is the representation of translation
+        let translationX = cameraTransform.columns.3.x
+        let translationY = cameraTransform.columns.3.y
+        let translationZ = cameraTransform.columns.3.z
+        
+        let currentTimer = Date()
+        let dataReadTimeStamp = Int64(currentTimer.timeIntervalSince1970 * 1000)
+        
+        let poseWithTime = ["<\(dataReadTimeStamp)>", orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ] as [Any]
+//        TODO: Fix appending to file
+        
+        if let exisitingFileData = readDataFromTextFile(targetURL: generalURL, fileName: globalPoseFileName) {
+            do {
+                let newAppendingPoseData = exisitingFileData + poseWithTime.description + "\n"
+                try newAppendingPoseData.description.write(to: poseURL, atomically: true, encoding: .utf8)
+            } catch {
+                print("Error when writing to the pose text file\n")
+            }
+        } else {
+            print("Error when reading existed pose data file\n")
+        }
+        
+        let currentTimestamp = CACurrentMediaTime()
+        let dur = currentTimestamp - lastFrameTimestamp
+//        print("Duration: ", dur, currentTimestamp)
+//        if currentTimestamp - lastFrameTimestamp < targetFrameRate {
+//            sleep(sleep(forTimeInterval: targetFrameRate - dur))
+//        }
+        //        print(currentTimestamp)
+        lastFrameTimestamp = currentTimestamp
     }
     
 
@@ -656,6 +686,7 @@ class ARViewModel: ObservableObject{
         
         timer?.invalidate()
         timer = nil
+        self.recordFrameRate = String(Double(round(10*(self.totalFramesCounter / self.timeCount))/10))
     }
     
     /*

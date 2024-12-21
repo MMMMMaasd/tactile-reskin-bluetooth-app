@@ -28,6 +28,7 @@ struct ReadView : View{
     @Environment(\.scenePhase) private var phase
     @State private var fileSetNames = ["", "", "", "", "", "", "", ""]
     @State var showingExporter = false
+    @State var showingFPSInfo = false
     @State var showingSelectSheet = false
     @State var openFlash = true
     @State var exportFileName = ""
@@ -84,7 +85,7 @@ struct ReadView : View{
                }
             }
             .padding(.top, 580.0)
-            .padding(.leading, 20)
+            .padding(.leading, 10)
             .buttonStyle(.bordered)
             
             .alert(isPresented: $showingAlert){
@@ -99,6 +100,15 @@ struct ReadView : View{
                                   showingAlert = false
                                   
                               }
+                )
+            }
+            .alert(isPresented: $showingFPSInfo){
+                Alert(title: Text("This Record's Frame Rate")
+                    .foregroundColor(.red),
+                      message: Text(arViewModel.recordFrameRate),
+                      dismissButton: .default(Text("Close")) {
+                            showingFPSInfo = false
+                      }
                 )
             }
             VStack{
@@ -296,6 +306,9 @@ struct ReadView : View{
         print(appStatus.colorMapTrigger)
         arViewModel.timeInterval = (1.0/appStatus.animationFPS)
         arViewModel.userFPS = appStatus.animationFPS
+        if(isReading){
+            showingFPSInfo = true
+        }
             isReading = !isReading
             //cameraModel.isRecording = !cameraModel.isRecording
             arViewModel.isOpen = !arViewModel.isOpen

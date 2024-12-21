@@ -29,10 +29,10 @@
 		B9D072BF2C1445E700C5ECD8 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */; };
 		B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */; };
 		B9D072C32C23F6F100C5ECD8 /* deviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072C22C23F6F100C5ECD8 /* deviceView.swift */; };
-		B9D8D3DE2C522E1300A7B839 /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */; };
 		B9D8D3F12C534DA800A7B839 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D8D3F02C534DA800A7B839 /* SwiftUIView.swift */; };
 		B9F3C4142C515F1A008B555A /* CameraHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F3C4132C515F1A008B555A /* CameraHome.swift */; };
 		B9F3C4182C518050008B555A /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F3C4172C518050008B555A /* CameraViewModel.swift */; };
+		B9FFD4EC2D163C1A00FAD8CA /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FFD4EB2D163C1A00FAD8CA /* ARViewContainer.swift */; };
 		CDE14DA36B71D1D0C3F13D96 /* Pods_ReskinBLEApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F96CB0EDE6B0F8A62632894 /* Pods_ReskinBLEApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -85,10 +85,10 @@
 		B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBUUIDS.swift; sourceTree = "<group>"; };
 		B9D072C22C23F6F100C5ECD8 /* deviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deviceView.swift; sourceTree = "<group>"; };
-		B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
 		B9D8D3F02C534DA800A7B839 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		B9F3C4132C515F1A008B555A /* CameraHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHome.swift; sourceTree = "<group>"; };
 		B9F3C4172C518050008B555A /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		B9FFD4EB2D163C1A00FAD8CA /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
 		DD73662182F31C9D894E5858 /* Pods-ReskinBLEAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEAppTests.debug.xcconfig"; path = "Target Support Files/Pods-ReskinBLEAppTests/Pods-ReskinBLEAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E89530D391651A7B45F138FC /* Pods_ReskinBLEAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReskinBLEAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3F1F260C56E398FCAC64AE0 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig"; path = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -188,7 +188,7 @@
 				B9944A352CFE988E00232FBB /* MainView.swift */,
 				B9F3C4132C515F1A008B555A /* CameraHome.swift */,
 				B905B27E2C8A706A006F994E /* WebRTCManager.swift */,
-				B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */,
+				B9FFD4EB2D163C1A00FAD8CA /* ARViewContainer.swift */,
 				B9BDD0642C573EA20061475C /* peripheralView.swift */,
 				B905B27C2C8A6BD3006F994E /* liveConnectionView.swift */,
 				B9D8D3F02C534DA800A7B839 /* SwiftUIView.swift */,
@@ -483,7 +483,7 @@
 				B9B046A82C06DFA300096E8B /* DataViewView.swift in Sources */,
 				B98D69562C04569C00648D95 /* accountView.swift in Sources */,
 				B905B27F2C8A706A006F994E /* WebRTCManager.swift in Sources */,
-				B9D8D3DE2C522E1300A7B839 /* ARViewContainer.swift in Sources */,
+				B9FFD4EC2D163C1A00FAD8CA /* ARViewContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -671,7 +671,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Michael.ReskinBLE;
+				PRODUCT_BUNDLE_IDENTIFIER = Michael.newReskin.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -712,7 +712,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Michael.ReskinBLE;
+				PRODUCT_BUNDLE_IDENTIFIER = Michael.newReskin.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;

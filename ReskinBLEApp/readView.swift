@@ -133,6 +133,7 @@ struct ReadView : View{
                 .buttonStyle(.bordered)
                 Button(action: {
                     showingAlert = true
+                    deleteRecordedData(url: paths, targetDirect: fileSetNames[6])
                     if(appStatus.hapticFeedbackLevel == "medium") {
                         let impact = UIImpactFeedbackGenerator(style: .medium)
                         impact.impactOccurred()

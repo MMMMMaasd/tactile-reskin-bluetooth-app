@@ -26,6 +26,19 @@ struct AccountView : View{
                 .padding(.trailing, 305)
             
             HStack{
+                Text("Animation rate")
+
+                TextField("FPS", value: $appStatus.animationFPS, format: .number)
+                    .frame(width: 60.0, height: 35)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.leading, 180)
+                }
+            .frame(width: 400.0, height: 40.0)
+            .background(.tabBackground)
+            .padding(.trailing, 5)
+            .padding(.bottom, 190.0)
+            
+            HStack{
                     Text("Tactile data reading frequency")
                     
                     TextField("second", value: $appStatus.tactileRecordTimeInterval, format: .number)

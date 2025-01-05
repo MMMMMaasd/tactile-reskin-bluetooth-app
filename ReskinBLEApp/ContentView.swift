@@ -15,7 +15,7 @@ struct ContentView: View {
                 Image("NYU_Logo")
                     .resizable()
                     .frame(width:340.0, height: 200.0)
-                Text("ReSkin Interaction APP")
+                Text("ReSkin Interaction BLE")
                     .font(.title)
                     .multilineTextAlignment(.center)
                     .bold()

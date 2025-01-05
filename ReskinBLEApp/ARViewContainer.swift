@@ -174,10 +174,10 @@ class ARViewModel: ObservableObject{
         
         let saveFileNames = setupRecording()
         lastFrameTimestamp = 0
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true){ [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: self.timeInterval, repeats: true){ [weak self] _ in
             self?.captureVideoFrame()
             self?.recordTimestamp += self?.timeInterval ?? 0.0
-            self?.timeCount += 1.0 / 60.0
+            self?.timeCount += self?.timeInterval ?? 0.0
             print(self?.timeCount)
         }
         isOpen = true

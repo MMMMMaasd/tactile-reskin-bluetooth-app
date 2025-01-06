@@ -112,6 +112,8 @@ class ARViewModel: ObservableObject{
     private let assetWritingSemaphore = DispatchSemaphore(value: 1)
     
     private var lastFrameTimestamp: TimeInterval = 0
+    @Published var recordFrameRate: String = "Unknown"
+    @Published var totalFramesCounter: Double = 0
     
     init() {
         self.ciContext = CIContext()
@@ -160,6 +162,7 @@ class ARViewModel: ObservableObject{
         depthImageCount = 0
         timeCount = 0.0
         recordTimestamp = 0.0
+        totalFramesCounter = 0.0
         
         /*
         let configuration = ARWorldTrackingConfiguration()
@@ -170,10 +173,10 @@ class ARViewModel: ObservableObject{
         
         let saveFileNames = setupRecording()
         lastFrameTimestamp = 0
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true){ [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: self.timeInterval, repeats: true){ [weak self] _ in
             self?.captureVideoFrame()
             self?.recordTimestamp += self?.timeInterval ?? 0.0
-            self?.timeCount += 1.0
+            self?.timeCount += self?.timeInterval ?? 0.0
             print(self?.timeCount)
         }
         isOpen = true
@@ -399,6 +402,7 @@ class ARViewModel: ObservableObject{
     }
     
     func captureVideoFrame() {
+        self.totalFramesCounter += 1
 //        let targetFrameRate: TimeInterval = 1.0 / 60.0
         guard let currentFrame = session.currentFrame else {return}
 //        let currentTimestamp = CACurrentMediaTime()
@@ -680,6 +684,7 @@ class ARViewModel: ObservableObject{
         
         timer?.invalidate()
         timer = nil
+        self.recordFrameRate = String(Double(round(10*(self.totalFramesCounter / self.timeCount))/10))
     }
     
     /*

@@ -113,7 +113,6 @@ class ARViewModel: ObservableObject{
     
     private var lastFrameTimestamp: TimeInterval = 0
     
-    
     init() {
         self.ciContext = CIContext()
     }
@@ -680,7 +679,8 @@ class ARViewModel: ObservableObject{
         }
         
         timer?.invalidate()
-        timer = nil    }
+        timer = nil
+    }
     
     /*
     private func updateData(){

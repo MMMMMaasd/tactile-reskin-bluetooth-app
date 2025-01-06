@@ -402,7 +402,6 @@ class ARViewModel: ObservableObject{
     func captureVideoFrame() {
 //        let targetFrameRate: TimeInterval = 1.0 / 60.0
         guard let currentFrame = session.currentFrame else {return}
-        
 //        let currentTimestamp = CACurrentMediaTime()
 //            if currentTimestamp - lastFrameTimestamp < targetFrameRate {
 //                return

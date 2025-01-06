@@ -403,7 +403,7 @@ class ARViewModel: ObservableObject{
     }
     
     func captureVideoFrame() {
-        self.totalFramesCounter += 1
+       // self.totalFramesCounter += 1
 //        let targetFrameRate: TimeInterval = 1.0 / 60.0
         guard let currentFrame = session.currentFrame else {return}
         

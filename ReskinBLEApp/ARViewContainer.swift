@@ -116,44 +116,7 @@ class ARViewModel: ObservableObject{
     init() {
         self.ciContext = CIContext()
     }
-    /*
-    func startCountdown(arView: ARView, completion: @escaping () -> Array<String>) {
-            var countdown = 3
-            let countdownLabel = UILabel()
-            countdownLabel.font = UIFont.boldSystemFont(ofSize: 100)
-            countdownLabel.textColor = .white
-            countdownLabel.textAlignment = .center
-            countdownLabel.frame = arView.bounds
-            arView.addSubview(countdownLabel)
-        
-            func showCountdown(number: Int) {
-                countdownLabel.text = "\(number)"
-            }
 
-            func removeCountdown() {
-                countdownLabel.removeFromSuperview()
-            }
-
-            let countdownTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                showCountdown(number: countdown)
-                if countdown == 0 {
-                    timer.invalidate()
-                    removeCountdown()
-                    completion() // Start the recording after countdown
-                } else {
-                    countdown -= 1
-                }
-            }
-            
-            countdownTimer.fire()
-        }
-    func startSession(arView: ARView) -> Array<String>{
-          startCountdown(arView: arView) { [weak self] in
-              return self?.beginRecording() ?? ["", "", "", "", "", ""]
-          }
-        return ["", "", "", "", "", ""]
-      }
-*/
     func startSession() -> Array<String>{
 
         rgbImageCount = 0
@@ -401,12 +364,7 @@ class ARViewModel: ObservableObject{
     func captureVideoFrame() {
 //        let targetFrameRate: TimeInterval = 1.0 / 60.0
         guard let currentFrame = session.currentFrame else {return}
-//        let currentTimestamp = CACurrentMediaTime()
-//            if currentTimestamp - lastFrameTimestamp < targetFrameRate {
-//                return
-//        }
-//        print(currentTimestamp)
-//        lastFrameTimestamp = currentTimestamp
+
         var imgSuccessFlag = true
         
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
@@ -414,19 +372,12 @@ class ARViewModel: ObservableObject{
         }
         
         let orientation = windowScene.interfaceOrientation
-        
+
         let currentTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
     
         let rgbPixelBuffer = currentFrame.capturedImage
         guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
-    
-        /*
-        if(timeCount.truncatingRemainder(dividingBy: 0.03) == 0.0){
-            saveImage(from: rgbPixelBuffer, directory: rgbDirect)
-            saveImage(from: depthPixelBuffer, directory: depthDirect)
-        }
-        */
-        
+
         let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
         let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
         // let viewPort = windowScene.bounds
@@ -454,44 +405,10 @@ class ARViewModel: ObservableObject{
                     )
                     let transformedImage = ciImage.transformed(by: normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)).cropped(to: cropRect)
                     
-                    /*
-                     let transform = CGAffineTransform(rotationAngle: -.pi / 2)
-                     .translatedBy(x: -ciImage.extent.height, y: 0)
-                     
-                     let transformedCiImage = ciImage.transformed(by: transform)
-                     
-                     //let scaledWidth = viewportSize.width / transformedCiImage.extent.width
-                     let scaleHeight = viewportSize.height / transformedCiImage.extent.height
-                     //let finalScale = min(scaledWidth, scaleHeight)
-                     let scaledTransformedCiImage = transformedCiImage.transformed(by: CGAffineTransform(scaleX: scaleHeight, y: scaleHeight))
-                     
-                     let cropRect = CGRect(
-                     x: (scaledTransformedCiImage.extent.width - viewportSize.width) / 2, y: 0, width: viewportSize.width, height: viewportSize.height
-                     )
-                     
-                     
-                     transformedCiImage = scaledTransformedCiImage.cropped(to: cropRect)
-                     */
-                    // let transformedCiImage = ciImage.transformed(by: transform)
-                    
                     self.ciContext.render(transformedImage, to: outputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceRGB())
-                    /*
-                     print(timeCount.truncatingRemainder(dividingBy: (userFPS/30)))
-                     if(timeCount.truncatingRemainder(dividingBy: (userFPS/30)) == 0.0){
-                     print("YEsssssssssss")
-                     saveImage(from: outputBuffer, directory: rgbDirect)
-                     }
-                     */
                     
                     self.assetWritingSemaphore.wait()
                     defer { self.assetWritingSemaphore.signal() }
-                    
-                    //
-//                    print("rgbPixelBuffer dimensions: \(CVPixelBufferGetWidth(rgbPixelBuffer)), \(CVPixelBufferGetHeight(rgbPixelBuffer))\n")
-//                    print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
-//                    print("outputBuffer dimensions: \(CVPixelBufferGetWidth(outputBuffer)), \(CVPixelBufferGetHeight(outputBuffer))\n")
-                    //print("Transform: \(transform)\n")
-
                     
                     if let success = self.pixelBufferAdapter?.append(outputBuffer, withPresentationTime: currentTime) {
                         if !success {
@@ -503,9 +420,7 @@ class ARViewModel: ObservableObject{
                         print("Failed to append pixel buffer: Pixel buffer adapter is nil.")
                         imgSuccessFlag = false
                     }
-                    
-                    // self.saveImage(from: outputBuffer, isDepth: false)
-                    
+
                     CVPixelBufferUnlockBaseAddress(outputBuffer, [])
                     CVPixelBufferUnlockBaseAddress(rgbPixelBuffer, .readOnly)
                 }
@@ -542,25 +457,6 @@ class ARViewModel: ObservableObject{
                     return
                 }
                 
-                /*
-                 let gradientFilter = CIFilter.linearGradient()
-                 gradientFilter.point0 = CGPoint(x: 0, y: 0)
-                 gradientFilter.point1 = CGPoint(x: depthSize.width, y: depthSize.height)
-                 gradientFilter.color0 = CIColor(red: 1, green: 1, blue: 0)
-                 gradientFilter.color1 = CIColor(red: 0, green: 0, blue: 1)
-                 guard let gradientImage = gradientFilter.outputImage else {
-                 print("Failed to get output image from gradient filter.")
-                 return
-                 }
-                 
-                 let colorMapFilter = CIFilter.colorMap()
-                 colorMapFilter.inputImage = ciImageAfterFiltered
-                 colorMapFilter.gradientImage = gradientImage
-                 guard let ciImageAfterMapped = colorMapFilter.outputImage else {
-                 print("Failed to get output image from color map filter.")
-                 return
-                 }
-                 */
                 
                 var ciImageToRender = ciImageAfterFiltered
                 
@@ -588,17 +484,6 @@ class ARViewModel: ObservableObject{
                     self.ciContext.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceGray())
                 }
                 
-                /*
-                 if(timeCount.truncatingRemainder(dividingBy: (userFPS/30)) == 0.0){
-                 saveImage(from: depthOutputBuffer, directory: depthDirect, isDepth: true)
-                 }
-                 */
-                // self.saveImage(from: depthOutputBuffer, isDepth: true)
-                
-//                print("depthPixelBuffer dimensions: \(CVPixelBufferGetWidth(depthPixelBuffer)), \(CVPixelBufferGetHeight(depthPixelBuffer))\n")
-//                print("transformedCiImage dimensions: \(transformedImage.extent.width), \(transformedImage.extent.height)\n")
-//                print("depthOutputBuffer dimensions: \(CVPixelBufferGetWidth(depthOutputBuffer)), \(CVPixelBufferGetHeight(depthOutputBuffer))\n")
-                
                 self.depthPixelBufferAdapter?.append(depthOutputBuffer, withPresentationTime: currentTime)
                 
                 CVPixelBufferUnlockBaseAddress(depthOutputBuffer, [])
@@ -611,27 +496,16 @@ class ARViewModel: ObservableObject{
         if !imgSuccessFlag {return}
         print("Did not return", imgSuccessFlag)
         let cameraTransform = currentFrame.camera.transform
-//        print(cameraTransform.columns.3)
-        // Get the orientation matrix
-        let rotationMatrx = matrix_float3x3(SIMD3<Float>(cameraTransform.columns.0.x, cameraTransform.columns.0.y, cameraTransform.columns.0.z),
-                                            SIMD3<Float>(cameraTransform.columns.1.x, cameraTransform.columns.1.y, cameraTransform.columns.1.z),
-                                            SIMD3<Float>(cameraTransform.columns.2.x, cameraTransform.columns.2.y, cameraTransform.columns.2.z))
-//        print(cameraTransform)
-//        print(rotationMatrx)
-//        print(cameraTransform.columns.3)
+
         // Transform the orientation matrix to unit quaternion
-        let quaternion = simd_quaternion(rotationMatrx)
-        print(quaternion)
+        let quaternion = simd_quaternion(cameraTransform)
+
         // Extract the value
+        let orientationX = quaternion.vector.x
         let orientationY = quaternion.vector.y
-        let orientationX = (quaternion.vector.x)
+        let orientationZ = quaternion.vector.z
         let orientationW = quaternion.vector.w
-        let orientationZ = (quaternion.vector.z)
         
-//        let orientationY = quaternion.vector.x
-//        let orientationX = -(quaternion.vector.y)
-//        let orientationW = quaternion.vector.z
-//        let orientationZ = -(quaternion.vector.w)
         // Use the last column's vlaue, which is the representation of translation
         let translationX = cameraTransform.columns.3.x
         let translationY = cameraTransform.columns.3.y
@@ -654,14 +528,8 @@ class ARViewModel: ObservableObject{
             print("Error when reading existed pose data file\n")
         }
         
-        let currentTimestamp = CACurrentMediaTime()
-        let dur = currentTimestamp - lastFrameTimestamp
-//        print("Duration: ", dur, currentTimestamp)
-//        if currentTimestamp - lastFrameTimestamp < targetFrameRate {
-//            sleep(sleep(forTimeInterval: targetFrameRate - dur))
-//        }
-        //        print(currentTimestamp)
-        lastFrameTimestamp = currentTimestamp
+//        let currentTimestamp = CACurrentMediaTime()
+//        lastFrameTimestamp = currentTimestamp
     }
     
 

@@ -102,6 +102,15 @@ struct ReadView : View{
                               }
                 )
             }
+            .alert(isPresented: $showingFPSInfo){
+                Alert(title: Text("This Record's Frame Rate")
+                    .foregroundColor(.red),
+                      message: Text(arViewModel.recordFrameRate),
+                      dismissButton: .default(Text("Close")) {
+                            showingFPSInfo = false
+                      }
+                )
+            }
             VStack{
                 Button(action: {
                     showingExporter.toggle()

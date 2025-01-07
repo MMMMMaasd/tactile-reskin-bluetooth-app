@@ -82,6 +82,44 @@ struct AccountView : View{
             .padding(.trailing, 5)
             .padding(.top, 160.0)
         
+            VStack{
+                Text("NYU CILVR Tactile")
+                    .fontWeight(.light)
+                    .padding(.top, 150)
+                    .bold()
+                Link(destination: URL(string: "https://reskin.dev/")!, label: {
+                    HStack{
+                        Text("More about Reskin -> ")
+                            .bold()
+                        Image("ReskinPicture")
+                            .resizable()
+                            .frame(width: 40.0, height: 40.0)
+                            .cornerRadius(20)
+
+                    }
+                    .frame(width: 280, height: 40)
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(12)
+                })
+                Link(destination: URL(string: "https://github.com/raunaqbhirangi/reskin_sensor")!, label: {
+                    HStack{
+                        Text("Reskin Library -> ")
+                            .bold()
+                        Image("GithubLogo")
+                            .resizable()
+                            .padding(.bottom, 3.0)
+                            .frame(width: 50.0, height: 50.0)
+                            .cornerRadius(12)
+                    }
+                    .frame(width: 280, height: 40)
+                    .foregroundColor(.white)
+                    .background(Color.black)
+                    .cornerRadius(12)
+                })
+            }
+            .padding(.top, 300.0)
+        
             Button(action: {
                 appStatus.ifGoToNextPage = 0
                 if(appStatus.hapticFeedbackLevel == "medium") {

@@ -74,6 +74,7 @@ class ARViewModel: ObservableObject{
     public var userFPS = 60.0
     public var isColorMapOpened = false
     //private var backgroundRecordingID: UUID?
+    private var orientation: UIInterfaceOrientation = .portrait
     
     // Control the destination of rgb and depth video file
     private var assetWriter: AVAssetWriter?
@@ -85,6 +86,9 @@ class ARViewModel: ObservableObject{
 //    private var coloredAssetWriter: AVAssetWriter?
 //    private var coloredVideoInput: AVAssetWriterInput?
 //    private var coloredPixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
+    private var viewPortSize = CGSize(width: 720, height: 960)
+    private var combinedRGBTransform: CGAffineTransform?
+    private var combinedDepthTransform: CGAffineTransform?
     
     private var poseFileHandle: FileHandle?
     
@@ -290,6 +294,27 @@ class ARViewModel: ObservableObject{
             print("Failed to setup recording: \(error)")
         }
         
+        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+            if let currentFrame = self.session.currentFrame {
+                timer.invalidate() // Stop the timer once the frame is available
+                let rgbPixelBuffer = currentFrame.capturedImage
+                
+                let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
+                var normalizeTransform = CGAffineTransform(scaleX: 1.0/rgbSize.width, y: 1.0/rgbSize.height)
+                let flipTransform = (self.orientation.isPortrait) ? CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1) : .identity
+                let displayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: self.viewPortSize)
+                let toViewPortTransform = CGAffineTransform(scaleX: self.viewPortSize.width, y: self.viewPortSize.height)
+
+                self.combinedRGBTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
+                
+                guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
+                let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
+                normalizeTransform = CGAffineTransform(scaleX: 1.0/depthSize.width, y: 1.0/depthSize.height)
+                
+                self.combinedDepthTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
+            }
+        }
+        
         return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName, poseFileName, generalDataRecordDirectName, tactileDataFileName]
     }
     
@@ -384,24 +409,26 @@ class ARViewModel: ObservableObject{
 
         var imgSuccessFlag = true
         
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
-            return
-        }
-//        let postSceneTimestamp = CACurrentMediaTime()
-//        print("Post scene duration: ", postSceneTimestamp - preRecvFrameTimestamp)
-        let orientation = windowScene.interfaceOrientation
-        print(orientation)
+//        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+//            return
+//        }
+////        let postSceneTimestamp = CACurrentMediaTime()
+////        print("Post scene duration: ", postSceneTimestamp - preRecvFrameTimestamp)
+//        let orientation = windowScene.interfaceOrientation
+//        print(orientation)
 
         let currentTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
     
         let rgbPixelBuffer = currentFrame.capturedImage
         guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
-
-        let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
-        let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
+//        let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
+//        let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
         // let viewPort = windowScene.bounds
         //let viewPortSize = windowScene.bounds.size
-        let viewPortSize = CGSize(width: 720, height: 960)
+        let cropRect = CGRect(
+            x: 0, y: 0, width: self.viewPortSize.width, height: self.viewPortSize.height
+        )
+        
     
         //guard let rgbdPixelBuffer = createRGBDFrame(rgb: rgbPixelBuffer, depth: depthPixelBuffer) else {return}
 //        let preImgTimestamp = CACurrentMediaTime()
@@ -417,16 +444,14 @@ class ARViewModel: ObservableObject{
                     CVPixelBufferLockBaseAddress(outputBuffer, [])
                     
                     let ciImage = CIImage(cvPixelBuffer: rgbPixelBuffer)
-                    let normalizeTransform = CGAffineTransform(scaleX: 1.0/rgbSize.width, y: 1.0/rgbSize.height)
-                    let flipTransform = (orientation.isPortrait) ? CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1) : .identity
-                    let displayTransform = currentFrame.displayTransform(for: orientation, viewportSize: viewPortSize)
-                    let toViewPortTransform = CGAffineTransform(scaleX: viewPortSize.width, y: viewPortSize.height)
-                    let cropRect = CGRect(
-                        x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height
-                    )
-                    let transformedImage = ciImage.transformed(by: normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)).cropped(to: cropRect)
+//                    let normalizeTransform = CGAffineTransform(scaleX: 1.0/rgbSize.width, y: 1.0/rgbSize.height)
+//                    let flipTransform = CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1)
+//                    let displayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: viewPortSize)
+//                    let toViewPortTransform = CGAffineTransform(scaleX: viewPortSize.width, y: viewPortSize.height)
                     
-                    self.ciContext.render(transformedImage, to: outputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceRGB())
+//                    let transformedImage = ciImage.transformed(by: normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)).cropped(to: cropRect)
+                    let transformedImage = ciImage.transformed(by: self.combinedRGBTransform!).cropped(to: cropRect)
+                    self.ciContext.render(transformedImage, to: outputBuffer, bounds: cropRect, colorSpace: CGColorSpaceCreateDeviceRGB())
                     
                     self.assetWritingSemaphore.wait()
                     defer { self.assetWritingSemaphore.signal() }
@@ -490,19 +515,20 @@ class ARViewModel: ObservableObject{
                 }
                 
                 
-                let normalizeTransform = CGAffineTransform(scaleX: 1.0/depthSize.width, y: 1.0/depthSize.height)
-                let flipTransform = (orientation.isPortrait) ? CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1) : .identity
-                let displayTransform = currentFrame.displayTransform(for: orientation, viewportSize: viewPortSize)
-                let toViewPortTransform = CGAffineTransform(scaleX: viewPortSize.width, y: viewPortSize.height)
-                let cropRect = CGRect(
-                    x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height
-                )
-                let transformedImage = ciImageToRender.transformed(by: normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)).cropped(to: cropRect)
+//                let normalizeTransform = CGAffineTransform(scaleX: 1.0/depthSize.width, y: 1.0/depthSize.height)
+//                let flipTransform = CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1)
+//                let displayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: viewPortSize)
+//                let toViewPortTransform = CGAffineTransform(scaleX: viewPortSize.width, y: viewPortSize.height)
+//                let cropRect = CGRect(
+//                    x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height
+//                )
+//                let transformedImage = ciImageToRender.transformed(by: normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)).cropped(to: cropRect)
+                let transformedImage = ciImageToRender.transformed(by: self.combinedDepthTransform!).cropped(to: cropRect)
                 
                 if(self.isColorMapOpened) {
-                    self.ciContext.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceRGB())
+                    self.ciContext.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: self.viewPortSize.width, height: self.viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceRGB())
                 } else {
-                    self.ciContext.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: viewPortSize.width, height: viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceGray())
+                    self.ciContext.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: self.viewPortSize.width, height: self.viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceGray())
                 }
                 
                 self.depthPixelBufferAdapter?.append(depthOutputBuffer, withPresentationTime: currentTime)

@@ -20,12 +20,10 @@ struct ReadView : View{
     @State private var isReading = false
     //private let timerInterval: TimeInterval = 0.1
     @State private var recordingTimer: Timer?
-    @State private var showSheet = false
     @State var showingAlert : Bool = false
     @Environment(\.scenePhase) private var phase
     @State private var fileSetNames = ["", "", "", "", "", "", "", ""]
     @State var showingExporter = false
-    @State var showingSelectSheet = false
     @State var openFlash = true
     @State var exportFileName = ""
     var body : some View{
@@ -284,10 +282,11 @@ struct ReadView : View{
      }*/
     }
     
-    private func saveFile(targetIndex: Int){
-        exportFileName = fileSetNames[targetIndex]
-        showingSelectSheet.toggle()
-    }
+//    private func saveFile(targetIndex: Int){
+//        exportFileName = fileSetNames[targetIndex]
+//        showingSelectSheet.toggle()
+//    }
+    
     func toggleRecording() {
         arViewModel.isColorMapOpened = appStatus.colorMapTrigger
         print(appStatus.colorMapTrigger)

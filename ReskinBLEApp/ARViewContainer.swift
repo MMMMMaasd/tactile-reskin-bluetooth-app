@@ -83,6 +83,8 @@ class ARViewModel: ObservableObject{
     private var coloredVideoInput: AVAssetWriterInput?
     private var coloredPixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
     
+    private var poseFileHandle: FileHandle?
+    
     @Published var rgbValue: String = "N/A"
     @Published var depthValue: String = "N/A"
     @Published var position: String = "N/A"
@@ -271,6 +273,9 @@ class ARViewModel: ObservableObject{
             coloredAssetWriter?.startWriting()
             coloredAssetWriter?.startSession(atSourceTime: startTime!)
             */
+            
+            poseFileHandle = try FileHandle(forWritingTo: poseTextURL)
+            try poseFileHandle?.seekToEnd()
         } catch {
             print("Failed to setup recording: \(error)")
         }
@@ -363,6 +368,8 @@ class ARViewModel: ObservableObject{
     
     func captureVideoFrame() {
 //        let targetFrameRate: TimeInterval = 1.0 / 60.0
+//        let preRecvFrameTimestamp = CACurrentMediaTime()
+//        print("Time at start: ", preRecvFrameTimestamp - lastFrameTimestamp)
         guard let currentFrame = session.currentFrame else {return}
 
         var imgSuccessFlag = true
@@ -370,7 +377,8 @@ class ARViewModel: ObservableObject{
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
             return
         }
-        
+//        let postSceneTimestamp = CACurrentMediaTime()
+//        print("Post scene duration: ", postSceneTimestamp - preRecvFrameTimestamp)
         let orientation = windowScene.interfaceOrientation
 
         let currentTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
@@ -385,6 +393,8 @@ class ARViewModel: ObservableObject{
         let viewPortSize = CGSize(width: 720, height: 960)
     
         //guard let rgbdPixelBuffer = createRGBDFrame(rgb: rgbPixelBuffer, depth: depthPixelBuffer) else {return}
+//        let preImgTimestamp = CACurrentMediaTime()
+//        print("Post settings duration: ", preImgTimestamp - postSceneTimestamp)
         DispatchQueue.global(qos: .userInitiated).async {
             
             if let videoInput = self.videoInput, videoInput.isReadyForMoreMediaData == true {
@@ -493,8 +503,10 @@ class ARViewModel: ObservableObject{
             // Processing Colormap Depth Frame
                         
         }
+//        let postImgTimestamp = CACurrentMediaTime()
+//        print("Image retrieval time:", postImgTimestamp - preImgTimestamp)
         if !imgSuccessFlag {return}
-        print("Did not return", imgSuccessFlag)
+//        print("Did not return", imgSuccessFlag)
         let cameraTransform = currentFrame.camera.transform
 
         // Transform the orientation matrix to unit quaternion
@@ -514,21 +526,25 @@ class ARViewModel: ObservableObject{
         let currentTimer = Date()
         let dataReadTimeStamp = Int64(currentTimer.timeIntervalSince1970 * 1000)
         
-        let poseWithTime = ["<\(dataReadTimeStamp)>", orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ] as [Any]
-//        TODO: Fix appending to file
+        let poseWithTime = ["\"<\(dataReadTimeStamp)>\"", orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ] as [Any]
+//        let postPoseTimestamp = CACurrentMediaTime()
+//        print("Pose retrieval time:", postPoseTimestamp - postImgTimestamp)
         
-        if let exisitingFileData = readDataFromTextFile(targetURL: generalURL, fileName: globalPoseFileName) {
-            do {
-                let newAppendingPoseData = exisitingFileData + poseWithTime.description + "\n"
-                try newAppendingPoseData.description.write(to: poseURL, atomically: true, encoding: .utf8)
-            } catch {
-                print("Error when writing to the pose text file\n")
+        do {
+            let line = poseWithTime.map { String(describing: $0)}.joined(separator: ",") + "\n"
+            if let data = line.data(using: .utf8) {
+                try self.poseFileHandle?.write(contentsOf: data)
             }
-        } else {
-            print("Error when reading existed pose data file\n")
+        } catch {
+            print("Error when writing to the pose text file\n")
         }
         
+//        let postWriteTimestamp = CACurrentMediaTime()
+//        print("Saving time: ", postWriteTimestamp - postPoseTimestamp)
+//        
 //        let currentTimestamp = CACurrentMediaTime()
+//        print("Iteration time: ", currentTimestamp - lastFrameTimestamp)
+//
 //        lastFrameTimestamp = currentTimestamp
     }
     
@@ -545,7 +561,13 @@ class ARViewModel: ObservableObject{
             self.depthAssetWriter = nil
             print("Depth Video recording finished.")
         }
-        
+
+        do {
+            try poseFileHandle?.close()
+        } catch {
+            print("Error closing pose file")
+        }
+
         timer?.invalidate()
         timer = nil
     }

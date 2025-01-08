@@ -42,11 +42,14 @@ struct ARViewContainer: UIViewRepresentable {
         
         // Set the session configuration properties
         configuration.frameSemantics = .sceneDepth
-        configuration.planeDetection = [.horizontal, .vertical]
+        configuration.planeDetection = []
+        configuration.environmentTexturing = .none  // No environment texturing
+        configuration.sceneReconstruction = []  // No scene reconstruction
         configuration.isAutoFocusEnabled = false
         
         // Run the session with the configuration
         arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        arView.environment.sceneUnderstanding.options = [] // No extra scene understanding
         
         
         return arView
@@ -79,25 +82,32 @@ class ARViewModel: ObservableObject{
     private var depthAssetWriter: AVAssetWriter?
     private var depthVideoInput: AVAssetWriterInput?
     private var depthPixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
-    private var coloredAssetWriter: AVAssetWriter?
-    private var coloredVideoInput: AVAssetWriterInput?
-    private var coloredPixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
+//    private var coloredAssetWriter: AVAssetWriter?
+//    private var coloredVideoInput: AVAssetWriterInput?
+//    private var coloredPixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
     
     private var poseFileHandle: FileHandle?
     
-    @Published var rgbValue: String = "N/A"
-    @Published var depthValue: String = "N/A"
-    @Published var position: String = "N/A"
-    @Published var orientation: String = "N/A"
+//    @Published var rgbValue: String = "N/A"
+//    @Published var depthValue: String = "N/A"
+//    @Published var position: String = "N/A"
+//    @Published var orientation: String = "N/A"
     @Published var isOpen : Bool = false
     
     // Control the destination of rgb images directory and depth images directory
-    @Published var rgbDirect: URL = URL(fileURLWithPath: "")
-    @Published var depthDirect: URL = URL(fileURLWithPath: "")
+    private var rgbDirect: URL = URL(fileURLWithPath: "")
+    private var depthDirect: URL = URL(fileURLWithPath: "")
     // Control the destination of pose data text file
-    @Published var poseURL: URL = URL(fileURLWithPath: "")
-    @Published var generalURL: URL = URL(fileURLWithPath: "")
-    @Published var globalPoseFileName: String = ""
+    private var poseURL: URL = URL(fileURLWithPath: "")
+    private var generalURL: URL = URL(fileURLWithPath: "")
+    private var globalPoseFileName: String = ""
+    
+//    @Published var rgbDirect: URL = URL(fileURLWithPath: "")
+//    @Published var depthDirect: URL = URL(fileURLWithPath: "")
+//    // Control the destination of pose data text file
+//    @Published var poseURL: URL = URL(fileURLWithPath: "")
+//    @Published var generalURL: URL = URL(fileURLWithPath: "")
+//    @Published var globalPoseFileName: String = ""
     
     public var rgbImageCount: Int = 0
     public var depthImageCount: Int = 0
@@ -380,6 +390,7 @@ class ARViewModel: ObservableObject{
 //        let postSceneTimestamp = CACurrentMediaTime()
 //        print("Post scene duration: ", postSceneTimestamp - preRecvFrameTimestamp)
         let orientation = windowScene.interfaceOrientation
+        print(orientation)
 
         let currentTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
     
@@ -572,44 +583,6 @@ class ARViewModel: ObservableObject{
         timer = nil
     }
     
-    /*
-    private func updateData(){
-        captureVideoFrame()
-        guard let currentFrame = session.currentFrame else {return}
-        let cameraTransform = currentFrame.camera.transform
-        // Get the orientation matrix
-        let rotationMatrx = matrix_float3x3(SIMD3<Float>(cameraTransform.columns.0.x, cameraTransform.columns.0.y, cameraTransform.columns.0.z),
-                                            SIMD3<Float>(cameraTransform.columns.1.x, cameraTransform.columns.1.y, cameraTransform.columns.1.z),
-                                            SIMD3<Float>(cameraTransform.columns.2.x, cameraTransform.columns.2.y, cameraTransform.columns.2.z))
-        // Transform the orientation matrix to unit quaternion
-        let quaternion = simd_quaternion(rotationMatrx)
-        // Extract the value
-        let orientationY = quaternion.vector.x
-        let orientationX = -(quaternion.vector.y)
-        let orientationW = quaternion.vector.z
-        let orientationZ = -(quaternion.vector.w)
-        // Use the last column's vlaue, which is the representation of translation
-        let translationX = cameraTransform.columns.3.x
-        let translationY = cameraTransform.columns.3.y
-        let translationZ = cameraTransform.columns.3.z
-        
-        let currentTimer = Date()
-        let dataReadTimeStamp = Int64(currentTimer.timeIntervalSince1970 * 1000)
-        
-        let poseWithTime = ["<\(dataReadTimeStamp)>", orientationX, orientationY, orientationZ, orientationW, translationX, translationY, translationZ] as [Any]
-        
-        if let exisitingFileData = readDataFromTextFile(targetURL: generalURL, fileName: globalPoseFileName) {
-            do {
-                let newAppendingPoseData = exisitingFileData + poseWithTime.description + "\n"
-                try newAppendingPoseData.description.write(to: poseURL, atomically: true, encoding: .utf8)
-            } catch {
-                print("Error when writing to the pose text file\n")
-            }
-        } else {
-            print("Error when reading existed pose data file\n")
-        }
-    }
-    */
     func getDocumentsDirect() -> URL{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         print(paths[0].path)

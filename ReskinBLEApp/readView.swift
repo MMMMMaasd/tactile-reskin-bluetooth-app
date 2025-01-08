@@ -15,11 +15,8 @@ import AVFoundation
 
 struct ReadView : View{
     @StateObject var arViewModel = ARViewModel()
-    @StateObject var cameraModel = CameraViewModel()
     @EnvironmentObject var appStatus : AppInformation
-    //let deviceViewModel = DeviceView()
     @ObservedObject var sharedBluetoothManager =  BluetoothManager()
-    @ObservedObject private var bluetoothManager = BluetoothManager()
     @State private var isReading = false
     //private let timerInterval: TimeInterval = 0.1
     @State private var recordingTimer: Timer?
@@ -32,7 +29,7 @@ struct ReadView : View{
     @State var openFlash = true
     @State var exportFileName = ""
     var body : some View{
-        var paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         ZStack{
             /*
             CameraView(cameraModel: cameraModel)

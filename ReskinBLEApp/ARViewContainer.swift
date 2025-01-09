@@ -172,7 +172,7 @@ class ARViewModel: ObservableObject{
         
         let saveFileNames = setupRecording()
         lastFrameTimestamp = 0
-        var last_ts = 0.0
+//        var last_ts = 0.0
         
         displayLink = CADisplayLink(target: self, selector: #selector(updateFrame))
         displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(self.userFPS!), maximum: Float(self.userFPS!), preferred: Float(self.userFPS!))
@@ -189,8 +189,8 @@ class ARViewModel: ObservableObject{
             return
         }
         
-        let deltaTime = link.timestamp - lastTimestamp
-        lastTimestamp = link.timestamp
+//        let deltaTime = link.timestamp - lastTimestamp
+//        lastTimestamp = link.timestamp
 
         captureVideoFrame()
         timeCount += 1.0
@@ -345,91 +345,7 @@ class ARViewModel: ObservableObject{
         return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName, poseFileName, generalDataRecordDirectName, tactileDataFileName]
     }
     
-    
-    let imageSavingQueue = DispatchQueue(label: "imageSavingQueue")
-    private var isSavingImages = false
-
-    private func saveImage(from pixelBuffer: CVPixelBuffer, isDepth: Bool = false) {
-        imageSavingQueue.async { [weak self] in
-            guard let self = self else { return }
-
-            if isDepth {
-                self.depthImagesToSave.append(pixelBuffer)
-                if self.depthImagesToSave.count >= self.batchSize {
-                    self.saveBatch(of: self.depthImagesToSave, isDepth: true)
-                }
-            } else {
-                self.rgbImagesToSave.append(pixelBuffer)
-                if self.rgbImagesToSave.count >= self.batchSize {
-                    self.saveBatch(of: self.rgbImagesToSave, isDepth: false)
-                }
-            }
-        }
-    }
-
-    private func saveBatch(of images: [CVPixelBuffer], isDepth: Bool) {
-        let directory = isDepth ? depthDirect : rgbDirect
-        let totalImages = images.count
-
-        for (index, pixelBuffer) in images.enumerated() {
-            // Lock the base address
-            CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
-            defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly) }
-
-
-            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-            guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else {
-                print("Failed to create CGImage from CIImage.")
-                continue
-            }
-
-            let uiImage = UIImage(cgImage: cgImage)
-            guard let jpegData = uiImage.jpegData(compressionQuality: 0.8) else {
-                print("Failed to convert UIImage to JPEG data.")
-                continue
-            }
-
-            let fileName = isDepth ? "\(depthImageCount).jpg" : "\(rgbImageCount).jpg"
-            let fileUrl = directory.appendingPathComponent(fileName)
-
-            do {
-                try jpegData.write(to: fileUrl)
-                if isDepth {
-                    depthImageCount += 1
-                } else {
-                    rgbImageCount += 1
-                }
-            } catch {
-                print("Error saving image: \(error.localizedDescription)")
-            }
-
-            // Free memory by niling out references
-            if index % 10 == 0 { // Adjust the index check for more aggressive cleanup
-                self.depthImagesToSave.removeAll()
-                self.rgbImagesToSave.removeAll()
-            }
-        }
-
-        // Clear the array after processing
-        if isDepth {
-            depthImagesToSave.removeAll()
-        } else {
-            rgbImagesToSave.removeAll()
-        }
-    }
-
-    private func flushRemainingImages() {
-        // Flush any remaining images if not empty
-        if !rgbImagesToSave.isEmpty {
-            saveBatch(of: rgbImagesToSave, isDepth: false)
-        }
-        if !depthImagesToSave.isEmpty {
-            saveBatch(of: depthImagesToSave, isDepth: true)
-        }
-    }
-    
     func captureVideoFrame() {
-//        let targetFrameRate: TimeInterval = 1.0 / 60.0
 //        let preRecvFrameTimestamp = CACurrentMediaTime()
 //        print("Time at start: ", preRecvFrameTimestamp - lastFrameTimestamp)
         guard let currentFrame = session.currentFrame else {return}
@@ -468,17 +384,17 @@ class ARViewModel: ObservableObject{
                     let transformedImage = ciImage.transformed(by: self.combinedRGBTransform!).cropped(to: cropRect)
                     self.ciContext.render(transformedImage, to: outputBuffer, bounds: cropRect, colorSpace: CGColorSpaceCreateDeviceRGB())
                     
-                    self.assetWritingSemaphore.wait()
-                    defer { self.assetWritingSemaphore.signal() }
+//                    self.assetWritingSemaphore.wait()
+//                    defer { self.assetWritingSemaphore.signal() }
                     
                     if let success = self.pixelBufferAdapter?.append(outputBuffer, withPresentationTime: currentTime) {
                         if !success {
-                            print("Failed to append pixel buffer. Pixel buffer adapter state: \(self.pixelBufferAdapter?.assetWriterInput.isReadyForMoreMediaData), Time: \(currentTime)")
+                            print("Failed to append RGB pixel buffer. Pixel buffer adapter state: \(self.pixelBufferAdapter?.assetWriterInput.isReadyForMoreMediaData), Time: \(currentTime)")
                             print(self.assetWriter?.error);
                             imgSuccessFlag = false
                         }
                     } else {
-                        print("Failed to append pixel buffer: Pixel buffer adapter is nil.")
+                        print("Failed to append RGB pixel buffer: Pixel buffer adapter is nil.")
                         imgSuccessFlag = false
                     }
 
@@ -523,7 +439,7 @@ class ARViewModel: ObservableObject{
                 let fileURL = self.depthDirect.appendingPathComponent("\(self.depthImageCount).bin")
                 do {
                     try data.write(to: fileURL)
-                    print("Saved depth data to \(fileURL)")
+//                    print("Saved depth data to \(fileURL)")
                 } catch {
                     print("Error saving binary file: \(error)")
                 }
@@ -570,13 +486,21 @@ class ARViewModel: ObservableObject{
                     self.ciContext.render(transformedImage, to: depthOutputBuffer, bounds: CGRect(x: 0, y: 0, width: self.viewPortSize.width, height: self.viewPortSize.height), colorSpace: CGColorSpaceCreateDeviceGray())
                 }
                 
-                self.depthPixelBufferAdapter?.append(depthOutputBuffer, withPresentationTime: currentTime)
+                if let success = self.depthPixelBufferAdapter?.append(depthOutputBuffer, withPresentationTime: currentTime) {
+                    if !success {
+                        print("Failed to append depth pixel buffer. Pixel buffer adapter state: \(self.pixelBufferAdapter?.assetWriterInput.isReadyForMoreMediaData), Time: \(currentTime)")
+                        print(self.assetWriter?.error);
+                        imgSuccessFlag = false
+                    }
+                } else {
+                    print("Failed to append depth pixel buffer: Pixel buffer adapter is nil.")
+                    imgSuccessFlag = false
+                }
                 
                 CVPixelBufferUnlockBaseAddress(depthOutputBuffer, [])
                 CVPixelBufferUnlockBaseAddress(depthPixelBuffer, .readOnly)
             }
             
-            // Processing Colormap Depth Frame
                         
         }
 //        let postImgTimestamp = CACurrentMediaTime()
@@ -661,32 +585,4 @@ class ARViewModel: ObservableObject{
             try FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
     }
     
-    func readDataFromTextFile(targetURL: URL, fileName : String) -> String? {
-        do {
-            let url = targetURL.appendingPathComponent(fileName)
-            let contents = try String(contentsOf: url, encoding: .utf8)
-            return contents
-        } catch {
-            print("Error reading file: \(error)")
-            return nil
-        }
-    }
-    
-    func switchCamera(){
-            guard var currenConfig = session.configuration else{
-                fatalError("Unexpectedly failed to get the configuration.")
-            }
-            
-            switch currenConfig {
-                    case is ARWorldTrackingConfiguration:
-                        currenConfig = ARFaceTrackingConfiguration()
-                    case is ARFaceTrackingConfiguration:
-                        currenConfig = ARWorldTrackingConfiguration()
-                    default:
-                        currenConfig = ARWorldTrackingConfiguration()
-                    }
-                    
-            session.run(currenConfig)
-        //print("AR session not started yet")
-    }
 }

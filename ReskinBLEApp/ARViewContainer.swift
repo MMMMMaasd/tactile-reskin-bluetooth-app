@@ -70,8 +70,7 @@ class ARViewModel: ObservableObject{
     // 30 FPS: 0.033 : (1.0/30.0)
     // 25 FPS: 0.04
 
-    public var timeInterval = (1.0/60.0)
-    public var userFPS = 60.0
+    public var userFPS: Double?
     public var isColorMapOpened = false
     //private var backgroundRecordingID: UUID?
     private var orientation: UIInterfaceOrientation = .portrait
@@ -122,6 +121,9 @@ class ARViewModel: ObservableObject{
     private var startTime: CMTime?
     private let ciContext: CIContext
     
+    private var displayLink: CADisplayLink?
+    private var lastTimestamp: CFTimeInterval = 0
+    
     private var rgbImagesToSave: [CVPixelBuffer] = []
     private var depthImagesToSave: [CVPixelBuffer] = []
     private let batchSize = 10
@@ -149,20 +151,36 @@ class ARViewModel: ObservableObject{
         
         let saveFileNames = setupRecording()
         lastFrameTimestamp = 0
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true){ [weak self] _ in
-            self?.captureVideoFrame()
-            self?.recordTimestamp += self?.timeInterval ?? 0.0
-            self?.timeCount += 1.0
-            print(self?.timeCount)
-        }
+        var last_ts = 0.0
+        sleep(1)
+        
+        displayLink = CADisplayLink(target: self, selector: #selector(updateFrame))
+        displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(self.userFPS!), maximum: Float(self.userFPS!), preferred: Float(self.userFPS!))
+        displayLink?.add(to: .main, forMode: .common)
+        
         isOpen = true
         return saveFileNames
     }
     
+    @objc private func updateFrame(link: CADisplayLink) {
+        guard lastTimestamp > 0 else {
+            // Initialize timestamp on the first call
+            lastTimestamp = link.timestamp
+            return
+        }
+        
+        let deltaTime = link.timestamp - lastTimestamp
+        lastTimestamp = link.timestamp
+
+        captureVideoFrame()
+    }
+    
     func pauseSession(){
         //session.pause()
-        timer?.invalidate()
-        timer = nil
+//        timer?.invalidate()
+//        timer = nil
+        displayLink?.invalidate()
+        displayLink = nil
         isOpen = false
         stopRecording()
     }
@@ -314,6 +332,7 @@ class ARViewModel: ObservableObject{
                 self.combinedDepthTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
             }
         }
+        print("Finished setting up transforms")
         
         return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName, poseFileName, generalDataRecordDirectName, tactileDataFileName]
     }
@@ -408,23 +427,11 @@ class ARViewModel: ObservableObject{
         guard let currentFrame = session.currentFrame else {return}
 
         var imgSuccessFlag = true
-        
-//        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
-//            return
-//        }
-////        let postSceneTimestamp = CACurrentMediaTime()
-////        print("Post scene duration: ", postSceneTimestamp - preRecvFrameTimestamp)
-//        let orientation = windowScene.interfaceOrientation
-//        print(orientation)
 
         let currentTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
     
         let rgbPixelBuffer = currentFrame.capturedImage
         guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
-//        let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
-//        let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
-        // let viewPort = windowScene.bounds
-        //let viewPortSize = windowScene.bounds.size
         let cropRect = CGRect(
             x: 0, y: 0, width: self.viewPortSize.width, height: self.viewPortSize.height
         )
@@ -605,8 +612,10 @@ class ARViewModel: ObservableObject{
             print("Error closing pose file")
         }
 
-        timer?.invalidate()
-        timer = nil
+//        timer?.invalidate()
+//        timer = nil
+        displayLink?.invalidate()
+        displayLink = nil
     }
     
     func getDocumentsDirect() -> URL{

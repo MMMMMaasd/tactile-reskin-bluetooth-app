@@ -290,7 +290,7 @@ struct ReadView : View{
     func toggleRecording() {
         arViewModel.isColorMapOpened = appStatus.colorMapTrigger
         print(appStatus.colorMapTrigger)
-        arViewModel.timeInterval = (1.0/appStatus.animationFPS)
+//        arViewModel.timeInterval = (1.0/appStatus.animationFPS)
         arViewModel.userFPS = appStatus.animationFPS
             isReading = !isReading
             //cameraModel.isRecording = !cameraModel.isRecording

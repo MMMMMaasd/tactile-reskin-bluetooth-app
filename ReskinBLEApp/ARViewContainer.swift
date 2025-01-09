@@ -133,6 +133,27 @@ class ARViewModel: ObservableObject{
     
     init() {
         self.ciContext = CIContext()
+        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+            if let currentFrame = self.session.currentFrame {
+                timer.invalidate() // Stop the timer once the frame is available
+                let rgbPixelBuffer = currentFrame.capturedImage
+                
+                let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
+                var normalizeTransform = CGAffineTransform(scaleX: 1.0/rgbSize.width, y: 1.0/rgbSize.height)
+                let flipTransform = (self.orientation.isPortrait) ? CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1) : .identity
+                let displayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: self.viewPortSize)
+                let toViewPortTransform = CGAffineTransform(scaleX: self.viewPortSize.width, y: self.viewPortSize.height)
+
+                self.combinedRGBTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
+                
+                guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
+                let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
+                normalizeTransform = CGAffineTransform(scaleX: 1.0/depthSize.width, y: 1.0/depthSize.height)
+                
+                self.combinedDepthTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
+            }
+        }
+        print("Finished setting up transforms")
     }
 
     func startSession() -> Array<String>{
@@ -152,7 +173,6 @@ class ARViewModel: ObservableObject{
         let saveFileNames = setupRecording()
         lastFrameTimestamp = 0
         var last_ts = 0.0
-        sleep(1)
         
         displayLink = CADisplayLink(target: self, selector: #selector(updateFrame))
         displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(self.userFPS!), maximum: Float(self.userFPS!), preferred: Float(self.userFPS!))
@@ -173,6 +193,7 @@ class ARViewModel: ObservableObject{
         lastTimestamp = link.timestamp
 
         captureVideoFrame()
+        timeCount += 1.0
     }
     
     func pauseSession(){
@@ -211,8 +232,6 @@ class ARViewModel: ObservableObject{
         let depthImagesDirect = generalDataRecordDirectURL.appendingPathComponent(depthImagesDirectName)
         let poseTextURL = generalDataRecordDirectURL.appendingPathComponent(poseFileName)
         let tactileDataFileURL = generalDataRecordDirectURL.appendingPathComponent(tactileDataFileName)
-        print(rgbVideoURL)
-        print(depthVideoURL)
         
         do {
             try FileManager.default.createDirectory(at: generalDataRecordDirectURL, withIntermediateDirectories: true, attributes: nil)
@@ -276,11 +295,20 @@ class ARViewModel: ObservableObject{
             depthVideoInput?.expectsMediaDataInRealTime = true
             depthAssetWriter?.add(depthVideoInput!)
             
-            let depthAttributes: [String: Any] = [
-                kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA),
-                kCVPixelBufferWidthKey as String: 720,
-                kCVPixelBufferHeightKey as String: 960
-            ]
+            let depthAttributes: [String: Any]
+            if isColorMapOpened {
+                depthAttributes = [
+                    kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA),
+                    kCVPixelBufferWidthKey as String: 720,
+                    kCVPixelBufferHeightKey as String: 960
+                ]
+            } else {
+                depthAttributes = [
+                    kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_OneComponent8,
+                    kCVPixelBufferWidthKey as String: 720,
+                    kCVPixelBufferHeightKey as String: 960
+                ]
+            }
             
             depthPixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: depthVideoInput!, sourcePixelBufferAttributes: depthAttributes)
             
@@ -312,27 +340,7 @@ class ARViewModel: ObservableObject{
             print("Failed to setup recording: \(error)")
         }
         
-        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-            if let currentFrame = self.session.currentFrame {
-                timer.invalidate() // Stop the timer once the frame is available
-                let rgbPixelBuffer = currentFrame.capturedImage
-                
-                let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
-                var normalizeTransform = CGAffineTransform(scaleX: 1.0/rgbSize.width, y: 1.0/rgbSize.height)
-                let flipTransform = (self.orientation.isPortrait) ? CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1) : .identity
-                let displayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: self.viewPortSize)
-                let toViewPortTransform = CGAffineTransform(scaleX: self.viewPortSize.width, y: self.viewPortSize.height)
-
-                self.combinedRGBTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
-                
-                guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
-                let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
-                normalizeTransform = CGAffineTransform(scaleX: 1.0/depthSize.width, y: 1.0/depthSize.height)
-                
-                self.combinedDepthTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
-            }
-        }
-        print("Finished setting up transforms")
+        
         
         return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName, poseFileName, generalDataRecordDirectName, tactileDataFileName]
     }
@@ -496,6 +504,30 @@ class ARViewModel: ObservableObject{
                 
                 CVPixelBufferLockBaseAddress(depthPixelBuffer, .readOnly)
                 CVPixelBufferLockBaseAddress(depthOutputBuffer, [])
+                
+//                Save metric depth data as binary file
+                let width = CVPixelBufferGetWidth(depthPixelBuffer)
+                let height = CVPixelBufferGetHeight(depthPixelBuffer)
+                let bytesPerRow = CVPixelBufferGetBytesPerRow(depthPixelBuffer)
+                
+                guard let baseAddress = CVPixelBufferGetBaseAddress(depthPixelBuffer) else {
+                    CVPixelBufferUnlockBaseAddress(depthPixelBuffer, .readOnly)
+                    return
+                }
+                
+                let floatBuffer = baseAddress.assumingMemoryBound(to: Float32.self)
+                let dataSize = width * height * MemoryLayout<Float32>.size
+                let data = Data(bytes: floatBuffer, count: dataSize)
+                
+                // Save binary data to a file
+                let fileURL = self.depthDirect.appendingPathComponent("\(self.depthImageCount).bin")
+                do {
+                    try data.write(to: fileURL)
+                    print("Saved depth data to \(fileURL)")
+                } catch {
+                    print("Error saving binary file: \(error)")
+                }
+                self.depthImageCount += 1
                 
                 let ciImage = CIImage(cvPixelBuffer: depthPixelBuffer)
                 

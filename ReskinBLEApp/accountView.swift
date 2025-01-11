@@ -10,8 +10,7 @@ import SwiftUI
 struct SettingsView : View{
     @EnvironmentObject var appStatus: AppInformation
     
-    let streamingOptions = ["Wi-Fi", "USB", "Off"] // Streaming options
-    let frequencyOptions = ["10Hz", "20Hz", "30Hz", "50Hz", "60Hz", "100Hz"] // Frequency options
+    let frequencyOptions = ["0.1", "0.05", "0.033", "0.02", "0.017", "0.01"] // Frequency options
     
     var body : some View{
         Form{
@@ -28,9 +27,9 @@ struct SettingsView : View{
                     }
                     Spacer()
                     Picker("Streaming Options", selection: $appStatus.rgbdVideoStreaming) {
-                        ForEach(streamingOptions, id: \.self) { option in
-                            Text(option)
-                        }
+                        Text("Wi-Fi").tag(StreamingMode.wifi)
+                        Text("USB").tag(StreamingMode.usb)
+                        Text("Off").tag(StreamingMode.off)
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .frame(width: 125) // Adjust width for the picker
@@ -41,10 +40,10 @@ struct SettingsView : View{
                 HStack {
                     VStack(alignment: .leading, spacing: 8) {
                         // Title and caption
-                        Text("Tactile Data Frequency")
+                        Text("Tactile Data Time Interval")
                             .font(.body)
                             .foregroundColor(.primary)
-                        Text("Frequency for tactile data reading")
+                        Text("Time Period for tactile data reading")
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
@@ -191,6 +190,12 @@ struct SettingsView : View{
 //        }
 //        .padding(.bottom, 100.0)
 //    }
+}
+
+enum StreamingMode: String {
+    case off = "Off"
+    case wifi = "Wi-Fi"
+    case usb = "USB"
 }
 
 #Preview {

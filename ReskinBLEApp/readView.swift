@@ -18,7 +18,6 @@ struct ReadView : View{
     @EnvironmentObject var appStatus : AppInformation
     @ObservedObject var sharedBluetoothManager =  BluetoothManager()
     @State private var isReading = false
-    //private let timerInterval: TimeInterval = 0.1
     @State private var recordingTimer: Timer?
     @State var showingAlert : Bool = false
     @Environment(\.scenePhase) private var phase
@@ -29,28 +28,17 @@ struct ReadView : View{
     var body : some View{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         ZStack{
-            /*
-            CameraView(cameraModel: cameraModel)
-                .frame(width: 350.0, height: 450.0)
-                .environmentObject(cameraModel)
-                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                .padding(.bottom, 250.0)
-             */
-            ARViewContainer(session: arViewModel.session)
-                .edgesIgnoringSafeArea(.all)
-                .frame(width: 400.0, height: 550.0)
-                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                .padding(.bottom, 100.0)
-             
-            
-            
-            /*
-            Text("press to read data")
-                .font(.title)
-                .fontWeight(.medium)
-                .padding(.bottom, 170.0)
-                .padding(.top, 450)
-             */
+            if appStatus.rgbdVideoStreaming == .off {
+                ARViewContainer(session: arViewModel.session)
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(width: 400.0, height: 550.0)
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .padding(.bottom, 100.0)
+            } else {
+                Text("Streaming mode is active: \(appStatus.rgbdVideoStreaming)")
+                        .font(.headline)
+                        .foregroundColor(.red)
+            }
             Button(action: toggleRecording) {
                 if isReading {
                     Image(systemName: "stop.circle")
@@ -78,6 +66,7 @@ struct ReadView : View{
                         .multilineTextAlignment(.center)
                }
             }
+            .disabled(appStatus.rgbdVideoStreaming != .off)
             .padding(.top, 580.0)
             .padding(.leading, 20)
             .buttonStyle(.bordered)
@@ -242,24 +231,6 @@ struct ReadView : View{
             
         }
         .frame(width: 10.0, height: 10.0)
-        
-        /*
-        .actionSheet(isPresented: $showingSelectSheet){
-            ActionSheet(title: Text("Choose Export Option"), buttons: [
-                .default(Text("Save RGB Video File (.mp4)"), action: {
-                    //saveFile(targetIndex: 0)
-                    exportFileName = fileSetNames[0]
-                    showingExporter = true
-                }),
-                .default(Text("Save Depth Video File (.mp4)"), action: {
-                    //saveFile(targetIndex: 1)
-                    exportFileName = fileSetNames[1]
-                    showingExporter = true
-                }),
-                .cancel()
-            ])
-        }
-         */
         .fileExporter(isPresented: $showingExporter, document: DocumentaryFolder(files: createDocumentaryFolderFiles(paths: paths, fileSetNames: fileSetNames)), contentType: .folder, defaultFilename: fileSetNames[2]) { result in
             switch result {
             case .success(let url):
@@ -269,17 +240,27 @@ struct ReadView : View{
             }
         }
         .ignoresSafeArea()
-        
-        /*
-        .onAppear{
-            arViewModel.startSession()
+        .onChange(of: appStatus.rgbdVideoStreaming) { oldMode, newMode in
+            handleStreamingModeChange(from: oldMode, to: newMode)
         }
-         */
-        /*.sheet(isPresented: $showSheet){
-         List(sharedBluetoothManager.peripherals, id: \.name) { peripheral in
-             singleBLEPeripheral(peripheral: peripheral, bluetoothManager: sharedBluetoothManager)
-         }
-     }*/
+        
+    }
+    private func handleStreamingModeChange(from oldMode: StreamingMode, to newMode: StreamingMode) {
+        switch (oldMode, newMode) {
+        case (_, .off):
+            // Show ARViewContainer when switching back to "Off"
+            arViewModel.startSession()
+            print("Switched to \(newMode): ARView is active.")
+            
+
+        case (_, .wifi), (_, .usb):
+            // Pause recording if running and kill ARSession.
+            if isReading {
+                toggleRecording()
+            }
+            arViewModel.killSession()
+            print("Switched to \(newMode): ARView removed, streaming started.")
+        }
     }
     
 //    private func saveFile(targetIndex: Int){
@@ -289,42 +270,28 @@ struct ReadView : View{
     
     func toggleRecording() {
         arViewModel.isColorMapOpened = appStatus.colorMapTrigger
-        print(appStatus.colorMapTrigger)
-//        arViewModel.timeInterval = (1.0/appStatus.animationFPS)
         arViewModel.userFPS = appStatus.animationFPS
-            isReading = !isReading
-            //cameraModel.isRecording = !cameraModel.isRecording
-            arViewModel.isOpen = !arViewModel.isOpen
-            if isReading && arViewModel.isOpen{
-                fileSetNames = arViewModel.startSession()
+        isReading = !isReading
+//        print("isReading: ", isReading)
+//        print("isOpen: ", arViewModel.isOpen)
+        if arViewModel.isOpen {
+            if isReading {
+                fileSetNames = arViewModel.startRecording()
                 if(appStatus.sharedBluetoothManager.ifConnected){
                     startRecording(targetURL: fileSetNames[6], targetFile: fileSetNames[7])
                 }
-                //cameraModel.startRecording()
-                /*
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
-                let currentDateTime = dateFormatter.string(from: Date())
-                fileName = "AR \(currentDateTime).mp4"
-                do {
-                    try createFile(fileName: fileName)
-                    print("File saved successfully at \(fileName)")
-                    let url = getDocumentsDirect().appendingPathComponent(fileName)
-                } catch {
-                    print("Error saving file: \(error)")
-                    return
-                }
-                 */
                 
                 print(fileSetNames)
             } else {
                 if(appStatus.sharedBluetoothManager.ifConnected){
                     stopRecording()
+                    print("This stop recording is when shared bluetooth manager is connected")
                 }
-                //cameraModel.stopRecording()
-                arViewModel.pauseSession()
+                arViewModel.stopRecording()
                 
             }
+        }
+        
         if(appStatus.hapticFeedbackLevel == "medium") {
             let impact = UIImpactFeedbackGenerator(style: .medium)
             impact.impactOccurred()
@@ -336,7 +303,7 @@ struct ReadView : View{
             impact.impactOccurred()
         }
                     
-        }
+    }
     /*
         else{
             showingAlert = true

@@ -86,7 +86,7 @@ class AppInformation : ObservableObject{
     @Published var tactileRecordTimeInterval: Double = 0.1
     @Published var animationFPS: Double = 30.0
     @Published var hapticFeedbackLevel: String = "medium"
-    @Published var rgbdVideoStreaming: String = "Off"
+    @Published var rgbdVideoStreaming: StreamingMode = .off
     @Published var colorMapTrigger: Bool = false
 }
 

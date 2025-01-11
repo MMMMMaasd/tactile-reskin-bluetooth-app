@@ -25,40 +25,17 @@ struct ARViewContainer: UIViewRepresentable {
         // Initialize the ARView
         let arView = ARView(frame: .zero, cameraMode: .ar)
         arView.session = session
-        
-        // Create and configure the AR session configuration
-        let configuration = ARWorldTrackingConfiguration()
-        
-        // Loop through available video formats and select the wide-angle camera format
-        for videoFormat in ARWorldTrackingConfiguration.supportedVideoFormats {
-            if videoFormat.captureDeviceType == .builtInWideAngleCamera {
-                print("Wide-angle camera selected: \(videoFormat)")
-                configuration.videoFormat = videoFormat
-                break
-            } else {
-                print("Unsupported video format: \(videoFormat.captureDeviceType)")
-            }
-        }
-        
-        // Set the session configuration properties
-        configuration.frameSemantics = .sceneDepth
-        configuration.planeDetection = []
-        configuration.environmentTexturing = .none  // No environment texturing
-        configuration.sceneReconstruction = []  // No scene reconstruction
-        configuration.isAutoFocusEnabled = false
-        
-        // Run the session with the configuration
-        arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         arView.environment.sceneUnderstanding.options = [] // No extra scene understanding
-        
-        
         return arView
     }
     func updateUIView(_ uiView: ARView, context: Context) {}
     
-    func destroyUIView(_ uiView: ARView, context: Context) {
-            uiView.session.pause()
+    func dismantleUIView(_ uiView: ARView, coordinator: Context) {
+        
     }
+//    func destroyUIView(_ uiView: ARView, context: Context) {
+//            uiView.session.pause()
+//    }
     
     
 }
@@ -133,6 +110,7 @@ class ARViewModel: ObservableObject{
     
     init() {
         self.ciContext = CIContext()
+        self.startSession()
         Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             if let currentFrame = self.session.currentFrame {
                 timer.invalidate() // Stop the timer once the frame is available
@@ -156,30 +134,39 @@ class ARViewModel: ObservableObject{
         print("Finished setting up transforms")
     }
 
-    func startSession() -> Array<String>{
-
-        rgbImageCount = 0
-        depthImageCount = 0
-        timeCount = 0.0
-        recordTimestamp = 0.0
-        
-        /*
+    func startSession() {
+        // Create and configure the AR session configuration
         let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = [.horizontal, .vertical]
-        configuration.frameSemantics = [.sceneDepth]
-        session.run(configuration)
-        */
         
-        let saveFileNames = setupRecording()
-        lastFrameTimestamp = 0
-//        var last_ts = 0.0
+        // Loop through available video formats and select the wide-angle camera format
+        for videoFormat in ARWorldTrackingConfiguration.supportedVideoFormats {
+            if videoFormat.captureDeviceType == .builtInWideAngleCamera {
+                print("Wide-angle camera selected: \(videoFormat)")
+                configuration.videoFormat = videoFormat
+                break
+            } else {
+                print("Unsupported video format: \(videoFormat.captureDeviceType)")
+            }
+        }
         
-        displayLink = CADisplayLink(target: self, selector: #selector(updateFrame))
-        displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(self.userFPS!), maximum: Float(self.userFPS!), preferred: Float(self.userFPS!))
-        displayLink?.add(to: .main, forMode: .common)
+        // Set the session configuration properties
+        configuration.frameSemantics = .sceneDepth
+        configuration.planeDetection = []
+        configuration.environmentTexturing = .none  // No environment texturing
+        configuration.sceneReconstruction = []  // No scene reconstruction
+        configuration.isAutoFocusEnabled = false
         
+        // Run the session with the configuration
+        session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        print("Starting session")
         isOpen = true
-        return saveFileNames
+    }
+    
+    func killSession() {
+        session.pause() // Pause before releasing resources
+        session = ARSession() // Replace with a new ARSession
+        isOpen = false
+        print("ARSession killed and reset.")
     }
     
     @objc private func updateFrame(link: CADisplayLink) {
@@ -196,14 +183,54 @@ class ARViewModel: ObservableObject{
         timeCount += 1.0
     }
     
+    func startRecording() -> Array<String> {
+        rgbImageCount = 0
+        depthImageCount = 0
+        timeCount = 0.0
+        recordTimestamp = 0.0
+        
+        let saveFileNames = setupRecording()
+        
+        displayLink = CADisplayLink(target: self, selector: #selector(updateFrame))
+        displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(self.userFPS!), maximum: Float(self.userFPS!), preferred: Float(self.userFPS!))
+        displayLink?.add(to: .main, forMode: .common)
+        
+        return saveFileNames
+        
+    }
     func pauseSession(){
-        //session.pause()
+        session.pause()
 //        timer?.invalidate()
 //        timer = nil
+//        displayLink?.invalidate()
+//        displayLink = nil
+//        stopRecording()
+        isOpen = false
+    }
+    
+    func stopRecording(){
         displayLink?.invalidate()
         displayLink = nil
-        isOpen = false
-        stopRecording()
+        videoInput?.markAsFinished()
+        assetWriter?.finishWriting {
+            self.assetWriter = nil
+            print("RGB Video recording finished.")
+        }
+        
+        depthVideoInput?.markAsFinished()
+        depthAssetWriter?.finishWriting {
+            self.depthAssetWriter = nil
+            print("Depth Video recording finished.")
+        }
+
+        do {
+            try poseFileHandle?.close()
+        } catch {
+            print("Error closing pose file")
+        }
+
+//        displayLink?.invalidate()
+//        displayLink = nil
     }
     
     func setupRecording() -> Array<String>{
@@ -546,32 +573,6 @@ class ARViewModel: ObservableObject{
 //        print("Iteration time: ", currentTimestamp - lastFrameTimestamp)
 //
 //        lastFrameTimestamp = currentTimestamp
-    }
-    
-
-    func stopRecording(){
-        videoInput?.markAsFinished()
-        assetWriter?.finishWriting {
-            self.assetWriter = nil
-            print("RGB Video recording finished.")
-        }
-        
-        depthVideoInput?.markAsFinished()
-        depthAssetWriter?.finishWriting {
-            self.depthAssetWriter = nil
-            print("Depth Video recording finished.")
-        }
-
-        do {
-            try poseFileHandle?.close()
-        } catch {
-            print("Error closing pose file")
-        }
-
-//        timer?.invalidate()
-//        timer = nil
-        displayLink?.invalidate()
-        displayLink = nil
     }
     
     func getDocumentsDirect() -> URL{

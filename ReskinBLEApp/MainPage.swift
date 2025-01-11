@@ -31,7 +31,7 @@ struct MainPage: View {
                         Label("ble-device", systemImage: "iphone.gen1.radiowaves.left.and.right")
                 }
                 
-                AccountView()
+                SettingsView()
                     .tabItem {
                         Label("settings", systemImage: "gear")
             

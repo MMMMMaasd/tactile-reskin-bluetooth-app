@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AccountView : View{
+struct SettingsView : View{
     @EnvironmentObject var appStatus: AppInformation
     var body : some View{
         ZStack{
@@ -16,7 +16,7 @@ struct AccountView : View{
                 .fontWeight(.black)
                 .foregroundColor(Color.black)
                 .frame(width: 500.0, height: 140)
-                .ignoresSafeArea()
+//                .ignoresSafeArea()
                 .background(.tabBackground)
                 .padding(.bottom, 600)
             Text("General")
@@ -117,6 +117,6 @@ struct AccountView : View{
 }
 
 #Preview {
-    AccountView()
+    SettingsView()
         .environmentObject(AppInformation())
 }

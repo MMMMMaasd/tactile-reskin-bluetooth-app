@@ -6,7 +6,7 @@ target 'ReskinBLEApp' do
   use_frameworks!
 
   # Pods for ReskinBLEApp
-  pod "WebRTC"
+  pod "GoogleWebRTC"
 
   target 'ReskinBLEAppTests' do
     inherit! :search_paths

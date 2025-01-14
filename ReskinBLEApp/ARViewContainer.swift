@@ -10,11 +10,12 @@ import ARKit
 import RealityKit
 import Foundation
 import AVFoundation
+import Network
 import CoreMedia
 import CoreImage
 import UIKit
 import CoreImage.CIFilterBuiltins
-
+import WebRTC
 
 
 struct ARViewContainer: UIViewRepresentable {
@@ -42,14 +43,18 @@ struct ARViewContainer: UIViewRepresentable {
 
 class ARViewModel: ObservableObject{
     var session = ARSession()
+//    var connection: NWConnection?
     // 100 FPS: 0.01 (Not sure if its possible)
     // 60 FPS: 0.017 : (1.0/60.0)
     // 30 FPS: 0.033 : (1.0/30.0)
     // 25 FPS: 0.04
-
+    
     public var userFPS: Double?
     public var isColorMapOpened = false
     //private var backgroundRecordingID: UUID?
+    private var webRTCManager = WebRTCManager()
+    private var usbManager = USBManager()
+    
     private var orientation: UIInterfaceOrientation = .portrait
     
     // Control the destination of rgb and depth video file
@@ -65,6 +70,14 @@ class ARViewModel: ObservableObject{
     private var viewPortSize = CGSize(width: 720, height: 960)
     private var combinedRGBTransform: CGAffineTransform?
     private var combinedDepthTransform: CGAffineTransform?
+    
+    private var rgbPixelBufferUSB: CVPixelBuffer?
+    private var depthPixelBufferUSB: CVPixelBuffer?
+    private var depthConfidencePixelBufferUSB: CVPixelBuffer?
+    
+    private var rgbOutputPixelBufferUSB: CVPixelBuffer?
+    private var depthOutputPixelBufferUSB: CVPixelBuffer?
+    private var depthConfidenceOutputPixelBufferUSB: CVPixelBuffer?
     
     private var poseFileHandle: FileHandle?
     
@@ -108,6 +121,8 @@ class ARViewModel: ObservableObject{
     
     private var lastFrameTimestamp: TimeInterval = 0
     
+    private var streamConnection: NWConnection?
+    
     init() {
         self.ciContext = CIContext()
         self.startSession()
@@ -127,11 +142,14 @@ class ARViewModel: ObservableObject{
                 guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
                 let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
                 normalizeTransform = CGAffineTransform(scaleX: 1.0/depthSize.width, y: 1.0/depthSize.height)
+                let depthDisplayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: CGSize(width: 192, height: 256))
+                let toDepthViewPortTransform = CGAffineTransform(scaleX: 192, y: 256)
                 
-                self.combinedDepthTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
+                self.combinedDepthTransform = normalizeTransform.concatenating(flipTransform).concatenating(depthDisplayTransform).concatenating(toDepthViewPortTransform)
             }
         }
         print("Finished setting up transforms")
+        print(MemoryLayout<CameraPose>.size)
     }
 
     func startSession() {
@@ -162,11 +180,257 @@ class ARViewModel: ObservableObject{
         isOpen = true
     }
     
+    func pauseSession(){
+        session.pause()
+        isOpen = false
+    }
+    
     func killSession() {
         session.pause() // Pause before releasing resources
         session = ARSession() // Replace with a new ARSession
         isOpen = false
         print("ARSession killed and reset.")
+    }
+    
+    func startUSBStreaming() {
+        print("Connecting to USB Manager")
+        setupUSBRecording()
+        sleep(1)
+        usbManager.connect()
+//        usbManager.
+//
+        displayLink = CADisplayLink(target: self, selector: #selector(sendFrameUSB))
+        displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(self.userFPS!), maximum: Float(self.userFPS!), preferred: Float(self.userFPS!))
+        displayLink?.add(to: .main, forMode: .common)
+    }
+    
+    func stopUSBStreaming() {
+        self.rgbOutputPixelBufferUSB = nil
+        self.depthOutputPixelBufferUSB = nil
+        self.depthConfidenceOutputPixelBufferUSB = nil
+    }
+    
+    private func setupUSBRecording() {
+        var rgbBuffer: CVPixelBuffer?
+        var depthBuffer: CVPixelBuffer?
+        var depthConfidenceBuffer: CVPixelBuffer?
+        
+        let rgbAttributes: [String: Any] = [
+            kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32ARGB),
+            kCVPixelBufferWidthKey as String: 720,
+            kCVPixelBufferHeightKey as String: 960
+            
+        ]
+        let depthAttributes = [
+            kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_DepthFloat32,
+            kCVPixelBufferWidthKey as String: 192,
+            kCVPixelBufferHeightKey as String: 256
+        ]
+        let confidenceAttributes = [
+            kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_OneComponent8,
+            kCVPixelBufferWidthKey as String: 192,
+            kCVPixelBufferHeightKey as String: 256
+        ]
+        
+        let status = CVPixelBufferCreate(
+            kCFAllocatorDefault,
+            720,
+            960,
+            kCVPixelFormatType_32ARGB,
+            rgbAttributes as CFDictionary,
+            &rgbBuffer
+        )
+        guard status == kCVReturnSuccess else {
+            print("Failed to create CVPixelBuffer")
+            return
+        }
+        self.rgbOutputPixelBufferUSB = rgbBuffer
+        
+        let depthStatus = CVPixelBufferCreate(
+            kCFAllocatorDefault,
+            192,
+            256,
+            kCVPixelFormatType_DepthFloat32,
+            depthAttributes as CFDictionary,
+            &depthBuffer
+        )
+        
+        guard depthStatus == kCVReturnSuccess else {
+            print("Failed to create CVPixelBuffer")
+            return
+        }
+        self.depthOutputPixelBufferUSB = depthBuffer
+        
+        let depthConfidenceStatus = CVPixelBufferCreate(
+            kCFAllocatorDefault,
+            192,
+            256,
+            kCVPixelFormatType_OneComponent8,
+            confidenceAttributes as CFDictionary,
+            &depthConfidenceBuffer
+        )
+        guard depthConfidenceStatus == kCVReturnSuccess else {
+            print("Failed to create CVPixelBuffer")
+            return
+        }
+        self.depthConfidenceOutputPixelBufferUSB = depthConfidenceBuffer
+        print("Made all USB Buffers")
+    }
+    
+    func startWiFiStreaming(host: String, port: UInt16) {
+        // Set up the network connection
+//        // Start WebRTC connection
+        webRTCManager.setupConnection()
+//        streamConnection = NWConnection(host: NWEndpoint.Host(host), port: NWEndpoint.Port(rawValue: port)!, using: .udp)
+//        streamConnection?.start(queue: .global())
+        // Start the timer to fetch and send frames
+//        displayLink = CADisplayLink(target: self, selector: #selector(sendFrame))
+//        displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(self.userFPS!), maximum: Float(self.userFPS!), preferred: Float(self.userFPS!))
+//        displayLink?.add(to: .main, forMode: .common)
+    }
+
+    func stopWiFiStreaming() {
+        displayLink?.invalidate()
+        displayLink = nil
+        streamConnection?.cancel()
+        streamConnection = nil
+    }
+    
+    @objc private func sendFrame(link: CADisplayLink) {
+        streamVideoFrame()
+        /*sendRGBData*/()
+    }
+    
+    @objc private func sendFrameUSB(link: CADisplayLink) {
+        streamVideoFrameUSB()
+        /*sendRGBData*/()
+    }
+    
+    func streamVideoFrameUSB() {
+        guard let currentFrame = session.currentFrame else {return}
+        
+        var imgSuccessFlag = true
+        
+        let currentTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
+        
+        let rgbPixelBuffer = currentFrame.capturedImage
+        guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
+        guard let depthConfidencePixelBuffer = currentFrame.sceneDepth?.confidenceMap else { return }
+        let cropRect = CGRect(
+            x: 0, y: 0, width: self.viewPortSize.width, height: self.viewPortSize.height
+        )
+        
+        let cameraTransform = currentFrame.camera.transform
+
+        // Transform the orientation matrix to unit quaternion
+        let quaternion = simd_quaternion(cameraTransform)
+        var camera_pose = CameraPose(
+            qx: quaternion.vector.x,
+            qy: quaternion.vector.y,
+            qz: quaternion.vector.z,
+            qw: quaternion.vector.w,
+            tx: cameraTransform.columns.3.x,
+            ty: cameraTransform.columns.3.y,
+            tz: cameraTransform.columns.3.z
+        )
+        var record3dHeader = Record3DHeader(
+            rgbWidth: 720,
+            rgbHeight: 960,
+            depthWidth: 192,
+            depthHeight: 256,
+            confidenceWidth: 192,
+            confidenceHeight: 256,
+            rgbSize: 0,
+            depthSize: 0,
+            confidenceMapSize: 0,
+            miscSize: 0,
+            deviceType: 1
+        )
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            CVPixelBufferLockBaseAddress(rgbPixelBuffer, .readOnly)
+            CVPixelBufferLockBaseAddress(self.rgbOutputPixelBufferUSB!, [])
+            
+            let rgbCiImage = CIImage(cvPixelBuffer: rgbPixelBuffer)
+            let rgbTransformedImage = rgbCiImage.transformed(by: self.combinedRGBTransform!)
+
+            guard let rgbCgImage = self.ciContext.createCGImage(rgbTransformedImage, from: rgbTransformedImage.extent) else{
+                return
+            }
+            let rgbImageData = UIImage(cgImage: rgbCgImage).jpegData(compressionQuality: 0.5)
+            print(rgbImageData!.count)
+            record3dHeader.rgbSize = UInt32(rgbImageData!.count)
+            
+//            CVPixelBufferUnlockBaseAddress(self.rgbOutputPixelBufferUSB!, [])
+//            CVPixelBufferUnlockBaseAddress(rgbPixelBuffer, .readOnly)
+            
+            CVPixelBufferLockBaseAddress(depthPixelBuffer, .readOnly)
+            CVPixelBufferLockBaseAddress(self.depthOutputPixelBufferUSB!, [])
+            
+            let depthCiImage = CIImage(cvPixelBuffer: depthPixelBuffer)
+            let depthTransformedImage = depthCiImage.transformed(by: self.combinedDepthTransform!)
+            
+            self.ciContext.render(depthTransformedImage, to: self.depthOutputPixelBufferUSB!)
+            print("compressing depth")
+            let compressedDepthData = self.usbManager.compressData(from: self.depthOutputPixelBufferUSB!, isDepth: true)
+            print("Compressed depth successfully")
+            
+            record3dHeader.depthSize = UInt32(compressedDepthData!.count)
+            
+//            CVPixelBufferUnlockBaseAddress(self.depthOutputPixelBufferUSB!, [])
+//            CVPixelBufferUnlockBaseAddress(depthPixelBuffer, .readOnly)
+            
+            CVPixelBufferLockBaseAddress(depthConfidencePixelBuffer, .readOnly)
+            CVPixelBufferLockBaseAddress(self.depthConfidenceOutputPixelBufferUSB!, [])
+            
+            let depthConfidenceCiImage = CIImage(cvPixelBuffer: depthConfidencePixelBuffer)
+            let depthConfTransformedImage = depthConfidenceCiImage.transformed(by: self.combinedDepthTransform!)
+            self.ciContext.render(depthConfTransformedImage, to: self.depthConfidenceOutputPixelBufferUSB!)
+            let compressedDepthConfData = self.usbManager.compressData(from: self.depthConfidenceOutputPixelBufferUSB!, isDepth: false)
+            print("Compressed depth conf successfully")
+            record3dHeader.confidenceMapSize = UInt32(compressedDepthConfData!.count)
+            
+            CVPixelBufferUnlockBaseAddress(self.rgbOutputPixelBufferUSB!, [])
+            CVPixelBufferUnlockBaseAddress(rgbPixelBuffer, .readOnly)
+            CVPixelBufferUnlockBaseAddress(self.depthOutputPixelBufferUSB!, [])
+            CVPixelBufferUnlockBaseAddress(depthPixelBuffer, .readOnly)
+            CVPixelBufferUnlockBaseAddress(self.depthConfidenceOutputPixelBufferUSB!, [])
+            CVPixelBufferUnlockBaseAddress(depthConfidencePixelBuffer, .readOnly)
+            self.usbManager.sendData(
+                rgbImageData: rgbImageData!,
+                compressedDepthData: compressedDepthData!,
+                compressedConfData: compressedDepthConfData!,
+                poseData: Data(bytes: &camera_pose, count: MemoryLayout<CameraPose>.size),
+                record3dHeaderData: Data(bytes: &record3dHeader, count: MemoryLayout<Record3DHeader>.size)
+            )
+            
+        }
+        
+    }
+        //guard let rgbdPixelBuffer = createRGBDFrame(rgb: rgbPixelBuffer, depth: depthPixelBuffer) else {return}
+//        let preImgTimestamp = CACurrentMediaTime()
+//        print("Post settings duration: ", preImgTimestamp - postSceneTimestamp)
+    
+    func streamVideoFrame() {
+        guard let currentFrame = session.currentFrame else {return}
+        let cropRect = CGRect(
+            x: 0, y: 0, width: self.viewPortSize.width, height: self.viewPortSize.height
+        )
+        let pixelBuffer = currentFrame.capturedImage
+        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        let transformedImage = ciImage.transformed(by: self.combinedRGBTransform!).cropped(to: cropRect)
+        print("Transformed image ready")
+        if let jpegData = self.ciContext.jpegRepresentation(of: transformedImage, colorSpace: CGColorSpaceCreateDeviceRGB()) {
+            streamConnection!.send(content: jpegData, completion: .contentProcessed { error in
+                if let error = error {
+                    print("Error sending RGB data: \(error)")
+                }
+            })
+        }
+
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+
     }
     
     @objc private func updateFrame(link: CADisplayLink) {
@@ -198,15 +462,7 @@ class ARViewModel: ObservableObject{
         return saveFileNames
         
     }
-    func pauseSession(){
-        session.pause()
-//        timer?.invalidate()
-//        timer = nil
-//        displayLink?.invalidate()
-//        displayLink = nil
-//        stopRecording()
-        isOpen = false
-    }
+    
     
     func stopRecording(){
         displayLink?.invalidate()
@@ -408,7 +664,7 @@ class ARViewModel: ObservableObject{
 //                    let toViewPortTransform = CGAffineTransform(scaleX: viewPortSize.width, y: viewPortSize.height)
                     
 //                    let transformedImage = ciImage.transformed(by: normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)).cropped(to: cropRect)
-                    let transformedImage = ciImage.transformed(by: self.combinedRGBTransform!).cropped(to: cropRect)
+                    let transformedImage = ciImage.transformed(by: self.combinedRGBTransform!) //.cropped(to: cropRect)
                     self.ciContext.render(transformedImage, to: outputBuffer, bounds: cropRect, colorSpace: CGColorSpaceCreateDeviceRGB())
                     
 //                    self.assetWritingSemaphore.wait()

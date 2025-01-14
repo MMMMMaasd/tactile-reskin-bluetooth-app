@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		10533E833A30B7DA9347BCEB /* Pods_ReskinBLEAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E89530D391651A7B45F138FC /* Pods_ReskinBLEAppTests.framework */; };
 		262CA726C681B31A98312192 /* Pods_ReskinBLEApp_ReskinBLEAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1433E9D72A7D0A10A3BC6F6 /* Pods_ReskinBLEApp_ReskinBLEAppUITests.framework */; };
-		B905B27D2C8A6BD3006F994E /* liveConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B905B27C2C8A6BD3006F994E /* liveConnectionView.swift */; };
-		B905B27F2C8A706A006F994E /* WebRTCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B905B27E2C8A706A006F994E /* WebRTCManager.swift */; };
+		43A8A4192D33427F007DD3A5 /* WebRTCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A8A4182D33427F007DD3A5 /* WebRTCManager.swift */; };
+		43A8A41B2D356CAC007DD3A5 /* USBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A8A41A2D356CA8007DD3A5 /* USBManager.swift */; };
 		B9104F5E2BFDE63A000D4DDD /* USBInterfaceAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */; };
 		B9104F602BFDE63A000D4DDD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F5F2BFDE63A000D4DDD /* ContentView.swift */; };
 		B9104F622BFDE63C000D4DDD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9104F612BFDE63C000D4DDD /* Assets.xcassets */; };
@@ -20,7 +20,6 @@
 		B98D69522C04559900648D95 /* dataStroageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69512C04559900648D95 /* dataStroageView.swift */; };
 		B98D69542C04563000648D95 /* readView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69532C04563000648D95 /* readView.swift */; };
 		B98D69562C04569C00648D95 /* accountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69552C04569C00648D95 /* accountView.swift */; };
-		B98D69582C04671200648D95 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69572C04671200648D95 /* ViewController.swift */; };
 		B9944A342CFE983300232FBB /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9944A332CFE982E00232FBB /* MainPage.swift */; };
 		B9944A362CFE989100232FBB /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9944A352CFE988E00232FBB /* MainView.swift */; };
 		B9B046A82C06DFA300096E8B /* DataViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B046A72C06DFA300096E8B /* DataViewView.swift */; };
@@ -28,9 +27,7 @@
 		B9BDD0652C573EA20061475C /* peripheralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BDD0642C573EA20061475C /* peripheralView.swift */; };
 		B9D072BF2C1445E700C5ECD8 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */; };
 		B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */; };
-		B9D072C32C23F6F100C5ECD8 /* deviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072C22C23F6F100C5ECD8 /* deviceView.swift */; };
 		B9D8D3DE2C522E1300A7B839 /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */; };
-		B9D8D3F12C534DA800A7B839 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D8D3F02C534DA800A7B839 /* SwiftUIView.swift */; };
 		B9F3C4142C515F1A008B555A /* CameraHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F3C4132C515F1A008B555A /* CameraHome.swift */; };
 		B9F3C4182C518050008B555A /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F3C4172C518050008B555A /* CameraViewModel.swift */; };
 		CDE14DA36B71D1D0C3F13D96 /* Pods_ReskinBLEApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F96CB0EDE6B0F8A62632894 /* Pods_ReskinBLEApp.framework */; };
@@ -57,11 +54,11 @@
 		0CBD4267F2EF97DBCD33503C /* Pods-ReskinBLEApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEApp.release.xcconfig"; path = "Target Support Files/Pods-ReskinBLEApp/Pods-ReskinBLEApp.release.xcconfig"; sourceTree = "<group>"; };
 		1ACF9268D5F722721AF8AB81 /* Pods-ReskinBLEApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEApp.debug.xcconfig"; path = "Target Support Files/Pods-ReskinBLEApp/Pods-ReskinBLEApp.debug.xcconfig"; sourceTree = "<group>"; };
 		343E0790C0DA3CC1E2DF3D0C /* Pods-ReskinBLEAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEAppTests.release.xcconfig"; path = "Target Support Files/Pods-ReskinBLEAppTests/Pods-ReskinBLEAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		43A8A4182D33427F007DD3A5 /* WebRTCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCManager.swift; sourceTree = "<group>"; };
+		43A8A41A2D356CA8007DD3A5 /* USBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBManager.swift; sourceTree = "<group>"; };
 		4F96CB0EDE6B0F8A62632894 /* Pods_ReskinBLEApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReskinBLEApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		58E1B0A80DFAF829946B0063 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B1433E9D72A7D0A10A3BC6F6 /* Pods_ReskinBLEApp_ReskinBLEAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReskinBLEApp_ReskinBLEAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B905B27C2C8A6BD3006F994E /* liveConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = liveConnectionView.swift; sourceTree = "<group>"; };
-		B905B27E2C8A706A006F994E /* WebRTCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCManager.swift; sourceTree = "<group>"; };
 		B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReskinBLEApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppApp.swift; sourceTree = "<group>"; };
 		B9104F5F2BFDE63A000D4DDD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -74,7 +71,6 @@
 		B98D69512C04559900648D95 /* dataStroageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataStroageView.swift; sourceTree = "<group>"; };
 		B98D69532C04563000648D95 /* readView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = readView.swift; sourceTree = "<group>"; };
 		B98D69552C04569C00648D95 /* accountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accountView.swift; sourceTree = "<group>"; };
-		B98D69572C04671200648D95 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B98D69632C04911F00648D95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B9944A272CFE8B4F00232FBB /* NSBluetoothAlwaysUsageDescription.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = NSBluetoothAlwaysUsageDescription.txt; sourceTree = "<group>"; };
 		B9944A332CFE982E00232FBB /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
@@ -84,9 +80,7 @@
 		B9BDD0642C573EA20061475C /* peripheralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = peripheralView.swift; sourceTree = "<group>"; };
 		B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBUUIDS.swift; sourceTree = "<group>"; };
-		B9D072C22C23F6F100C5ECD8 /* deviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deviceView.swift; sourceTree = "<group>"; };
 		B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
-		B9D8D3F02C534DA800A7B839 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		B9F3C4132C515F1A008B555A /* CameraHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHome.swift; sourceTree = "<group>"; };
 		B9F3C4172C518050008B555A /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		DD73662182F31C9D894E5858 /* Pods-ReskinBLEAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEAppTests.debug.xcconfig"; path = "Target Support Files/Pods-ReskinBLEAppTests/Pods-ReskinBLEAppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -171,29 +165,26 @@
 		B9104F5C2BFDE63A000D4DDD /* ReskinBLEApp */ = {
 			isa = PBXGroup;
 			children = (
-				B98D69632C04911F00648D95 /* Info.plist */,
-				B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */,
-				B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */,
-				B98D69572C04671200648D95 /* ViewController.swift */,
-				B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */,
+				43A8A41A2D356CA8007DD3A5 /* USBManager.swift */,
+				43A8A4182D33427F007DD3A5 /* WebRTCManager.swift */,
+				B9944A332CFE982E00232FBB /* MainPage.swift */,
 				B9104F5F2BFDE63A000D4DDD /* ContentView.swift */,
 				B98D69532C04563000648D95 /* readView.swift */,
-				B98D69512C04559900648D95 /* dataStroageView.swift */,
 				B98D69552C04569C00648D95 /* accountView.swift */,
-				B9D072C22C23F6F100C5ECD8 /* deviceView.swift */,
-				B9B046A72C06DFA300096E8B /* DataViewView.swift */,
-				B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */,
-				B9F3C4172C518050008B555A /* CameraViewModel.swift */,
-				B9944A332CFE982E00232FBB /* MainPage.swift */,
-				B9944A352CFE988E00232FBB /* MainView.swift */,
-				B9F3C4132C515F1A008B555A /* CameraHome.swift */,
-				B905B27E2C8A706A006F994E /* WebRTCManager.swift */,
 				B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */,
-				B9BDD0642C573EA20061475C /* peripheralView.swift */,
-				B905B27C2C8A6BD3006F994E /* liveConnectionView.swift */,
-				B9D8D3F02C534DA800A7B839 /* SwiftUIView.swift */,
 				B9104F612BFDE63C000D4DDD /* Assets.xcassets */,
+				B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */,
+				B9F3C4132C515F1A008B555A /* CameraHome.swift */,
+				B9F3C4172C518050008B555A /* CameraViewModel.swift */,
+				B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */,
+				B98D69512C04559900648D95 /* dataStroageView.swift */,
+				B9B046A72C06DFA300096E8B /* DataViewView.swift */,
+				B98D69632C04911F00648D95 /* Info.plist */,
+				B9BDD0642C573EA20061475C /* peripheralView.swift */,
 				B9104F632BFDE63C000D4DDD /* Preview Content */,
+				B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */,
+				B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */,
+				B9944A352CFE988E00232FBB /* MainView.swift */,
 			);
 			path = ReskinBLEApp;
 			sourceTree = "<group>";
@@ -464,25 +455,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B905B27D2C8A6BD3006F994E /* liveConnectionView.swift in Sources */,
+				43A8A4192D33427F007DD3A5 /* WebRTCManager.swift in Sources */,
 				B9B046AC2C0DE7D000096E8B /* TryReadDataView.swift in Sources */,
 				B9104F602BFDE63A000D4DDD /* ContentView.swift in Sources */,
-				B9D8D3F12C534DA800A7B839 /* SwiftUIView.swift in Sources */,
 				B9104F5E2BFDE63A000D4DDD /* USBInterfaceAppApp.swift in Sources */,
+				43A8A41B2D356CAC007DD3A5 /* USBManager.swift in Sources */,
 				B98D69542C04563000648D95 /* readView.swift in Sources */,
 				B9BDD0652C573EA20061475C /* peripheralView.swift in Sources */,
 				B9D072BF2C1445E700C5ECD8 /* BluetoothManager.swift in Sources */,
 				B98D69522C04559900648D95 /* dataStroageView.swift in Sources */,
-				B9D072C32C23F6F100C5ECD8 /* deviceView.swift in Sources */,
 				B9F3C4182C518050008B555A /* CameraViewModel.swift in Sources */,
 				B9F3C4142C515F1A008B555A /* CameraHome.swift in Sources */,
 				B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */,
 				B9944A362CFE989100232FBB /* MainView.swift in Sources */,
-				B98D69582C04671200648D95 /* ViewController.swift in Sources */,
 				B9944A342CFE983300232FBB /* MainPage.swift in Sources */,
 				B9B046A82C06DFA300096E8B /* DataViewView.swift in Sources */,
 				B98D69562C04569C00648D95 /* accountView.swift in Sources */,
-				B905B27F2C8A706A006F994E /* WebRTCManager.swift in Sources */,
 				B9D8D3DE2C522E1300A7B839 /* ARViewContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

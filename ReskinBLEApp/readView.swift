@@ -250,16 +250,24 @@ struct ReadView : View{
         case (_, .off):
             // Show ARViewContainer when switching back to "Off"
             arViewModel.startSession()
+            arViewModel.stopWiFiStreaming()
             print("Switched to \(newMode): ARView is active.")
             
 
-        case (_, .wifi), (_, .usb):
+        case (_, .wifi):
             // Pause recording if running and kill ARSession.
             if isReading {
                 toggleRecording()
             }
             arViewModel.killSession()
+            arViewModel.startWiFiStreaming(host: "192.168.0.232", port: 8080)
+//            arViewModel.killSession()
             print("Switched to \(newMode): ARView removed, streaming started.")
+        case (_, .usb):
+            if isReading {
+                toggleRecording()
+            }
+            arViewModel.startUSBStreaming()
         }
     }
     

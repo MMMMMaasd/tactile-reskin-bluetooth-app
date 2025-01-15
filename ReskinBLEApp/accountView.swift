@@ -26,8 +26,17 @@ struct SettingsView : View{
                             .foregroundColor(.gray)
                     }
                     Spacer()
-                    Picker("Streaming Options", selection: $appStatus.rgbdVideoStreaming) {
-                        Text("Wi-Fi").tag(StreamingMode.wifi)
+                    let binding = Binding<StreamingMode>(
+                        get: { appStatus.rgbdVideoStreaming },
+                        set: { newValue in
+                            if newValue != StreamingMode.wifi { // Disable Option wifi
+                                appStatus.rgbdVideoStreaming = newValue
+                            }
+                        }
+                    )
+//                    Picker("Streaming Options", selection: $appStatus.rgbdVideoStreaming) { // This can be used when we don't need to disable option
+                    Picker("Streaming Options", selection: binding) { // Temporary fix to keep wifi option but disable it
+                        Text("Wi-Fi").tag(StreamingMode.wifi).opacity(0.5)
                         Text("USB").tag(StreamingMode.usb)
                         Text("Off").tag(StreamingMode.off)
                     }

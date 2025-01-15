@@ -82,72 +82,56 @@ class USBManager {
         }
     }
     
+    func disconnect() {
+        // Cancel the listener if it exists
+        if let listener = listener {
+            listener.cancel()
+            print("Listener cancelled")
+        }
+        listener = nil
+
+        // Cancel the active connection if it exists
+        if let connection = activeConnection {
+            connection.cancel()
+            print("Connection cancelled")
+        }
+        activeConnection = nil
+    }
+    
     private func handleConnection(connection: NWConnection) {
         self.activeConnection = connection
         connection.start(queue: .global())
     }
     
-    func sendData(rgbImageData: Data, compressedDepthData: Data, compressedConfData: Data, poseData: Data, record3dHeaderData: Data) {
-//        print("Sending data")
+    func sendData(
+        record3dHeaderData: Data,
+        intrinsicMatData: Data,
+        poseData: Data,
+        rgbImageData: Data,
+        compressedDepthData: Data,
+        compressedConfData: Data
+    ) {
         guard let activeConnection = activeConnection else {
             print("No active connection. Cannot send data.")
             return
         }
+        let messageBody = record3dHeaderData + intrinsicMatData + poseData + rgbImageData + compressedDepthData + compressedConfData
+
+        self.ptHeader.body_size = UInt32(messageBody.count).bigEndian
+        let ptHeaderData = Data(bytes: &self.ptHeader, count:MemoryLayout<PeerTalkHeader>.size)
         
-//        DispatchQueue.global().async {
-//            guard let rgbImageData = rgbImage.pngData() else {
-//                print("Failed to encode image")
-//                return
-//            }
-//            guard let compressedDepthData = self.compressDepthMap(from: depthBuffer) else {
-//                print("Failed to compress depth map")
-//                return
-//            }
-//            guard let compressedDepthConfData = self.compressDepthMap(from: depthConfBuffer) else {
-//                print("Failed to compress depth confidence map")
-//                return
-//            }
-//            
-//            var record3DHeader_local = record3dheader
-//            
-//            record3DHeader_local.rgbSize = UInt32(rgbImageData.count).bigEndian
-//            record3DHeader_local.depthSize = UInt32(compressedDepthData.count).bigEndian
-//            record3DHeader_local.confidenceMapSize = UInt32(compressedDepthData.count).bigEndian
-//            record3DHeader_local.miscSize = 0
-//            record3DHeader_local.deviceType = 0
-//            // Create the Record3DHeader
-//            let record3DHeaderData = Data(bytes: &record3dheader, count: MemoryLayout<Record3DHeader>.size)
-            var intrinsicMat_local = self.intrinsicMat
-            let intrinsicMatData = Data(bytes: &intrinsicMat_local, count: MemoryLayout<IntrinsicMatrixCoeffs>.size)
-            
-//            var pose_local = pose
-//            let poseData = Data(bytes: &pose_local, count: MemoryLayout<CameraPose>.size)
-            
-            var messageBody = record3dHeaderData + intrinsicMatData + poseData + rgbImageData + compressedDepthData + compressedConfData
-            
-            var ptHeader_local = self.ptHeader
-            ptHeader_local.body_size = UInt32(messageBody.count).bigEndian
-            let ptHeaderData = Data(bytes: &ptHeader_local, count:MemoryLayout<PeerTalkHeader>.size)
-            
-            let completeMessage = ptHeaderData + messageBody
-            print("Sending data of size: \(completeMessage.count)")
-            activeConnection.send(content:completeMessage, completion: .contentProcessed {error in 
-                if let error = error {
-                    print("Failed to send data: \(error)")
-                } else {
-                    print("Image data sent successfully")
-                }
-            })
-//            print("Sent image")
-//            var record3DHeader = Record3DHeader(deviceType: 1, rgbSize: UInt32(imageData.count).bigEndian)
-//            let record3DHeaderData = Data(bytes: &record3DHeader, count: MemoryLayout<Record3DHeader>.size)
-//            Create PeerTalkHeader
-            
-//        }
+        let completeMessage = ptHeaderData + messageBody
+        print("Sending data of size: \(completeMessage.count)")
+        activeConnection.send(content:completeMessage, completion: .contentProcessed {error in
+            if let error = error {
+                print("Failed to send data: \(error)")
+            } else {
+                print("Image data sent successfully")
+            }
+        })
     }
     
     func sendData(connection: NWConnection, message: String) {
-        print("Started sending")
         let data = message.data(using: .utf8)!
         connection.send(content: data, completion: .contentProcessed { error in
             if let error = error {
@@ -159,9 +143,6 @@ class USBManager {
     }
     
     func compressData(from pixelBuffer: CVPixelBuffer, isDepth: Bool) -> Data? {
-//        CVPixelBufferLockBaseAddress(depthBuffer, .readOnly)
-//        defer { CVPixelBufferUnlockBaseAddress(depthBuffer, .readOnly) }
-
         // Extract depth data
         guard let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer) else {
             print("Failed to access depth buffer base address")
@@ -174,7 +155,6 @@ class USBManager {
         // Determine the element size based on the type of data
         let elementSize = isDepth ? MemoryLayout<Float>.size : MemoryLayout<UInt8>.size
         let dataSize = width * height * elementSize
-        print("Data size inside compress: ", dataSize, width*height)
 
         // Extract the raw data
         let data = Data(bytes: baseAddress, count: dataSize)

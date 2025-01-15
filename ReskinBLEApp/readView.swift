@@ -25,6 +25,7 @@ struct ReadView : View{
     @State var showingExporter = false
     @State var openFlash = true
     @State var exportFileName = ""
+    @State private var hasAppeared: Bool = false
     var body : some View{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         ZStack{
@@ -35,11 +36,37 @@ struct ReadView : View{
                     .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                     .padding(.bottom, 100.0)
             } else {
-                Text("Streaming mode is active: \(appStatus.rgbdVideoStreaming)")
-                        .font(.headline)
-                        .foregroundColor(.red)
+                VStack(alignment: .leading, spacing: 15) { // Reduced spacing
+                    // Heading
+                    Text("Streaming Mode: USB")
+                        .font(.title2) // Semi-bold and slightly smaller than title
+                        .fontWeight(.semibold)
+                        .padding(.bottom, 5) // Slight padding after the heading
+
+                    // Caption
+                    Text("You can disable streaming in settings")
+                        .font(.caption) // Small caption font
+                        .foregroundColor(.secondary)
+
+                    // Instructions
+                    VStack(alignment: .leading, spacing: 8) { // Reduced spacing between instructions
+                        Text("1. Connect cable to computer")
+                        Text("2. Click the button below to")
+                        Text("3. Run python demo-main.py on your computer")
+                    }
+                    .font(.body) // Regular font for instructions
+                    .lineSpacing(4) // Slightly reduced line spacing for compactness
+
+                    // Toggle Instruction
+                    Text("Press Toggle to start")
+                        .font(.headline) // Smaller than the main heading
+                        .fontWeight(.semibold)
+                        .padding(.top, 20) // Small padding before this line
+                }
+                .frame(width: 400.0, height: 450.0)
+                .padding()
             }
-            Button(action: toggleRecording) {
+            Button(action: {toggleRecording(mode:appStatus.rgbdVideoStreaming)}) {
                 if isReading {
                     Image(systemName: "stop.circle")
                         .resizable()
@@ -66,7 +93,7 @@ struct ReadView : View{
                         .multilineTextAlignment(.center)
                }
             }
-            .disabled(appStatus.rgbdVideoStreaming != .off)
+//            .disabled(appStatus.rgbdVideoStreaming != .off)
             .padding(.top, 580.0)
             .padding(.leading, 20)
             .buttonStyle(.bordered)
@@ -243,60 +270,69 @@ struct ReadView : View{
         .onChange(of: appStatus.rgbdVideoStreaming) { oldMode, newMode in
             handleStreamingModeChange(from: oldMode, to: newMode)
         }
+        .onAppear {
+            if !hasAppeared {
+                hasAppeared = true
+                initCode()
+            }
+        }
         
     }
+    
+    private func initCode() {
+        arViewModel.startSession()
+        arViewModel.isColorMapOpened = appStatus.colorMapTrigger
+        arViewModel.userFPS = appStatus.animationFPS
+    }
     private func handleStreamingModeChange(from oldMode: StreamingMode, to newMode: StreamingMode) {
+        if isReading {
+            toggleRecording(mode: oldMode)
+        }
         switch (oldMode, newMode) {
         case (_, .off):
             // Show ARViewContainer when switching back to "Off"
-            arViewModel.startSession()
-            arViewModel.stopWiFiStreaming()
+//            arViewModel.startSession()
+//            arViewModel.stopWiFiStreaming()
+            arViewModel.killUSBStreaming()
             print("Switched to \(newMode): ARView is active.")
-            
 
         case (_, .wifi):
             // Pause recording if running and kill ARSession.
-            if isReading {
-                toggleRecording()
-            }
-            arViewModel.killSession()
-            arViewModel.startWiFiStreaming(host: "192.168.0.232", port: 8080)
+//            arViewModel.startWiFiStreaming(host: "192.168.0.232", port: 8080)
 //            arViewModel.killSession()
-            print("Switched to \(newMode): ARView removed, streaming started.")
+            print("NOT IMPLEMENTED: Switched to \(newMode): ARView removed, streaming started.")
         case (_, .usb):
-            if isReading {
-                toggleRecording()
-            }
-            arViewModel.startUSBStreaming()
+            print("Switched to \(newMode): ARView removed, streaming started.")
+            arViewModel.setupUSBStreaming()
         }
     }
     
-//    private func saveFile(targetIndex: Int){
-//        exportFileName = fileSetNames[targetIndex]
-//        showingSelectSheet.toggle()
-//    }
-    
-    func toggleRecording() {
-        arViewModel.isColorMapOpened = appStatus.colorMapTrigger
-        arViewModel.userFPS = appStatus.animationFPS
+    func toggleRecording(mode: StreamingMode) {
         isReading = !isReading
-//        print("isReading: ", isReading)
-//        print("isOpen: ", arViewModel.isOpen)
         if arViewModel.isOpen {
-            if isReading {
-                fileSetNames = arViewModel.startRecording()
-                if(appStatus.sharedBluetoothManager.ifConnected){
-                    startRecording(targetURL: fileSetNames[6], targetFile: fileSetNames[7])
+            if mode == .off {
+                if isReading {
+                    fileSetNames = arViewModel.startRecording()
+                    if(appStatus.sharedBluetoothManager.ifConnected){
+                        startRecording(targetURL: fileSetNames[6], targetFile: fileSetNames[7])
+                    }
+                    
+                    print(fileSetNames)
+                } else {
+                    if(appStatus.sharedBluetoothManager.ifConnected){
+                        stopRecording()
+                        print("This stop recording is when shared bluetooth manager is connected")
+                    }
+                    arViewModel.stopRecording()
+                    
                 }
-                
-                print(fileSetNames)
-            } else {
-                if(appStatus.sharedBluetoothManager.ifConnected){
-                    stopRecording()
-                    print("This stop recording is when shared bluetooth manager is connected")
+            }
+            else if mode == .usb {
+                if isReading {
+                    arViewModel.startUSBStreaming()
+                } else {
+                    arViewModel.stopUSBStreaming()
                 }
-                arViewModel.stopRecording()
-                
             }
         }
         

@@ -16,9 +16,8 @@ import AVFoundation
 struct ReadView : View{
     @StateObject var arViewModel = ARViewModel()
     @EnvironmentObject var appStatus : AppInformation
-    @ObservedObject var sharedBluetoothManager =  BluetoothManager()
     @State private var isReading = false
-    @State private var recordingTimer: Timer?
+    @State private var displayLink: CADisplayLink?
     @State var showingAlert : Bool = false
     @Environment(\.scenePhase) private var phase
     @State private var fileSetNames = ["", "", "", "", "", "", "", ""]
@@ -290,7 +289,6 @@ struct ReadView : View{
         }
         switch (oldMode, newMode) {
         case (_, .off):
-            // Show ARViewContainer when switching back to "Off"
 //            arViewModel.startSession()
 //            arViewModel.stopWiFiStreaming()
             arViewModel.killUSBStreaming()
@@ -314,13 +312,13 @@ struct ReadView : View{
                 if isReading {
                     fileSetNames = arViewModel.startRecording()
                     if(appStatus.sharedBluetoothManager.ifConnected){
-                        startRecording(targetURL: fileSetNames[6], targetFile: fileSetNames[7])
+                        startRecordingBT(targetURL: fileSetNames[6], targetFile: fileSetNames[7])
                     }
                     
                     print(fileSetNames)
                 } else {
                     if(appStatus.sharedBluetoothManager.ifConnected){
-                        stopRecording()
+                        stopRecordingBT()
                         print("This stop recording is when shared bluetooth manager is connected")
                     }
                     arViewModel.stopRecording()
@@ -385,35 +383,16 @@ struct ReadView : View{
     }
 
         
-    func startRecording(targetURL: String, targetFile: String) {
-        isReading = true
-        let timer = Timer.scheduledTimer(withTimeInterval: appStatus.tactileRecordTimeInterval, repeats: true) { _ in
-            //appStatus.SharedDataString += sharedBluetoothManager.recordSingleData() ?? ""
-            //appStatus.SharedDataString = sharedBluetoothManager.recordString
-            appStatus.sharedBluetoothManager.recordSingleData(targetURL: targetURL, targetFile: targetFile)
-        }
-        recordingTimer = timer
+    func startRecordingBT(targetURL:String, targetFile: String) {
+        appStatus.sharedBluetoothManager.startRecording(
+            targetURL: targetURL,
+            targetFile: targetFile,
+            fps: appStatus.animationFPS
+        )
     }
-    
-    func stopRecording() {
-        if let timer = recordingTimer {
-            timer.invalidate()
-            isReading = false
-        }
-    }
-    
-    /*
-    func getDocumentsDirect() -> URL{
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        print(paths[0].path)
-        return paths[0]
-    }
-    */
-    
-    func createFile(fileName: String) throws {
-            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            let fileURL = documentsURL[0].appendingPathComponent(fileName)
-            try FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
+
+    func stopRecordingBT() {
+        appStatus.sharedBluetoothManager.stopRecording()
     }
     
     

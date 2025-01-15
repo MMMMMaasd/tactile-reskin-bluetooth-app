@@ -20,6 +20,8 @@ class BluetoothManager :  NSObject, ObservableObject{
     @State public var recordString: String = ""
     public var ifConnected: Bool = false
     @Published var peripheralsNames: [String] = []
+    private var displayLink: CADisplayLink?
+    private var BTFileHandle: FileHandle?
     
     override init(){
         //self.appStatus = AppInformation()
@@ -76,13 +78,6 @@ extension BluetoothManager: CBCentralManagerDelegate{
     func connectToPeripheral(peripheral: CBPeripheral){
         centralManager?.connect(peripheral, options: nil)
         ifConnected = true
-        let url = getDocumentsDirect().appendingPathComponent("data.txt")
-        do {
-            let emptyString = ""
-            try emptyString.write(to: url, atomically: true, encoding: .utf8)
-        } catch {
-            print("Error cleaning the file")
-        }
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -165,65 +160,52 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
         return recordString
     }
     */
-    
-    func recordSingleData(targetURL: String, targetFile: String){
-        if(ifConnected == true){
-            guard let characteristic = rxCharacteristic else { return
-            }
+    func startRecording(targetURL: String, targetFile: String, fps: Double) {
+        let url = getDocumentsDirect().appendingPathComponent(targetURL)
+        let targeturl = url.appendingPathComponent(targetFile)
+        do {
+            self.BTFileHandle = try FileHandle(forWritingTo: targeturl)
+//            defer {try? BTDataFileHandle.close()}
+            try self.BTFileHandle?.seekToEnd()
             
-
-            characteristicPeripheralUpdate(targetURL: targetURL, targetFile: targetFile, characteristic: characteristic)
+        } catch {
+            print("Error opening BTFileHandle")
+        }
+        
+        displayLink = CADisplayLink(target: self, selector: #selector(recordSingleData))
+        displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(fps), maximum: Float(fps), preferred: Float(fps))
+        displayLink?.add(to: .main, forMode: .common)
+    }
+    
+    func stopRecording() {
+        displayLink?.invalidate()
+        displayLink = nil
+        do {
+            try BTFileHandle?.close()
+        } catch {
+            print("Error closing pose file")
         }
     }
     
-    private func characteristicPeripheralUpdate(targetURL: String, targetFile: String, characteristic: CBCharacteristic){
-        let currentTimer = Date()
-        let dataReadTimeStamp = Int64(currentTimer.timeIntervalSince1970 * 1000)
-
-        var characteristicASCIIValue = NSString()
-            
-        guard let characteristicValue = characteristic.value,
-        let ASCIIstring = NSString(data: characteristicValue, encoding: String.Encoding.utf8.rawValue) else { return }
-
-        
-        characteristicASCIIValue = ASCIIstring
-        
-        if let characteristicASCIIValueStr = characteristicASCIIValue as? String {
-            /*
-             characteristicValues.append(characteristicASCIIValueStr)
-             recordString = recordString + characteristicASCIIValueStr + "\n"*/
-             let url = getDocumentsDirect().appendingPathComponent(targetURL)
-             let targeturl = url.appendingPathComponent(targetFile)
-             if let existingContent = readDataFromTextFile(targetURL: targetURL, targetFile: targetFile) {
-             let combinedContent = existingContent + "\n" + "<\(dataReadTimeStamp)>: " + characteristicASCIIValueStr
-             do {
-             try combinedContent.write(to: targeturl, atomically: true, encoding: .utf8)
-             characteristicValues.removeAll()
-             } catch {
-             print("Error appending to file: \(error)")
-             }
-             } else {
-             try? characteristicASCIIValueStr.write(to: url, atomically: true, encoding: .utf8)
-             characteristicValues.removeAll()
-             }
-            //recordString = recordString + "\n" + characteristicASCIIValueStr
-            print("Value Recieved: \((characteristicASCIIValue as String))")
-        }
-        /*
-        if characteristicValues.count > 100 {
-            let url = getDocumentsDirect().appendingPathComponent("data.txt")
-            do {
-                let contents = try String(contentsOf: url, encoding: .utf8)
-                try recordString.write(to: url, atomically: true, encoding: .utf8)
-                characteristicValues.removeAll()
-                recordString = ""
-            } catch {
-                print(error.localizedDescription)
+    @objc private func recordSingleData(link: CADisplayLink){
+        if(ifConnected == true){
+            guard let characteristic = rxCharacteristic else { return
             }
+            characteristicPeripheralUpdate(characteristic: characteristic)
         }
-         */
-        //print("Value Recieved: \((characteristicASCIIValue as String))")
-}
+    }
+    
+    private func characteristicPeripheralUpdate(characteristic: CBCharacteristic){
+        let currentTimer = Date()
+        var dataReadTimeStamp = Int64(currentTimer.timeIntervalSince1970 * 1000)
+        let timeStampData = Data(bytes: &dataReadTimeStamp, count: MemoryLayout<Int64>.size)
+        
+        let crlfData = Data([0x0D, 0x0A])
+        
+        guard let characteristicValue = characteristic.value else {return}
+        let writeData = timeStampData + characteristicValue + crlfData
+        self.BTFileHandle!.write(writeData)
+    }
 
     func writeOutgoingValue(data: String){
           

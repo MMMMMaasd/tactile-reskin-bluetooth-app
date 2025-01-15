@@ -52,7 +52,7 @@ class ARViewModel: ObservableObject{
     public var userFPS: Double?
     public var isColorMapOpened = false
     //private var backgroundRecordingID: UUID?
-    private var webRTCManager = WebRTCManager()
+//    private var webRTCManager = WebRTCManager()
     private var usbManager = USBManager()
     
     private var orientation: UIInterfaceOrientation = .portrait
@@ -98,7 +98,6 @@ class ARViewModel: ObservableObject{
     public var timeCount: Double = 0.0
     public var recordTimestamp: Double = 0.0
     
-    private var timer: Timer?
     private var startTime: CMTime?
     private let ciContext: CIContext
     
@@ -276,7 +275,7 @@ class ARViewModel: ObservableObject{
     func startWiFiStreaming(host: String, port: UInt16) {
         // Set up the network connection
 //        // Start WebRTC connection
-        webRTCManager.setupConnection()
+//        webRTCManager.setupConnection()
     }
 
     func stopWiFiStreaming() {
@@ -595,7 +594,7 @@ class ARViewModel: ObservableObject{
         }
         
         
-        
+//        return [rgbVideoURL, depthVideoURL, rgbImagesDirect, depthImagesDirect, poseTextURL, tactileDataFileURL]
         return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName, poseFileName, generalDataRecordDirectName, tactileDataFileName]
     }
     

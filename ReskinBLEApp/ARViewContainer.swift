@@ -457,7 +457,7 @@ class ARViewModel: ObservableObject{
         }
         let poseFileName = "AR_Pose_\(currentDateTime).txt"
         let generalDataRecordDirectName = "\(currentDateTime)"
-        let tactileDataFileName = "Tactile_\(currentDateTime).txt"
+        let tactileDataFileName = "Tactile_\(currentDateTime).bin"
         
         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let generalDataRecordDirectURL = url[0].appendingPathComponent(generalDataRecordDirectName)

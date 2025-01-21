@@ -24,12 +24,16 @@ struct ARViewContainer: UIViewRepresentable {
     
     func makeUIView(context: Context) -> ARView {
         // Initialize the ARView
-        let arView = ARView(frame: .zero, cameraMode: .ar)
+        let arView = ARView(frame: .zero, cameraMode: .ar, automaticallyConfigureSession: false)
         arView.session = session
         arView.environment.sceneUnderstanding.options = [] // No extra scene understanding
         return arView
     }
-    func updateUIView(_ uiView: ARView, context: Context) {}
+    func updateUIView(_ uiView: ARView, context: Context) {
+        if uiView.session !== session {
+            uiView.session = session
+        }
+    }
     
     func dismantleUIView(_ uiView: ARView, coordinator: Context) {
         
@@ -159,7 +163,6 @@ class ARViewModel: ObservableObject{
             }
         }
         print("Finished setting up transforms")
-        print(MemoryLayout<CameraPose>.size)
     }
 
     func startSession() {
@@ -467,7 +470,7 @@ class ARViewModel: ObservableObject{
         let rgbImagesDirect = generalDataRecordDirectURL.appendingPathComponent(rgbImagesDirectName)
         let depthImagesDirect = generalDataRecordDirectURL.appendingPathComponent(depthImagesDirectName)
         let poseTextURL = generalDataRecordDirectURL.appendingPathComponent(poseFileName)
-        let tactileDataFileURL = generalDataRecordDirectURL.appendingPathComponent(tactileDataFileName)
+//        let tactileDataFileURL = generalDataRecordDirectURL.appendingPathComponent(tactileDataFileName)
         
         do {
             try FileManager.default.createDirectory(at: generalDataRecordDirectURL, withIntermediateDirectories: true, attributes: nil)
@@ -601,6 +604,7 @@ class ARViewModel: ObservableObject{
     func captureVideoFrame() {
 //        let preRecvFrameTimestamp = CACurrentMediaTime()
 //        print("Time at start: ", preRecvFrameTimestamp - lastFrameTimestamp)
+
         guard let currentFrame = session.currentFrame else {return}
 
         var imgSuccessFlag = true
@@ -673,7 +677,7 @@ class ARViewModel: ObservableObject{
 //                Save metric depth data as binary file
                 let width = CVPixelBufferGetWidth(depthPixelBuffer)
                 let height = CVPixelBufferGetHeight(depthPixelBuffer)
-                let bytesPerRow = CVPixelBufferGetBytesPerRow(depthPixelBuffer)
+//                let bytesPerRow = CVPixelBufferGetBytesPerRow(depthPixelBuffer)
                 
                 guard let baseAddress = CVPixelBufferGetBaseAddress(depthPixelBuffer) else {
                     CVPixelBufferUnlockBaseAddress(depthPixelBuffer, .readOnly)

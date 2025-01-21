@@ -28,13 +28,15 @@ struct ReadView : View{
     var body : some View{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         ZStack{
-            if appStatus.rgbdVideoStreaming == .off {
-                ARViewContainer(session: arViewModel.session)
-                    .edgesIgnoringSafeArea(.all)
-                    .frame(width: 400.0, height: 550.0)
-                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                    .padding(.bottom, 100.0)
-            } else {
+            ARViewContainer(session: arViewModel.session)
+                .edgesIgnoringSafeArea(.all)
+                .frame(width: 400.0, height: 550.0)
+                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                .padding(.bottom, 100.0)
+                .opacity(appStatus.rgbdVideoStreaming == .off ? 1 : 0)
+                .allowsHitTesting(appStatus.rgbdVideoStreaming == .off) // Disable interaction in streaming mode
+
+            if appStatus.rgbdVideoStreaming == .usb {
                 VStack(alignment: .leading, spacing: 15) { // Reduced spacing
                     // Heading
                     Text("Streaming Mode: USB")
@@ -289,18 +291,13 @@ struct ReadView : View{
         }
         switch (oldMode, newMode) {
         case (_, .off):
-//            arViewModel.startSession()
-//            arViewModel.stopWiFiStreaming()
             arViewModel.killUSBStreaming()
             print("Switched to \(newMode): ARView is active.")
 
         case (_, .wifi):
-            // Pause recording if running and kill ARSession.
-//            arViewModel.startWiFiStreaming(host: "192.168.0.232", port: 8080)
-//            arViewModel.killSession()
             print("NOT IMPLEMENTED: Switched to \(newMode): ARView removed, streaming started.")
         case (_, .usb):
-            print("Switched to \(newMode): ARView removed, streaming started.")
+            print("Switched to \(newMode): ARView is hidden.")
             arViewModel.setupUSBStreaming()
         }
     }

@@ -2,7 +2,7 @@
 //  USBInterfaceAppApp.swift
 //  USBInterfaceApp
 //
-//  Created by 卞泽宇 on 2024/5/22.
+//  Created by Michael on 2024/5/22.
 //
 
 import SwiftUI

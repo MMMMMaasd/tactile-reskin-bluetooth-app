@@ -2,28 +2,30 @@
 //  BluetoothManager.swift
 //  USBInterfaceApp
 //
-//  Created by 卞泽宇 on 2024/6/8.
+//  Created by Michael on 2024/6/8.
 //
 
 import SwiftUI
 import CoreBluetooth
 
 class BluetoothManager :  NSObject, ObservableObject{
-    //@EnvironmentObject var appStatus : AppInformation
-    //private let appStatus: AppInformation
     private var centralManager: CBCentralManager?
-    public var peripherals: [CBPeripheral] = []
     private var matchedPeripheral: CBPeripheral!
     private var txCharacteristic: CBCharacteristic!
     private var rxCharacteristic: CBCharacteristic!
     private var characteristicValues: [String] = []
-    @State public var recordString: String = ""
-    public var ifConnected: Bool = false
-    @Published var peripheralsNames: [String] = []
     private var displayLink: CADisplayLink?
     private var BTFileHandle: FileHandle?
+    @State public var recordString: String = ""
+    @Published var ifConnected: Bool = false
+    @Published var peripheralsNames: [String] = []
+    // Dictionary that mapped CBUUID of each peripheral to scanned peripheral
+    @Published var peripheralUUIDs: [CBPeripheral: [CBUUID]] = [:]
     
-    override init(){
+    private var appStatus: AppInformation
+    
+    init(appStatus: AppInformation){
+        self.appStatus = appStatus
         //self.appStatus = AppInformation()
         super.init()
         self.centralManager = CBCentralManager(delegate: self, queue: .main)
@@ -51,8 +53,8 @@ extension BluetoothManager: CBCentralManagerDelegate{
                   }
     }
     func scan() -> Void{
-        //centralManager?.scanForPeripherals(withServices: nil)
-        centralManager?.scanForPeripherals(withServices: [CBUUIDs.BLEService_UUID])
+        centralManager?.scanForPeripherals(withServices: nil)
+        //centralManager?.scanForPeripherals(withServices: [CBUUIDs.BLEService_UUID])
     }
     func disconnectFromDevice () {
         if matchedPeripheral != nil {
@@ -69,9 +71,12 @@ extension BluetoothManager: CBCentralManagerDelegate{
         print ("Advertisement Data : \(advertisementData)")
         //centralManager?.stopScan()
         
-        if !peripherals.contains(peripheral) && !peripheralsNames.contains(peripheral.name ?? "unnamed device"){
-            self.peripherals.append(peripheral)
+        if !self.appStatus.peripherals.contains(peripheral) && !peripheralsNames.contains(peripheral.name ?? "unnamed device"){
+            self.appStatus.peripherals.append(peripheral)
             self.peripheralsNames.append(peripheral.name ?? "unnamed device")
+            if let detectedUUID = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
+                peripheralUUIDs[peripheral] = detectedUUID
+            }
         }
     }
     
@@ -136,7 +141,7 @@ extension BluetoothManager: CBPeripheralDelegate{
 }
 
 extension BluetoothManager: CBPeripheralManagerDelegate {
-    
+
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         switch peripheral.state {
         case .poweredOn:

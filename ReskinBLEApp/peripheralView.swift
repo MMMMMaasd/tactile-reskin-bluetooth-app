@@ -2,46 +2,46 @@
 //  peripheralView.swift
 //  USBInterfaceApp
 //
-//  Created by 卞泽宇 on 2024/7/29.
+//  Created by Michael on 2024/7/29.
 //
 
 import SwiftUI
 import CoreBluetooth
 
 struct singleBLEPeripheral: View {
-    let appInfo = AppInformation()
     @ObservedObject private var bluetoothManager: BluetoothManager
     @EnvironmentObject var appStatus: AppInformation
-    @State private var isConnected = false
+    @State private var currentDeviceConnectStatus = false
     @State private var connectAlert : Bool = false
+    @State private var serviceUUID : [CBUUID]
     let peripheral: CBPeripheral
     
     init(peripheral: CBPeripheral, bluetoothManager: BluetoothManager) {
         self.peripheral = peripheral
         self.bluetoothManager = bluetoothManager
+        self.serviceUUID = []
 
     }
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
                 Text(peripheral.name ?? "unnamed device")
                     .font(.headline)
+                Spacer()
+            if(!appStatus.ifTactileConnected || currentDeviceConnectStatus){
                 Button(action: {
-                    if !isConnected{
+                    if !currentDeviceConnectStatus{
                         bluetoothManager.connectToPeripheral(peripheral: peripheral)
-                        isConnected = true
+                        currentDeviceConnectStatus = true
+                        if(appStatus.sharedBluetoothManager.peripheralUUIDs[peripheral] == [CBUUIDs.BLEService_UUID]){
+                            appStatus.ifTactileConnected = true
+                        }
                     }else{
+                        currentDeviceConnectStatus = false
+                        if(appStatus.sharedBluetoothManager.peripheralUUIDs[peripheral] == [CBUUIDs.BLEService_UUID]){
+                            appStatus.ifTactileConnected = false
+                        }
                         bluetoothManager.disconnectFromDevice()
-                        isConnected = false
                     }
-                    /*
-                    if !isConnected{
-                        bluetoothManager.connectToPeripheral(peripheral: peripheral)
-                        isConnected = true
-                    }else {
-                        bluetoothManager.disconnectFromDevice()
-                        isConnected = false
-                    }
-                     */
                     if(appStatus.hapticFeedbackLevel == "medium") {
                         let impact = UIImpactFeedbackGenerator(style: .medium)
                         impact.impactOccurred()
@@ -53,42 +53,32 @@ struct singleBLEPeripheral: View {
                         impact.impactOccurred()
                     }
                 }) {
-                    if isConnected {
-                        Text("Stop a Touch")
+                    if currentDeviceConnectStatus {
+                        Text("Disconnect")
                             .foregroundColor(.red)
                     } else {
-                        Text("Start a Touch")
+                        Text("Connect")
                             .foregroundColor(.blue)
                     }
                 }
                 .padding(.leading, 50.0)
                 .buttonStyle(.bordered)
-            /*
-                .alert(isPresented: $connectAlert){
-                    Alert(
-                        
-                    )
-                }
-             */
             }
-            //.onAppear(perform: loadDeviceConnectionStatus)
         }
+    }
 }
 
 struct PeripheralView: View {
     @EnvironmentObject var appStatus : AppInformation
     var body: some View {
         VStack{
-            /*
-            Text("BLE-devices")
-                .fontWeight(.black)
-                .foregroundColor(Color.black)
-                .frame(width: 500.0, height: 130)
+            Text("Devices Detected")
+                .font(.body)
+                .frame(width: 500.0, height: 50)
                 .ignoresSafeArea()
-                .background(.tabBackground)
-                .padding(.bottom, 10)
-             */
-            List(appStatus.sharedBluetoothManager.peripherals, id: \.name) { peripheral in
+                .background(.white)
+                .padding(.top, 5)
+            List(appStatus.peripherals, id: \.name) { peripheral in
                 singleBLEPeripheral(peripheral: peripheral, bluetoothManager: appStatus.sharedBluetoothManager)
             }
             

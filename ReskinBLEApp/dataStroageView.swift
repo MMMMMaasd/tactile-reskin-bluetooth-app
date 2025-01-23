@@ -2,8 +2,9 @@
 //  dataStroageView.swift
 //  USBInterfaceApp
 //
-//  Created by 卞泽宇 on 2024/5/27.
+//  Created by Michael on 2024/5/27.
 //
+
 
 import SwiftUI
 import UniformTypeIdentifiers
@@ -17,19 +18,6 @@ struct RecordView : View{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         NavigationView{
             VStack{
-                /*
-                Text("Record View")
-                    .onTapGesture {
-                        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-                        print(paths[0].path)
-                        do{
-                            let input = try String(contentsOf: paths[0].appendingPathComponent("data.txt"))
-                            print(input)
-                        }catch{
-                            print(error.localizedDescription)
-                        }
-                    }
-                 */
                 VStack{
                     NavigationLink(destination: DataViewView()){
                         HStack{
@@ -332,3 +320,5 @@ struct SubLevelDirectory: FileDocument{
     RecordView()
         .environmentObject(AppInformation())
 }
+
+

@@ -2,8 +2,9 @@
 //  DataViewView.swift
 //  USBInterfaceApp
 //
-//  Created by 卞泽宇 on 2024/5/29.
+//  Created by Michael on 2024/5/29.
 //
+
 
 import SwiftUI
 import UniformTypeIdentifiers
@@ -214,3 +215,5 @@ struct TextFileInView: FileDocument {
     DataViewView()
         .environmentObject(AppInformation())
 }
+
+

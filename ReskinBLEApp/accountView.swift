@@ -2,7 +2,7 @@
 //  accountView.swift
 //  USBInterfaceApp
 //
-//  Created by 卞泽宇 on 2024/5/27.
+//  Created by Michael on 2024/5/27.
 //
 
 import SwiftUI
@@ -84,6 +84,19 @@ struct SettingsView : View{
 //                    .padding(.leading, 75)
                 }
                 .padding(.vertical, 5)
+                HStack{
+                    VStack(alignment: .leading, spacing: 8){
+                        Picker("Grid projection enabled", selection: $appStatus.gridProjectionTrigger){
+                            Text("3x3").tag("3x3")
+                            Text("5x5").tag("5x5")
+                            Text("off").tag("off")
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        Text("Project grid lines to your camera")
+                            .font(.caption)
+                            .foregroundStyle(.gray)
+                    }
+                }
                 
             }
         }

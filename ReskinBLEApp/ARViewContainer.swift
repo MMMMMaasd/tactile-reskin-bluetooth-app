@@ -47,6 +47,8 @@ struct ARViewContainer: UIViewRepresentable {
 
 class ARViewModel: ObservableObject{
     var session = ARSession()
+    var audioSession = AVCaptureSession()
+    var audioCaptureDelegate: AudioCaptureDelegate?
 //    var connection: NWConnection?
     // 100 FPS: 0.01 (Not sure if its possible)
     // 60 FPS: 0.017 : (1.0/60.0)
@@ -64,6 +66,7 @@ class ARViewModel: ObservableObject{
     // Control the destination of rgb and depth video file
     private var assetWriter: AVAssetWriter?
     private var videoInput: AVAssetWriterInput?
+    private var audioInput: AVAssetWriterInput?
     private var pixelBufferAdapter: AVAssetWriterInputPixelBufferAdaptor?
     private var depthAssetWriter: AVAssetWriter?
     private var depthVideoInput: AVAssetWriterInput?
@@ -120,6 +123,7 @@ class ARViewModel: ObservableObject{
     private var rgbAttributes: [String: Any] = [:]
     private var depthAttributes: [String: Any] = [:]
     private var depthConfAttributes: [String: Any] = [:]
+    private var audioOutputSettings: [String: Any] = [:]
     
     init() {
         self.rgbAttributes = [
@@ -136,6 +140,12 @@ class ARViewModel: ObservableObject{
             kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_OneComponent8,
             kCVPixelBufferWidthKey as String: Int(depthViewPortSize.width),
             kCVPixelBufferHeightKey as String: Int(depthViewPortSize.height)
+        ]
+        self.audioOutputSettings = [
+            AVFormatIDKey: kAudioFormatMPEG4AAC,
+            AVNumberOfChannelsKey: 2,
+            AVSampleRateKey: 44100.0,
+            AVEncoderBitRateKey: 128000
         ]
         
         self.ciContext = CIContext()
@@ -423,6 +433,14 @@ class ARViewModel: ObservableObject{
         
         let saveFileNames = setupRecording()
         
+        assetWriter?.startWriting()
+        startTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
+        assetWriter?.startSession(atSourceTime: startTime!)
+        audioSession.startRunning()
+        
+        depthAssetWriter?.startWriting()
+        depthAssetWriter?.startSession(atSourceTime: startTime!)
+
         displayLink = CADisplayLink(target: self, selector: #selector(updateFrame))
         displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(self.userFPS!), maximum: Float(self.userFPS!), preferred: Float(self.userFPS!))
         displayLink?.add(to: .main, forMode: .common)
@@ -435,7 +453,10 @@ class ARViewModel: ObservableObject{
     func stopRecording(){
         displayLink?.invalidate()
         displayLink = nil
+        audioSession.stopRunning()
+        audioInput?.markAsFinished()
         videoInput?.markAsFinished()
+        
         assetWriter?.finishWriting {
             self.assetWriter = nil
             print("RGB Video recording finished.")
@@ -529,16 +550,27 @@ class ARViewModel: ObservableObject{
             videoInput?.expectsMediaDataInRealTime = true
             assetWriter?.add(videoInput!)
             
-//            let rgbAttributes: [String: Any] = [
-//                kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32ARGB),
-//                kCVPixelBufferWidthKey as String: 720,
-//                kCVPixelBufferHeightKey as String: 960
-//                
-//            ]
+            audioInput = AVAssetWriterInput(mediaType: .audio, outputSettings: audioOutputSettings)
+            audioInput?.expectsMediaDataInRealTime = true
+            assetWriter?.add(audioInput!)
+            
             pixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput!, sourcePixelBufferAttributes: rgbAttributes)
-            assetWriter?.startWriting()
-            startTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
-            assetWriter?.startSession(atSourceTime: startTime!)
+            guard let audioDevice = AVCaptureDevice.default(for: .audio),
+                  let audioDeviceInput = try? AVCaptureDeviceInput(device: audioDevice) else {
+                  fatalError("Unable to access microphone.")
+            }
+            audioSession.addInput(audioDeviceInput)
+            
+            // Configure audio output
+            let audioOutput = AVCaptureAudioDataOutput()
+            if audioSession.canAddOutput(audioOutput) {
+                audioSession.addOutput(audioOutput)
+            }
+
+            // Set up an internal delegate
+            let audioQueue = DispatchQueue(label: "AudioProcessingQueue")
+            audioCaptureDelegate = AudioCaptureDelegate(writerInput: audioInput!)
+            audioOutput.setSampleBufferDelegate(audioCaptureDelegate, queue: audioQueue)
             
             let depthVideoSettings: [String: Any] = [
                 AVVideoCodecKey: AVVideoCodecType.h264,
@@ -580,9 +612,6 @@ class ARViewModel: ObservableObject{
             
             depthPixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: depthVideoInput!, sourcePixelBufferAttributes: recordingDepthAttributes)
             
-            depthAssetWriter?.startWriting()
-            depthAssetWriter?.startSession(atSourceTime: startTime!)
-            
             // Colormap
             /*
             coloredAssetWriter = try AVAssetWriter(outputURL: coloredVideoURL, fileType: .mp4)
@@ -612,6 +641,7 @@ class ARViewModel: ObservableObject{
 //        return [rgbVideoURL, depthVideoURL, rgbImagesDirect, depthImagesDirect, poseTextURL, tactileDataFileURL]
         return [rgbFileName, depthFileName, currentDateTime, rgbImagesDirectName, depthImagesDirectName, poseFileName, generalDataRecordDirectName, tactileDataFileName]
     }
+    
     
     func captureVideoFrame() {
 //        let preRecvFrameTimestamp = CACurrentMediaTime()
@@ -816,4 +846,18 @@ class ARViewModel: ObservableObject{
             try FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
     }
     
+}
+
+class AudioCaptureDelegate: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
+    private let writerInput: AVAssetWriterInput?
+
+    init(writerInput: AVAssetWriterInput) {
+        self.writerInput = writerInput
+    }
+
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        // Append audio sample buffer to the writer input
+        guard writerInput?.isReadyForMoreMediaData == true else { return }
+        writerInput?.append(sampleBuffer)
+    }
 }

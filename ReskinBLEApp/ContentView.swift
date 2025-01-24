@@ -20,6 +20,8 @@ struct ContentView: View {
                     .font(.title)
                     .multilineTextAlignment(.center)
                     .bold()
+                Text("Designed by New York Univeristy CILVR Tactile Lab")
+                    .font(.caption)
                 Button(action: {
                     appStatus.initializeARSession()
                     appStatus.ifGoToNextPage = 1

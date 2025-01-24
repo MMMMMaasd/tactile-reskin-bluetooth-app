@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  USBInterfaceApp
+//  PolySense
 //
 //  Created by Michael on 2024/5/22.
 //
@@ -13,9 +13,9 @@ struct ContentView: View {
     var body: some View {
         if appStatus.ifGoToNextPage == 0{
             VStack {
-                Image("NYU_Logo")
+                Image("PolySense_Logo")
                     .resizable()
-                    .frame(width:340.0, height: 200.0)
+                    .frame(width:180.0, height: 220.0)
                 Text("Welcome to PolySense")
                     .font(.title)
                     .multilineTextAlignment(.center)
@@ -51,7 +51,7 @@ class AppInformation : ObservableObject{
     @Published var ifGoToNextPage = 0
     @Published var ifAllowedRead = 0
     //@Published var sharedBluetoothManager =  BluetoothManager(self)
-    //@Published var tactileRecordTimeInterval: Double = 0.1
+//    @Published var tactileRecordTimeInterval: Double = 0.1
     @Published var animationFPS: Double = 30.0
     @Published var hapticFeedbackLevel: String = "medium"
     @Published var rgbdVideoStreaming: StreamingMode = .off

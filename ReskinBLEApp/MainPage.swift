@@ -1,6 +1,6 @@
 //
 //  MainPage.swift
-//  USBInterfaceApp
+//  PolySense
 //
 //  Created by Michael on 2024/5/22.
 //
@@ -9,22 +9,20 @@ import SwiftUI
 
 struct MainPage: View {
     @EnvironmentObject var appStatus : AppInformation
-    // Start the default page be the read view
-    @State private var selection = 1
+    // Start the default page be the read page
     var body: some View {
-        TabView(selection: $selection){
+        TabView(){
             Group{
                 PeripheralView()
                     .tabItem {
                         Label("ble-device", systemImage: "iphone.gen1.radiowaves.left.and.right")
                 }
-                    .tag(0)
-                
+
                 ReadView()
                     .tabItem {
                         Label("read", systemImage: "dot.scope")
                 }
-                    .tag(1)
+
                 
                 
                 SettingsView()
@@ -32,7 +30,7 @@ struct MainPage: View {
                         Label("settings", systemImage: "gear")
             
                     }
-                    .tag(2)
+
             }
                 .toolbarBackground(.tabBackground, for: .tabBar)
                 .toolbarBackground(.visible, for: .tabBar)

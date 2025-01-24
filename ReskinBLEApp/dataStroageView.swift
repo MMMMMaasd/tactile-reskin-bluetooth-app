@@ -1,10 +1,9 @@
 //
 //  dataStroageView.swift
-//  USBInterfaceApp
+//  PolySense
 //
 //  Created by Michael on 2024/5/27.
 //
-
 
 import SwiftUI
 import UniformTypeIdentifiers
@@ -320,5 +319,3 @@ struct SubLevelDirectory: FileDocument{
     RecordView()
         .environmentObject(AppInformation())
 }
-
-

@@ -1,6 +1,6 @@
 //
 //  WebRTCManager.swift
-//  ReskinBLEApp
+//  PolySense
 //
 //  Created by Raunaq Bhirangi on 1/11/25.
 //

@@ -1,6 +1,6 @@
 //
 //  peripheralView.swift
-//  USBInterfaceApp
+//  PolySense
 //
 //  Created by Michael on 2024/7/29.
 //

@@ -1,6 +1,6 @@
 //
 //  readView.swift
-//  USBInterfaceApp
+//  PolySense
 //
 //  Created by Michael on 2024/5/27.
 //

@@ -1,6 +1,6 @@
 //
 //  BluetoothManager.swift
-//  USBInterfaceApp
+//  PolySense
 //
 //  Created by Michael on 2024/6/8.
 //
@@ -66,9 +66,9 @@ extension BluetoothManager: CBCentralManagerDelegate{
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber){
         matchedPeripheral = peripheral
         matchedPeripheral.delegate = self
-        print("Peripheral Discovered: \(peripheral)")
-        print("Peripheral name: \(String(describing: peripheral.name))")
-        print ("Advertisement Data : \(advertisementData)")
+        //print("Peripheral Discovered: \(peripheral)")
+        //print("Peripheral name: \(String(describing: peripheral.name))")
+        //print ("Advertisement Data : \(advertisementData)")
         //centralManager?.stopScan()
         
         if !self.appStatus.peripherals.contains(peripheral) && !peripheralsNames.contains(peripheral.name ?? "unnamed device"){

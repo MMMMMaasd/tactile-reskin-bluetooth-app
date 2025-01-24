@@ -1,6 +1,6 @@
 //
 //  USBManager.swift
-//  ReskinBLEApp
+//  PolySense
 //
 //  Created by Raunaq Bhirangi on 1/13/25.
 //

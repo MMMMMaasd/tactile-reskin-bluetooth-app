@@ -3,6 +3,7 @@
 //  Created by 卞泽宇 on 2024/5/22.
 //
 
+/*
 import SwiftUI
 
 struct MainView: View {
@@ -30,3 +31,5 @@ struct MainView: View {
     MainView()
         .environmentObject(AppInformation())
 }
+
+*/

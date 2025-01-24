@@ -1,8 +1,8 @@
 //
 //  ARViewContainer.swift
-//  USBInterfaceApp
+//  PolySense
 //
-//  Created by 卞泽宇 on 2024/7/25.
+//  Created by Michael on 2024/7/25.
 //
 
 import SwiftUI
@@ -721,6 +721,7 @@ class ARViewModel: ObservableObject{
                     falseColorFilter.inputImage = ciImageAfterFiltered
                     ciImageToRender = falseColorFilter.outputImage!
                 }
+                
                 
                 let transformedImage = ciImageToRender.transformed(by: self.combinedDepthTransform!) //.cropped(to: cropRect)
                 

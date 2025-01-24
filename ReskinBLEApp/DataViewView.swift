@@ -1,10 +1,9 @@
 //
 //  DataViewView.swift
-//  USBInterfaceApp
+//  PolySense
 //
 //  Created by Michael on 2024/5/29.
 //
-
 
 import SwiftUI
 import UniformTypeIdentifiers
@@ -215,5 +214,3 @@ struct TextFileInView: FileDocument {
     DataViewView()
         .environmentObject(AppInformation())
 }
-
-

@@ -34,69 +34,71 @@ struct ReadView : View{
                 .padding(.bottom, 100.0)
                 .opacity(appStatus.rgbdVideoStreaming == .off ? 1 : 0)
                 .allowsHitTesting(appStatus.rgbdVideoStreaming == .off) // Disable interaction in streaming mode
-            if(appStatus.ifTactileConnected){
-                Text("tactile on")
-                    .font(.footnote)
-                    .foregroundColor(Color.white)
-                    .frame(width: 500.0, height: 25.0)
-                    .background(.green)
-                    .padding(.bottom, 675)
-                    .ignoresSafeArea()
-            }else{
-                Text("tactile off")
-                    .font(.footnote)
-                    .foregroundColor(Color.white)
-                    .frame(width: 500.0, height: 25.0)
-                    .background(.red)
-                    .padding(.bottom, 675)
-                    .ignoresSafeArea()
-            }
-            if(appStatus.gridProjectionTrigger == "5x5"){
-                GeometryReader { geometry in
-                        let GridWidth = geometry.size.width
-                        let GridHeight = geometry.size.height
+            if appStatus.rgbdVideoStreaming == .off {
+                if(appStatus.ifTactileConnected){
+                    Text("tactile on")
+                        .font(.footnote)
+                        .foregroundColor(Color.white)
+                        .frame(width: 500.0, height: 25.0)
+                        .background(.green)
+                        .padding(.bottom, 675)
+                        .ignoresSafeArea()
+                }else{
+                    Text("tactile off")
+                        .font(.footnote)
+                        .foregroundColor(Color.white)
+                        .frame(width: 500.0, height: 25.0)
+                        .background(.red)
+                        .padding(.bottom, 675)
+                        .ignoresSafeArea()
+                }
+                if(appStatus.gridProjectionTrigger == "5x5"){
+                    GeometryReader { geometry in
+                            let GridWidth = geometry.size.width
+                            let GridHeight = geometry.size.height
 
-                        Path { path in
-                            for col in 1..<5 {
-                                let x = GridWidth * CGFloat(col) / CGFloat(5)
-                                path.move(to: CGPoint(x: x, y: 0))
-                                path.addLine(to: CGPoint(x: x, y: GridHeight))
-                            }
+                            Path { path in
+                                for col in 1..<5 {
+                                    let x = GridWidth * CGFloat(col) / CGFloat(5)
+                                    path.move(to: CGPoint(x: x, y: 0))
+                                    path.addLine(to: CGPoint(x: x, y: GridHeight))
+                                }
 
-                            for row in 1..<5 {
-                                let y = GridHeight * CGFloat(row) / CGFloat(5)
-                                path.move(to: CGPoint(x: 0, y: y))
-                                path.addLine(to: CGPoint(x: GridWidth, y: y))
+                                for row in 1..<5 {
+                                    let y = GridHeight * CGFloat(row) / CGFloat(5)
+                                    path.move(to: CGPoint(x: 0, y: y))
+                                    path.addLine(to: CGPoint(x: GridWidth, y: y))
+                                }
                             }
+                            .stroke(Color.gray, lineWidth: 2)
+                            .opacity(0.5)
                         }
-                        .stroke(Color.gray, lineWidth: 2)
-                        .opacity(0.5)
-                    }
-                    .frame(width: 400.0, height: 550.0)
-                    .padding(.bottom, 100)
-            }else if(appStatus.gridProjectionTrigger == "3x3"){
-                GeometryReader { geometry in
-                        let GridWidth = geometry.size.width
-                        let GridHeight = geometry.size.height
+                        .frame(width: 400.0, height: 550.0)
+                        .padding(.bottom, 100)
+                }else if(appStatus.gridProjectionTrigger == "3x3"){
+                    GeometryReader { geometry in
+                            let GridWidth = geometry.size.width
+                            let GridHeight = geometry.size.height
 
-                        Path { path in
-                            for col in 1..<3 {
-                                let x = GridWidth * CGFloat(col) / CGFloat(3)
-                                path.move(to: CGPoint(x: x, y: 0))
-                                path.addLine(to: CGPoint(x: x, y: GridHeight))
-                            }
+                            Path { path in
+                                for col in 1..<3 {
+                                    let x = GridWidth * CGFloat(col) / CGFloat(3)
+                                    path.move(to: CGPoint(x: x, y: 0))
+                                    path.addLine(to: CGPoint(x: x, y: GridHeight))
+                                }
 
-                            for row in 1..<3 {
-                                let y = GridHeight * CGFloat(row) / CGFloat(3)
-                                path.move(to: CGPoint(x: 0, y: y))
-                                path.addLine(to: CGPoint(x: GridWidth, y: y))
+                                for row in 1..<3 {
+                                    let y = GridHeight * CGFloat(row) / CGFloat(3)
+                                    path.move(to: CGPoint(x: 0, y: y))
+                                    path.addLine(to: CGPoint(x: GridWidth, y: y))
+                                }
                             }
+                            .stroke(Color.gray, lineWidth: 2)
+                            .opacity(0.5)
                         }
-                        .stroke(Color.gray, lineWidth: 2)
-                        .opacity(0.5)
-                    }
-                    .frame(width: 400.0, height: 550.0)
-                    .padding(.bottom, 100)
+                        .frame(width: 400.0, height: 550.0)
+                        .padding(.bottom, 100)
+                }
             }
 
             if appStatus.rgbdVideoStreaming == .usb {
@@ -167,98 +169,100 @@ struct ReadView : View{
                               }
                 )
             }
-            HStack{
-                VStack{
-                    // Export to local button
-                    Button(action: {
-                        showingExporter.toggle()
-                        if(appStatus.hapticFeedbackLevel == "medium") {
-                            let impact = UIImpactFeedbackGenerator(style: .medium)
-                            impact.impactOccurred()
-                        } else if (appStatus.hapticFeedbackLevel == "heavy") {
-                            let impact = UIImpactFeedbackGenerator(style: .heavy)
-                            impact.impactOccurred()
-                        } else if (appStatus.hapticFeedbackLevel == "light") {
-                            let impact = UIImpactFeedbackGenerator(style: .light)
-                            impact.impactOccurred()
-                        }}){
-                            Image(systemName: "square.and.arrow.up.circle.fill")
-                                .resizable()
-                                .frame(height: 40)
-                                .frame(width: 40)
-                    }
-                    .padding(.trailing, 8.0)
-                    Text("Export")
-                        .foregroundStyle(.blue)
-                        .font(.caption)
-                        .padding(.trailing, 8.0)
-                    Text("to local")
-                        .foregroundStyle(.blue)
-                        .font(.caption)
-                        .padding(.trailing, 8.0)
-                }
-                VStack{
-                    // Delete last record button
-                    Button(action: {
-                        showingAlert = true
-                        if(appStatus.hapticFeedbackLevel == "medium") {
-                            let impact = UIImpactFeedbackGenerator(style: .medium)
-                            impact.impactOccurred()
-                        } else if (appStatus.hapticFeedbackLevel == "heavy") {
-                            let impact = UIImpactFeedbackGenerator(style: .heavy)
-                            impact.impactOccurred()
-                        } else if (appStatus.hapticFeedbackLevel == "light") {
-                            let impact = UIImpactFeedbackGenerator(style: .light)
-                            impact.impactOccurred()
-                        }}){
-                            Image(systemName: "trash.circle.fill")
-                                .resizable()
-                                .frame(height: 40)
-                                .frame(width: 40)
-                                .foregroundStyle(.red)
-                        
-                    }
-                    .padding(.trailing, 250.0)
-                    Text("Delete")
-                        .foregroundStyle(.red)
-                        .font(.caption)
-                        .padding(.trailing, 250)
-                    Text("last record")
-                        .foregroundStyle(.red)
-                        .font(.caption)
-                        .padding(.trailing, 250)
-                }
-            }
-            .padding(.top, 600)
-           
-            // Flash light control button
-            VStack{
-                Button(action: toggleFlash){
-                    if(openFlash){
-                        VStack{
-                            Image(systemName: "flashlight.off.circle.fill")
-                                .resizable()
-                                .frame(height: 40)
-                                .frame(width: 40)
-                            Text("Flash light off")
-                                .foregroundStyle(.blue)
-                                .font(.caption)
+            if appStatus.rgbdVideoStreaming == .off{
+                HStack{
+                    VStack{
+                        // Export to local button
+                        Button(action: {
+                            showingExporter.toggle()
+                            if(appStatus.hapticFeedbackLevel == "medium") {
+                                let impact = UIImpactFeedbackGenerator(style: .medium)
+                                impact.impactOccurred()
+                            } else if (appStatus.hapticFeedbackLevel == "heavy") {
+                                let impact = UIImpactFeedbackGenerator(style: .heavy)
+                                impact.impactOccurred()
+                            } else if (appStatus.hapticFeedbackLevel == "light") {
+                                let impact = UIImpactFeedbackGenerator(style: .light)
+                                impact.impactOccurred()
+                            }}){
+                                Image(systemName: "square.and.arrow.up.circle.fill")
+                                    .resizable()
+                                    .frame(height: 40)
+                                    .frame(width: 40)
                         }
-                    }else{
-                        VStack{
-                            Image(systemName: "flashlight.on.circle.fill")
-                                .resizable()
-                                .frame(height: 40)
-                                .frame(width: 40)
-                            Text("Flash light on")
-                                .foregroundStyle(.blue)
-                                .font(.caption)
+                        .padding(.trailing, 8.0)
+                        Text("Export")
+                            .foregroundStyle(.blue)
+                            .font(.caption)
+                            .padding(.trailing, 8.0)
+                        Text("to local")
+                            .foregroundStyle(.blue)
+                            .font(.caption)
+                            .padding(.trailing, 8.0)
+                    }
+                    VStack{
+                        // Delete last record button
+                        Button(action: {
+                            showingAlert = true
+                            if(appStatus.hapticFeedbackLevel == "medium") {
+                                let impact = UIImpactFeedbackGenerator(style: .medium)
+                                impact.impactOccurred()
+                            } else if (appStatus.hapticFeedbackLevel == "heavy") {
+                                let impact = UIImpactFeedbackGenerator(style: .heavy)
+                                impact.impactOccurred()
+                            } else if (appStatus.hapticFeedbackLevel == "light") {
+                                let impact = UIImpactFeedbackGenerator(style: .light)
+                                impact.impactOccurred()
+                            }}){
+                                Image(systemName: "trash.circle.fill")
+                                    .resizable()
+                                    .frame(height: 40)
+                                    .frame(width: 40)
+                                    .foregroundStyle(.red)
+                            
+                        }
+                        .padding(.trailing, 250.0)
+                        Text("Delete")
+                            .foregroundStyle(.red)
+                            .font(.caption)
+                            .padding(.trailing, 250)
+                        Text("last record")
+                            .foregroundStyle(.red)
+                            .font(.caption)
+                            .padding(.trailing, 250)
+                    }
+                }
+                .padding(.top, 600)
+               
+                // Flash light control button
+                VStack{
+                    Button(action: toggleFlash){
+                        if(openFlash){
+                            VStack{
+                                Image(systemName: "flashlight.off.circle.fill")
+                                    .resizable()
+                                    .frame(height: 40)
+                                    .frame(width: 40)
+                                Text("Flash light off")
+                                    .foregroundStyle(.blue)
+                                    .font(.caption)
+                            }
+                        }else{
+                            VStack{
+                                Image(systemName: "flashlight.on.circle.fill")
+                                    .resizable()
+                                    .frame(height: 40)
+                                    .frame(width: 40)
+                                Text("Flash light on")
+                                    .foregroundStyle(.blue)
+                                    .font(.caption)
+                            }
                         }
                     }
                 }
+                .padding(.leading, 240)
+                .padding(.top, 582)
             }
-            .padding(.leading, 240)
-            .padding(.top, 582)
             
         }
         .frame(width: 10.0, height: 10.0)

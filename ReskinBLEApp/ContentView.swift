@@ -16,12 +16,11 @@ struct ContentView: View {
                 Image("PolySense_Logo")
                     .resizable()
                     .frame(width:180.0, height: 220.0)
-                Text("Welcome to PolySense")
+                    .cornerRadius(30.0)
+                Text("Welcome to AnySense")
                     .font(.title)
                     .multilineTextAlignment(.center)
                     .bold()
-                Text("Designed by New York Univeristy CILVR Tactile Lab")
-                    .font(.caption)
                 Button(action: {
                     appStatus.initializeARSession()
                     appStatus.ifGoToNextPage = 1

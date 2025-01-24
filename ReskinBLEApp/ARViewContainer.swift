@@ -140,6 +140,8 @@ class ARViewModel: ObservableObject{
         
         self.ciContext = CIContext()
         self.startSession()
+        
+        
         Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             if let currentFrame = self.session.currentFrame {
                 timer.invalidate() // Stop the timer once the frame is available
@@ -153,13 +155,23 @@ class ARViewModel: ObservableObject{
 
                 self.combinedRGBTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
                 
-                guard let depthPixelBuffer = currentFrame.sceneDepth?.depthMap else { return }
-                let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
-                normalizeTransform = CGAffineTransform(scaleX: 1.0/depthSize.width, y: 1.0/depthSize.height)
-                let depthDisplayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: self.depthViewPortSize)
-                let toDepthViewPortTransform = CGAffineTransform(scaleX: self.depthViewPortSize.width, y: self.depthViewPortSize.height)
-                
-                self.combinedDepthTransform = normalizeTransform.concatenating(flipTransform).concatenating(depthDisplayTransform).concatenating(toDepthViewPortTransform)
+                // Retry mechanism for depth map initialization
+                Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { depthTimer in
+                    if let depthPixelBuffer = currentFrame.sceneDepth?.depthMap {
+                        // Stop the depth initialization timer once depthMap is available
+                        depthTimer.invalidate()
+                        
+                        let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
+                        normalizeTransform = CGAffineTransform(scaleX: 1.0 / depthSize.width, y: 1.0 / depthSize.height)
+                        
+                        let depthDisplayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: self.depthViewPortSize)
+                        let toDepthViewPortTransform = CGAffineTransform(scaleX: self.depthViewPortSize.width, y: self.depthViewPortSize.height)
+                        
+                        self.combinedDepthTransform = normalizeTransform.concatenating(flipTransform).concatenating(depthDisplayTransform).concatenating(toDepthViewPortTransform)
+                    } else {
+                        print("Depth map unavailable yet. Retrying initialization")
+                    }
+                }
             }
         }
         print("Finished setting up transforms")
@@ -722,7 +734,7 @@ class ARViewModel: ObservableObject{
                     ciImageToRender = falseColorFilter.outputImage!
                 }
                 
-                
+                print(self.combinedDepthTransform)
                 let transformedImage = ciImageToRender.transformed(by: self.combinedDepthTransform!) //.cropped(to: cropRect)
                 
                 if(self.isColorMapOpened) {

@@ -21,6 +21,7 @@ struct ContentView: View {
                     .multilineTextAlignment(.center)
                     .bold()
                 Button(action: {
+                    appStatus.initializeARSession()
                     appStatus.ifGoToNextPage = 1
                     if(appStatus.hapticFeedbackLevel == "medium") {
                         let impact = UIImpactFeedbackGenerator(style: .medium)
@@ -60,8 +61,15 @@ class AppInformation : ObservableObject{
     @Published var ifTactileConnected: Bool = false
     @Published var peripherals: [CBPeripheral] = []
     @Published var sharedBluetoothManager: BluetoothManager!
+    @Published var sharedARViewModel: ARViewModel!
     init() {
+        // Make sure bluetooth and AR model initialized before the app entering main page
         self.sharedBluetoothManager = BluetoothManager(appStatus: self)
+        self.sharedARViewModel = ARViewModel()
+    }
+    
+    func initializeARSession() {
+        sharedARViewModel.startSession()
     }
 }
 

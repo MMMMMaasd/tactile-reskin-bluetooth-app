@@ -10,19 +10,21 @@ import SwiftUI
 struct MainPage: View {
     @EnvironmentObject var appStatus : AppInformation
     // Start the default page be the read page
+    @State private var selection = 1
     var body: some View {
-        TabView(){
+        TabView(selection: $selection){
             Group{
                 PeripheralView()
                     .tabItem {
                         Label("ble-device", systemImage: "iphone.gen1.radiowaves.left.and.right")
                 }
-
+                    .tag(0)
+                
                 ReadView()
                     .tabItem {
                         Label("read", systemImage: "dot.scope")
                 }
-
+                    .tag(1)
                 
                 
                 SettingsView()
@@ -30,7 +32,7 @@ struct MainPage: View {
                         Label("settings", systemImage: "gear")
             
                     }
-
+                    .tag(2)
             }
                 .toolbarBackground(.tabBackground, for: .tabBar)
                 .toolbarBackground(.visible, for: .tabBar)

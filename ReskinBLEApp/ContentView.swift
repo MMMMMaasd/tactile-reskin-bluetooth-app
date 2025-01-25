@@ -63,6 +63,7 @@ class AppInformation : ObservableObject{
     @Published var peripherals: [CBPeripheral] = []
     @Published var sharedBluetoothManager: BluetoothManager!
     @Published var sharedARViewModel: ARViewModel!
+    @Published var ifRecordedOnce: Bool = false
     init() {
         // Make sure bluetooth and AR model initialized before the app entering main page
         self.sharedBluetoothManager = BluetoothManager(appStatus: self)

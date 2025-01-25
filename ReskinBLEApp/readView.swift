@@ -13,6 +13,10 @@ import UserNotifications
 import Foundation
 import AVFoundation
 
+enum ActiveAlert {
+    case first, second
+}
+
 struct ReadView : View{
     @EnvironmentObject var appStatus : AppInformation
     @State private var isReading = false
@@ -24,6 +28,7 @@ struct ReadView : View{
     @State var openFlash = true
     @State var exportFileName = ""
     @State private var hasAppeared: Bool = false
+    @State private var activeAlert: ActiveAlert = .first
     var body : some View{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         ZStack{
@@ -132,7 +137,10 @@ struct ReadView : View{
                 .frame(width: 400.0, height: 450.0)
                 .padding()
             }
-            Button(action: {toggleRecording(mode:appStatus.rgbdVideoStreaming)}) {
+            Button(action: {
+                toggleRecording(mode:appStatus.rgbdVideoStreaming)
+                appStatus.ifRecordedOnce = true
+            }) {
                 if isReading {
                     // Record button depends on streaming status
                     Image(systemName: "stop.circle")
@@ -154,27 +162,40 @@ struct ReadView : View{
             .padding(.top, 580.0)
             .padding(.leading, 2)
             
-            .alert(isPresented: $showingAlert){
-                // Open warning pop out informing user's delete move
-                Alert(title: Text("Warning")
-                    .foregroundColor(.red),
-                      message: Text("Your last recorded data will all be deleted, are you sure?"),
-                      primaryButton: .destructive(Text("Yes")) {
-                                  showingAlert = false
-                                  deleteRecordedData(url: paths, targetDirect: fileSetNames[6])
-                              },
-                              secondaryButton: .cancel(Text("No")) {
-                                  showingAlert = false
-                                  
-                              }
-                )
+            .alert(isPresented: $showingAlert) {
+                switch activeAlert {
+                case .first:
+                    return Alert(title: Text("Warning")
+                        .foregroundColor(.red),
+                          message: Text("Your last recorded data will all be deleted, are you sure?"),
+                          primaryButton: .destructive(Text("Yes")) {
+                                      showingAlert = false
+                                      deleteRecordedData(url: paths, targetDirect: fileSetNames[6])
+                                  },
+                                  secondaryButton: .cancel(Text("No")) {
+                                      showingAlert = false
+                                      
+                                  }
+                    )
+                case .second:
+                    return Alert(title: Text("Warning")
+                        .foregroundColor(.red),
+                          message: Text("You did not record any data yet!")
+                    )
+                }
             }
+            
             if appStatus.rgbdVideoStreaming == .off{
                 HStack{
                     VStack{
                         // Export to local button
                         Button(action: {
-                            showingExporter.toggle()
+                            if(appStatus.ifRecordedOnce){
+                                showingExporter.toggle()
+                            } else{
+                                showingAlert = true
+                                self.activeAlert = .second
+                            }
                             if(appStatus.hapticFeedbackLevel == "medium") {
                                 let impact = UIImpactFeedbackGenerator(style: .medium)
                                 impact.impactOccurred()
@@ -203,7 +224,13 @@ struct ReadView : View{
                     VStack{
                         // Delete last record button
                         Button(action: {
-                            showingAlert = true
+                            if(appStatus.ifRecordedOnce){
+                                showingAlert = true
+                                self.activeAlert = .first
+                            } else {
+                                showingAlert = true
+                                self.activeAlert = .second
+                            }
                             if(appStatus.hapticFeedbackLevel == "medium") {
                                 let impact = UIImpactFeedbackGenerator(style: .medium)
                                 impact.impactOccurred()

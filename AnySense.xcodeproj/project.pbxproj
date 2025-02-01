@@ -11,25 +11,18 @@
 		262CA726C681B31A98312192 /* Pods_ReskinBLEApp_ReskinBLEAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1433E9D72A7D0A10A3BC6F6 /* Pods_ReskinBLEApp_ReskinBLEAppUITests.framework */; };
 		43A8A4192D33427F007DD3A5 /* WebRTCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A8A4182D33427F007DD3A5 /* WebRTCManager.swift */; };
 		43A8A41B2D356CAC007DD3A5 /* USBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A8A41A2D356CA8007DD3A5 /* USBManager.swift */; };
-		B9104F5E2BFDE63A000D4DDD /* USBInterfaceAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */; };
 		B9104F602BFDE63A000D4DDD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F5F2BFDE63A000D4DDD /* ContentView.swift */; };
 		B9104F622BFDE63C000D4DDD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9104F612BFDE63C000D4DDD /* Assets.xcassets */; };
-		B9104F6F2BFDE63C000D4DDD /* USBInterfaceAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F6E2BFDE63C000D4DDD /* USBInterfaceAppTests.swift */; };
-		B9104F792BFDE63C000D4DDD /* USBInterfaceAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F782BFDE63C000D4DDD /* USBInterfaceAppUITests.swift */; };
-		B9104F7B2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9104F7A2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift */; };
-		B98D69522C04559900648D95 /* dataStroageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69512C04559900648D95 /* dataStroageView.swift */; };
 		B98D69542C04563000648D95 /* readView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69532C04563000648D95 /* readView.swift */; };
 		B98D69562C04569C00648D95 /* accountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D69552C04569C00648D95 /* accountView.swift */; };
 		B9944A342CFE983300232FBB /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9944A332CFE982E00232FBB /* MainPage.swift */; };
-		B9944A362CFE989100232FBB /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9944A352CFE988E00232FBB /* MainView.swift */; };
-		B9B046A82C06DFA300096E8B /* DataViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B046A72C06DFA300096E8B /* DataViewView.swift */; };
+		B997CCD32D4E081300F62B49 /* dataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B997CCD22D4E081300F62B49 /* dataStorage.swift */; };
+		B997CCD52D4E082900F62B49 /* AnySenseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B997CCD42D4E082900F62B49 /* AnySenseApp.swift */; };
 		B9B046AC2C0DE7D000096E8B /* TryReadDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */; };
 		B9BDD0652C573EA20061475C /* peripheralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BDD0642C573EA20061475C /* peripheralView.swift */; };
 		B9D072BF2C1445E700C5ECD8 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */; };
 		B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */; };
 		B9D8D3DE2C522E1300A7B839 /* ARViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */; };
-		B9F3C4142C515F1A008B555A /* CameraHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F3C4132C515F1A008B555A /* CameraHome.swift */; };
-		B9F3C4182C518050008B555A /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F3C4172C518050008B555A /* CameraViewModel.swift */; };
 		CDE14DA36B71D1D0C3F13D96 /* Pods_ReskinBLEApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F96CB0EDE6B0F8A62632894 /* Pods_ReskinBLEApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,29 +53,22 @@
 		58E1B0A80DFAF829946B0063 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B1433E9D72A7D0A10A3BC6F6 /* Pods_ReskinBLEApp_ReskinBLEAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReskinBLEApp_ReskinBLEAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9104F5A2BFDE63A000D4DDD /* AnySense.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnySense.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppApp.swift; sourceTree = "<group>"; };
 		B9104F5F2BFDE63A000D4DDD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B9104F612BFDE63C000D4DDD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B9104F6A2BFDE63C000D4DDD /* AnySenseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnySenseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B9104F6E2BFDE63C000D4DDD /* USBInterfaceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppTests.swift; sourceTree = "<group>"; };
 		B9104F742BFDE63C000D4DDD /* AnySenseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnySenseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B9104F782BFDE63C000D4DDD /* USBInterfaceAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppUITests.swift; sourceTree = "<group>"; };
-		B9104F7A2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		B98D69512C04559900648D95 /* dataStroageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataStroageView.swift; sourceTree = "<group>"; };
 		B98D69532C04563000648D95 /* readView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = readView.swift; sourceTree = "<group>"; };
 		B98D69552C04569C00648D95 /* accountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accountView.swift; sourceTree = "<group>"; };
 		B98D69632C04911F00648D95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B9944A272CFE8B4F00232FBB /* NSBluetoothAlwaysUsageDescription.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = NSBluetoothAlwaysUsageDescription.txt; sourceTree = "<group>"; };
 		B9944A332CFE982E00232FBB /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
-		B9944A352CFE988E00232FBB /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		B9B046A72C06DFA300096E8B /* DataViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewView.swift; sourceTree = "<group>"; };
+		B997CCD22D4E081300F62B49 /* dataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataStorage.swift; sourceTree = "<group>"; };
+		B997CCD42D4E082900F62B49 /* AnySenseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnySenseApp.swift; sourceTree = "<group>"; };
 		B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryReadDataView.swift; sourceTree = "<group>"; };
 		B9BDD0642C573EA20061475C /* peripheralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = peripheralView.swift; sourceTree = "<group>"; };
 		B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBUUIDS.swift; sourceTree = "<group>"; };
 		B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewContainer.swift; sourceTree = "<group>"; };
-		B9F3C4132C515F1A008B555A /* CameraHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHome.swift; sourceTree = "<group>"; };
-		B9F3C4172C518050008B555A /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		DD73662182F31C9D894E5858 /* Pods-ReskinBLEAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEAppTests.debug.xcconfig"; path = "Target Support Files/Pods-ReskinBLEAppTests/Pods-ReskinBLEAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E89530D391651A7B45F138FC /* Pods_ReskinBLEAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReskinBLEAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3F1F260C56E398FCAC64AE0 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig"; path = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -148,8 +134,6 @@
 			children = (
 				B9944A272CFE8B4F00232FBB /* NSBluetoothAlwaysUsageDescription.txt */,
 				B9104F5C2BFDE63A000D4DDD /* AnySense */,
-				B9104F6D2BFDE63C000D4DDD /* AnySenseTests */,
-				B9104F772BFDE63C000D4DDD /* AnySenseUITests */,
 				B9104F5B2BFDE63A000D4DDD /* Products */,
 				15990DD6FB02C20E1E01F328 /* Pods */,
 				5D65C12116564382B1C848B3 /* Frameworks */,
@@ -173,41 +157,20 @@
 				43A8A4182D33427F007DD3A5 /* WebRTCManager.swift */,
 				B9944A332CFE982E00232FBB /* MainPage.swift */,
 				B9104F5F2BFDE63A000D4DDD /* ContentView.swift */,
+				B997CCD22D4E081300F62B49 /* dataStorage.swift */,
 				B98D69532C04563000648D95 /* readView.swift */,
 				B98D69552C04569C00648D95 /* accountView.swift */,
 				B9D8D3DD2C522E1300A7B839 /* ARViewContainer.swift */,
 				B9104F612BFDE63C000D4DDD /* Assets.xcassets */,
 				B9D072BE2C1445E700C5ECD8 /* BluetoothManager.swift */,
-				B9F3C4132C515F1A008B555A /* CameraHome.swift */,
-				B9F3C4172C518050008B555A /* CameraViewModel.swift */,
+				B997CCD42D4E082900F62B49 /* AnySenseApp.swift */,
 				B9D072C02C145BE700C5ECD8 /* CBUUIDS.swift */,
-				B98D69512C04559900648D95 /* dataStroageView.swift */,
-				B9B046A72C06DFA300096E8B /* DataViewView.swift */,
 				B98D69632C04911F00648D95 /* Info.plist */,
 				B9BDD0642C573EA20061475C /* peripheralView.swift */,
 				B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */,
-				B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */,
-				B9944A352CFE988E00232FBB /* MainView.swift */,
 				B9DD2CBD2D442152008BF128 /* Preview Content */,
 			);
 			path = AnySense;
-			sourceTree = "<group>";
-		};
-		B9104F6D2BFDE63C000D4DDD /* AnySenseTests */ = {
-			isa = PBXGroup;
-			children = (
-				B9104F6E2BFDE63C000D4DDD /* USBInterfaceAppTests.swift */,
-			);
-			path = AnySenseTests;
-			sourceTree = "<group>";
-		};
-		B9104F772BFDE63C000D4DDD /* AnySenseUITests */ = {
-			isa = PBXGroup;
-			children = (
-				B9104F782BFDE63C000D4DDD /* USBInterfaceAppUITests.swift */,
-				B9104F7A2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift */,
-			);
-			path = AnySenseUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -458,18 +421,14 @@
 				43A8A4192D33427F007DD3A5 /* WebRTCManager.swift in Sources */,
 				B9B046AC2C0DE7D000096E8B /* TryReadDataView.swift in Sources */,
 				B9104F602BFDE63A000D4DDD /* ContentView.swift in Sources */,
-				B9104F5E2BFDE63A000D4DDD /* USBInterfaceAppApp.swift in Sources */,
 				43A8A41B2D356CAC007DD3A5 /* USBManager.swift in Sources */,
+				B997CCD52D4E082900F62B49 /* AnySenseApp.swift in Sources */,
 				B98D69542C04563000648D95 /* readView.swift in Sources */,
 				B9BDD0652C573EA20061475C /* peripheralView.swift in Sources */,
 				B9D072BF2C1445E700C5ECD8 /* BluetoothManager.swift in Sources */,
-				B98D69522C04559900648D95 /* dataStroageView.swift in Sources */,
-				B9F3C4182C518050008B555A /* CameraViewModel.swift in Sources */,
-				B9F3C4142C515F1A008B555A /* CameraHome.swift in Sources */,
+				B997CCD32D4E081300F62B49 /* dataStorage.swift in Sources */,
 				B9D072C12C145BE700C5ECD8 /* CBUUIDS.swift in Sources */,
-				B9944A362CFE989100232FBB /* MainView.swift in Sources */,
 				B9944A342CFE983300232FBB /* MainPage.swift in Sources */,
-				B9B046A82C06DFA300096E8B /* DataViewView.swift in Sources */,
 				B98D69562C04569C00648D95 /* accountView.swift in Sources */,
 				B9D8D3DE2C522E1300A7B839 /* ARViewContainer.swift in Sources */,
 			);
@@ -479,7 +438,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9104F6F2BFDE63C000D4DDD /* USBInterfaceAppTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,8 +445,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9104F792BFDE63C000D4DDD /* USBInterfaceAppUITests.swift in Sources */,
-				B9104F7B2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -716,7 +672,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DD73662182F31C9D894E5858 /* Pods-ReskinBLEAppTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -738,7 +693,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 343E0790C0DA3CC1E2DF3D0C /* Pods-ReskinBLEAppTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -760,7 +714,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 58E1B0A80DFAF829946B0063 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9U23FMDF45;
@@ -780,7 +733,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F3F1F260C56E398FCAC64AE0 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9U23FMDF45;

@@ -41,7 +41,7 @@ struct ReadView : View{
                 .allowsHitTesting(appStatus.rgbdVideoStreaming == .off) // Disable interaction in streaming mode
             if appStatus.rgbdVideoStreaming == .off {
                 if(appStatus.ifTactileConnected){
-                    Text("tactile on")
+                    Text("bluetooth device connected")
                         .font(.footnote)
                         .foregroundColor(Color.white)
                         .frame(width: 500.0, height: 25.0)
@@ -49,7 +49,7 @@ struct ReadView : View{
                         .padding(.bottom, 675)
                         .ignoresSafeArea()
                 }else{
-                    Text("tactile off")
+                    Text("bluetooth device disconnected")
                         .font(.footnote)
                         .foregroundColor(Color.white)
                         .frame(width: 500.0, height: 25.0)

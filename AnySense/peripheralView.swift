@@ -76,7 +76,8 @@ struct PeripheralView: View {
                 .font(.body)
                 .frame(width: 500.0, height: 50)
                 .ignoresSafeArea()
-                .background(.white)
+                .foregroundStyle(.deviceWord)
+                .background(.deviceTop)
                 .padding(.top, 5)
             List(appStatus.peripherals, id: \.name) { peripheral in
                 singleBLEPeripheral(peripheral: peripheral, bluetoothManager: appStatus.sharedBluetoothManager)

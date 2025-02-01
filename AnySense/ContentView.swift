@@ -37,10 +37,10 @@ struct ContentView: View {
                 }) {
                     Image("StartButton")
                         .resizable()
-                        .frame(width: 150, height: 150)
+                        .frame(width: 200, height: 200)
                 }
                 .padding(.top, 10.0)
-                .background(.white)
+                .background(.background)
             }
         }else{
             MainPage()

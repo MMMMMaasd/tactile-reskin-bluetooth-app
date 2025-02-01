@@ -1,6 +1,6 @@
 //
 //  CBUUIDS.swift
-//  PolySense
+//  Anysense
 //
 //  Created by Michael on 2024/6/8.
 //

@@ -1,6 +1,6 @@
 //
 //  accountView.swift
-//  PolySense
+//  Anysense
 //
 //  Created by Michael on 2024/5/27.
 //
@@ -44,28 +44,6 @@ struct SettingsView : View{
                     .frame(width: 125) // Adjust width for the picker
                 }
                 .padding(.vertical, 5)
-            
-                // Tactile Data Reading Frequency Picker
-//                HStack {
-//                    VStack(alignment: .leading, spacing: 8) {
-//                        // Title and caption
-//                        Text("Tactile Data Time Interval")
-//                            .font(.body)
-//                            .foregroundColor(.primary)
-//                        Text("Time Period for tactile data reading")
-//                            .font(.caption)
-//                            .foregroundColor(.gray)
-//                    }
-//                    // Picker in an HStack
-//                    Spacer()
-//                    Picker("", selection: $appStatus.tactileRecordTimeInterval) {
-//                        ForEach(frequencyOptions, id: \.self) { option in
-//                            Text(option)
-//                        }
-//                    }
-//                    .pickerStyle(MenuPickerStyle()) // Dropdown style
-//                    .frame(width:80)
-//                }
                 .padding(.vertical, 5)
                 HStack{
                         Text("Buttons haptic feedback")

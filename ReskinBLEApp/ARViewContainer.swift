@@ -1,6 +1,6 @@
 //
 //  ARViewContainer.swift
-//  PolySense
+//  Anysense
 //
 //  Created by Michael on 2024/7/25.
 //
@@ -151,6 +151,16 @@ class ARViewModel: ObservableObject{
         self.ciContext = CIContext()
         self.startSession()
         
+        guard let audioDevice = AVCaptureDevice.default(for: .audio),
+              let audioDeviceInput = try? AVCaptureDeviceInput(device: audioDevice) else {
+              fatalError("Unable to access microphone.")
+        }
+        audioSession.addInput(audioDeviceInput)
+        
+        let audioOutput = AVCaptureAudioDataOutput()
+        if audioSession.canAddOutput(audioOutput) {
+            audioSession.addOutput(audioOutput)
+        }
         
         Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             if let currentFrame = self.session.currentFrame {
@@ -436,7 +446,11 @@ class ARViewModel: ObservableObject{
         assetWriter?.startWriting()
         startTime = CMTimeMake(value: Int64(CACurrentMediaTime() * 1000), timescale: 1000)
         assetWriter?.startSession(atSourceTime: startTime!)
-        audioSession.startRunning()
+//        audioSession.startRunning()
+        
+        DispatchQueue.global(qos: .background).async {
+            self.audioSession.startRunning()
+        }
         
         depthAssetWriter?.startWriting()
         depthAssetWriter?.startSession(atSourceTime: startTime!)
@@ -456,6 +470,8 @@ class ARViewModel: ObservableObject{
         audioSession.stopRunning()
         audioInput?.markAsFinished()
         videoInput?.markAsFinished()
+        
+        audioCaptureDelegate = nil
         
         assetWriter?.finishWriting {
             self.assetWriter = nil
@@ -555,22 +571,25 @@ class ARViewModel: ObservableObject{
             assetWriter?.add(audioInput!)
             
             pixelBufferAdapter = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput!, sourcePixelBufferAttributes: rgbAttributes)
-            guard let audioDevice = AVCaptureDevice.default(for: .audio),
-                  let audioDeviceInput = try? AVCaptureDeviceInput(device: audioDevice) else {
-                  fatalError("Unable to access microphone.")
-            }
-            audioSession.addInput(audioDeviceInput)
             
             // Configure audio output
-            let audioOutput = AVCaptureAudioDataOutput()
-            if audioSession.canAddOutput(audioOutput) {
-                audioSession.addOutput(audioOutput)
-            }
+//            let audioOutput = AVCaptureAudioDataOutput()
+//            if audioSession.canAddOutput(audioOutput) {
+//                audioSession.addOutput(audioOutput)
+//            }
 
-            // Set up an internal delegate
-            let audioQueue = DispatchQueue(label: "AudioProcessingQueue")
+//            // Set up an internal delegate
+//            let audioQueue = DispatchQueue(label: "AudioProcessingQueue")
+//            audioCaptureDelegate = AudioCaptureDelegate(writerInput: audioInput!)
+//            audioOutput.setSampleBufferDelegate(audioCaptureDelegate, queue: audioQueue)
+            // Update the audio delegate with the new audioWriterInput
             audioCaptureDelegate = AudioCaptureDelegate(writerInput: audioInput!)
-            audioOutput.setSampleBufferDelegate(audioCaptureDelegate, queue: audioQueue)
+
+            // Attach the new delegate to the existing AVCaptureAudioDataOutput
+            if let audioOutput = audioSession.outputs.first(where: { $0 is AVCaptureAudioDataOutput }) as? AVCaptureAudioDataOutput {
+                let audioQueue = DispatchQueue(label: "AudioProcessingQueue")
+                audioOutput.setSampleBufferDelegate(audioCaptureDelegate, queue: audioQueue)
+            }
             
             let depthVideoSettings: [String: Any] = [
                 AVVideoCodecKey: AVVideoCodecType.h264,
@@ -764,7 +783,6 @@ class ARViewModel: ObservableObject{
                     ciImageToRender = falseColorFilter.outputImage!
                 }
                 
-                print(self.combinedDepthTransform)
                 let transformedImage = ciImageToRender.transformed(by: self.combinedDepthTransform!) //.cropped(to: cropRect)
                 
                 if(self.isColorMapOpened) {
@@ -857,7 +875,10 @@ class AudioCaptureDelegate: NSObject, AVCaptureAudioDataOutputSampleBufferDelega
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         // Append audio sample buffer to the writer input
-        guard writerInput?.isReadyForMoreMediaData == true else { return }
+        guard writerInput?.isReadyForMoreMediaData == true else {
+            print("Not ready")
+            return
+        }
         writerInput?.append(sampleBuffer)
     }
 }

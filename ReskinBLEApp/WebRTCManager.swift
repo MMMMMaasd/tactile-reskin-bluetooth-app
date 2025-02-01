@@ -1,6 +1,6 @@
 //
 //  WebRTCManager.swift
-//  PolySense
+//  Anysense
 //
 //  Created by Raunaq Bhirangi on 1/11/25.
 //

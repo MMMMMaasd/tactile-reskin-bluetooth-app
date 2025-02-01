@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  PolySense
+//  Anysense
 //
 //  Created by Michael on 2024/5/22.
 //
@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         if appStatus.ifGoToNextPage == 0{
             VStack {
-                Image("PolySense_Logo")
+                Image("Anysense_Logo")
                     .resizable()
                     .frame(width:180.0, height: 220.0)
                     .cornerRadius(30.0)

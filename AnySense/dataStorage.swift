@@ -1,118 +1,12 @@
 //
-//  dataStroageView.swift
-//  Anysense
+//  dataStorage.swift
+//  AnySense
 //
-//  Created by Michael on 2024/5/27.
+//  Created by Michael on 2025/2/1.
 //
-
 import SwiftUI
 import UniformTypeIdentifiers
 import Foundation
-
-struct RecordView : View{
-    @State var showingExporter = false
-    @EnvironmentObject var appStatus : AppInformation
-    @State private var fileName = ""
-    var body : some View{
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        NavigationView{
-            VStack{
-                VStack{
-                    NavigationLink(destination: DataViewView()){
-                        HStack{
-                            Text("View recorded tactile data")
-                            Image(systemName: "doc.text")
-                        }
-                        .frame(width: 250.0, height: 45)
-                        .background(.viewButton)
-                        .cornerRadius(5)
-                    }
-                    Button(action: {
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
-                        let currentDateTime = dateFormatter.string(from: Date())
-                        fileName = "\(currentDateTime).txt"
-                        do {
-                            try createFile(fileName: fileName)
-                            print("File saved successfully at \(fileName)")
-                            let url = getDocumentsDirect().appendingPathComponent(fileName)
-                            if let existingContent = readDataFromTextFile() {
-                                do {
-                                    try existingContent.write(to: url, atomically: true, encoding: .utf8)
-                                } catch {
-                                    print("Error appending to file: \(error)")
-                                }
-                            }
-                            
-                            /*
-                            do{
-                                try appStatus.SharedDataString.write(to: url, atomically: true, encoding: .utf8)
-                            }catch{
-                                print("Error appending to file: \(error)")
-                            }
-                             */
-                        } catch {
-                            print("Error saving file: \(error)")
-                        }
-                        if(appStatus.hapticFeedbackLevel == "medium") {
-                            let impact = UIImpactFeedbackGenerator(style: .medium)
-                            impact.impactOccurred()
-                        } else if (appStatus.hapticFeedbackLevel == "heavy") {
-                            let impact = UIImpactFeedbackGenerator(style: .heavy)
-                            impact.impactOccurred()
-                        } else if (appStatus.hapticFeedbackLevel == "light") {
-                            let impact = UIImpactFeedbackGenerator(style: .light)
-                            impact.impactOccurred()
-                        }
-                        showingExporter.toggle()
-                    }, label: {
-                        Text("Export recorded tactile data")
-                        Image(systemName: "square.and.arrow.up.on.square")
-                    })
-                    .buttonStyle(.bordered)
-                }
-            }
-            .fileExporter(isPresented: $showingExporter, document: TextFile(url: (paths[0].appendingPathComponent(fileName)).path), contentType: .plainText) { result in
-                switch result {
-                case .success(let url):
-                    print("Saved to \(url)")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
-        }
-        }
-    /*
-    func getDocumentsDirect() -> URL{
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        print(paths[0].path)
-        return paths[0]
-    }
-     */
-    func createFile(fileName: String) throws {
-            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            let fileURL = documentsURL[0].appendingPathComponent(fileName)
-            try FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
-    }
-    
-    func getDocumentsDirect() -> URL{
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        print(paths[0].path)
-        return paths[0]
-    }
-    
-    func readDataFromTextFile() -> String? {
-        let url = getDocumentsDirect().appendingPathComponent("data.txt")
-        do {
-            let contents = try String(contentsOf: url, encoding: .utf8)
-            return contents
-        } catch {
-            print("Error reading file: \(error)")
-            return nil
-        }
-    }
-    
-}
 
 struct TextFile: FileDocument {
     // tell the system we support only plain text
@@ -311,11 +205,3 @@ struct SubLevelDirectory: FileDocument{
             return folderWrapper
         }
     }
-
-
-
-
-#Preview {
-    RecordView()
-        .environmentObject(AppInformation())
-}

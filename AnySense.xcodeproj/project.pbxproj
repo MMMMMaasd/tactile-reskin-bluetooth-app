@@ -59,13 +59,13 @@
 		4F96CB0EDE6B0F8A62632894 /* Pods_ReskinBLEApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReskinBLEApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		58E1B0A80DFAF829946B0063 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B1433E9D72A7D0A10A3BC6F6 /* Pods_ReskinBLEApp_ReskinBLEAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReskinBLEApp_ReskinBLEAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReskinBLEApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9104F5A2BFDE63A000D4DDD /* AnySense.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnySense.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9104F5D2BFDE63A000D4DDD /* USBInterfaceAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppApp.swift; sourceTree = "<group>"; };
 		B9104F5F2BFDE63A000D4DDD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B9104F612BFDE63C000D4DDD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B9104F6A2BFDE63C000D4DDD /* ReskinBLEAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReskinBLEAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9104F6A2BFDE63C000D4DDD /* AnySenseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnySenseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9104F6E2BFDE63C000D4DDD /* USBInterfaceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppTests.swift; sourceTree = "<group>"; };
-		B9104F742BFDE63C000D4DDD /* ReskinBLEAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReskinBLEAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9104F742BFDE63C000D4DDD /* AnySenseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnySenseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9104F782BFDE63C000D4DDD /* USBInterfaceAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppUITests.swift; sourceTree = "<group>"; };
 		B9104F7A2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBInterfaceAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B98D69512C04559900648D95 /* dataStroageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dataStroageView.swift; sourceTree = "<group>"; };
@@ -147,9 +147,9 @@
 			isa = PBXGroup;
 			children = (
 				B9944A272CFE8B4F00232FBB /* NSBluetoothAlwaysUsageDescription.txt */,
-				B9104F5C2BFDE63A000D4DDD /* ReskinBLEApp */,
-				B9104F6D2BFDE63C000D4DDD /* ReskinBLEAppTests */,
-				B9104F772BFDE63C000D4DDD /* ReskinBLEAppUITests */,
+				B9104F5C2BFDE63A000D4DDD /* AnySense */,
+				B9104F6D2BFDE63C000D4DDD /* AnySenseTests */,
+				B9104F772BFDE63C000D4DDD /* AnySenseUITests */,
 				B9104F5B2BFDE63A000D4DDD /* Products */,
 				15990DD6FB02C20E1E01F328 /* Pods */,
 				5D65C12116564382B1C848B3 /* Frameworks */,
@@ -159,14 +159,14 @@
 		B9104F5B2BFDE63A000D4DDD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */,
-				B9104F6A2BFDE63C000D4DDD /* ReskinBLEAppTests.xctest */,
-				B9104F742BFDE63C000D4DDD /* ReskinBLEAppUITests.xctest */,
+				B9104F5A2BFDE63A000D4DDD /* AnySense.app */,
+				B9104F6A2BFDE63C000D4DDD /* AnySenseTests.xctest */,
+				B9104F742BFDE63C000D4DDD /* AnySenseUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B9104F5C2BFDE63A000D4DDD /* ReskinBLEApp */ = {
+		B9104F5C2BFDE63A000D4DDD /* AnySense */ = {
 			isa = PBXGroup;
 			children = (
 				43A8A41A2D356CA8007DD3A5 /* USBManager.swift */,
@@ -190,32 +190,32 @@
 				B9944A352CFE988E00232FBB /* MainView.swift */,
 				B9DD2CBD2D442152008BF128 /* Preview Content */,
 			);
-			path = ReskinBLEApp;
+			path = AnySense;
 			sourceTree = "<group>";
 		};
-		B9104F6D2BFDE63C000D4DDD /* ReskinBLEAppTests */ = {
+		B9104F6D2BFDE63C000D4DDD /* AnySenseTests */ = {
 			isa = PBXGroup;
 			children = (
 				B9104F6E2BFDE63C000D4DDD /* USBInterfaceAppTests.swift */,
 			);
-			path = ReskinBLEAppTests;
+			path = AnySenseTests;
 			sourceTree = "<group>";
 		};
-		B9104F772BFDE63C000D4DDD /* ReskinBLEAppUITests */ = {
+		B9104F772BFDE63C000D4DDD /* AnySenseUITests */ = {
 			isa = PBXGroup;
 			children = (
 				B9104F782BFDE63C000D4DDD /* USBInterfaceAppUITests.swift */,
 				B9104F7A2BFDE63C000D4DDD /* USBInterfaceAppUITestsLaunchTests.swift */,
 			);
-			path = ReskinBLEAppUITests;
+			path = AnySenseUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B9104F592BFDE63A000D4DDD /* ReskinBLEApp */ = {
+		B9104F592BFDE63A000D4DDD /* AnySense */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEApp" */;
+			buildConfigurationList = B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "AnySense" */;
 			buildPhases = (
 				A42CDBF7C43F93BDD9CC0D8E /* [CP] Check Pods Manifest.lock */,
 				B9104F562BFDE63A000D4DDD /* Sources */,
@@ -230,14 +230,14 @@
 			fileSystemSynchronizedGroups = (
 				B9DD2CBD2D442152008BF128 /* Preview Content */,
 			);
-			name = ReskinBLEApp;
+			name = AnySense;
 			productName = USBInterfaceApp;
-			productReference = B9104F5A2BFDE63A000D4DDD /* ReskinBLEApp.app */;
+			productReference = B9104F5A2BFDE63A000D4DDD /* AnySense.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B9104F692BFDE63C000D4DDD /* ReskinBLEAppTests */ = {
+		B9104F692BFDE63C000D4DDD /* AnySenseTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B9104F812BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEAppTests" */;
+			buildConfigurationList = B9104F812BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "AnySenseTests" */;
 			buildPhases = (
 				BFD71C2404AEF1C415B28069 /* [CP] Check Pods Manifest.lock */,
 				B9104F662BFDE63C000D4DDD /* Sources */,
@@ -249,14 +249,14 @@
 			dependencies = (
 				B9104F6C2BFDE63C000D4DDD /* PBXTargetDependency */,
 			);
-			name = ReskinBLEAppTests;
+			name = AnySenseTests;
 			productName = USBInterfaceAppTests;
-			productReference = B9104F6A2BFDE63C000D4DDD /* ReskinBLEAppTests.xctest */;
+			productReference = B9104F6A2BFDE63C000D4DDD /* AnySenseTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		B9104F732BFDE63C000D4DDD /* ReskinBLEAppUITests */ = {
+		B9104F732BFDE63C000D4DDD /* AnySenseUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B9104F842BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEAppUITests" */;
+			buildConfigurationList = B9104F842BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "AnySenseUITests" */;
 			buildPhases = (
 				19E588D3E85EB7C643595B3F /* [CP] Check Pods Manifest.lock */,
 				B9104F702BFDE63C000D4DDD /* Sources */,
@@ -269,9 +269,9 @@
 			dependencies = (
 				B9104F762BFDE63C000D4DDD /* PBXTargetDependency */,
 			);
-			name = ReskinBLEAppUITests;
+			name = AnySenseUITests;
 			productName = USBInterfaceAppUITests;
-			productReference = B9104F742BFDE63C000D4DDD /* ReskinBLEAppUITests.xctest */;
+			productReference = B9104F742BFDE63C000D4DDD /* AnySenseUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -297,7 +297,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */;
+			buildConfigurationList = B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "AnySense" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -315,9 +315,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B9104F592BFDE63A000D4DDD /* ReskinBLEApp */,
-				B9104F692BFDE63C000D4DDD /* ReskinBLEAppTests */,
-				B9104F732BFDE63C000D4DDD /* ReskinBLEAppUITests */,
+				B9104F592BFDE63A000D4DDD /* AnySense */,
+				B9104F692BFDE63C000D4DDD /* AnySenseTests */,
+				B9104F732BFDE63C000D4DDD /* AnySenseUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -497,12 +497,12 @@
 /* Begin PBXTargetDependency section */
 		B9104F6C2BFDE63C000D4DDD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B9104F592BFDE63A000D4DDD /* ReskinBLEApp */;
+			target = B9104F592BFDE63A000D4DDD /* AnySense */;
 			targetProxy = B9104F6B2BFDE63C000D4DDD /* PBXContainerItemProxy */;
 		};
 		B9104F762BFDE63C000D4DDD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B9104F592BFDE63A000D4DDD /* ReskinBLEApp */;
+			target = B9104F592BFDE63A000D4DDD /* AnySense */;
 			targetProxy = B9104F752BFDE63C000D4DDD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -636,13 +636,13 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"ReskinBLEApp/Preview Content\"";
-				DEVELOPMENT_TEAM = 88NB9U5CK6;
+				DEVELOPMENT_ASSET_PATHS = "\"AnySense/Preview Content\"";
+				DEVELOPMENT_TEAM = 2S4WVQA973;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ReskinBLEApp/Info.plist;
+				INFOPLIST_FILE = AnySense/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AnySense;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "";
@@ -679,12 +679,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"ReskinBLEApp/Preview Content\"";
-				DEVELOPMENT_TEAM = 88NB9U5CK6;
+				DEVELOPMENT_ASSET_PATHS = "\"AnySense/Preview Content\"";
+				DEVELOPMENT_TEAM = 2S4WVQA973;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ReskinBLEApp/Info.plist;
+				INFOPLIST_FILE = AnySense/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AnySense;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "";
@@ -730,7 +730,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReskinBLEApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReskinBLEApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnySense.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AnySense";
 			};
 			name = Debug;
 		};
@@ -752,7 +752,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReskinBLEApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ReskinBLEApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnySense.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AnySense";
 			};
 			name = Release;
 		};
@@ -799,7 +799,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "ReskinBLEApp" */ = {
+		B9104F552BFDE63A000D4DDD /* Build configuration list for PBXProject "AnySense" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F7C2BFDE63C000D4DDD /* Debug */,
@@ -808,7 +808,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEApp" */ = {
+		B9104F7E2BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "AnySense" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F7F2BFDE63C000D4DDD /* Debug */,
@@ -817,7 +817,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B9104F812BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEAppTests" */ = {
+		B9104F812BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "AnySenseTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F822BFDE63C000D4DDD /* Debug */,
@@ -826,7 +826,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B9104F842BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "ReskinBLEAppUITests" */ = {
+		B9104F842BFDE63C000D4DDD /* Build configuration list for PBXNativeTarget "AnySenseUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B9104F852BFDE63C000D4DDD /* Debug */,

@@ -7,9 +7,11 @@
 
 import SwiftUI
 import CoreBluetooth
+import AVFoundation
 
 struct ContentView: View {
     @EnvironmentObject var appStatus : AppInformation
+    @State private var showPermissionAlert = false
     var body: some View {
         if appStatus.ifGoToNextPage == 0{
             VStack {
@@ -22,17 +24,23 @@ struct ContentView: View {
                     .multilineTextAlignment(.center)
                     .bold()
                 Button(action: {
-                    appStatus.initializeARSession()
-                    appStatus.ifGoToNextPage = 1
-                    if(appStatus.hapticFeedbackLevel == "medium") {
-                        let impact = UIImpactFeedbackGenerator(style: .medium)
-                        impact.impactOccurred()
-                    } else if (appStatus.hapticFeedbackLevel == "heavy") {
-                        let impact = UIImpactFeedbackGenerator(style: .heavy)
-                        impact.impactOccurred()
-                    } else if (appStatus.hapticFeedbackLevel == "light") {
-                        let impact = UIImpactFeedbackGenerator(style: .light)
-                        impact.impactOccurred()
+                    appStatus.checkCameraPermissions { granted in
+                        if granted {
+                            appStatus.initializeARSession()
+                            appStatus.ifGoToNextPage = 1
+                            if appStatus.hapticFeedbackLevel == "medium" {
+                                let impact = UIImpactFeedbackGenerator(style: .medium)
+                                impact.impactOccurred()
+                            } else if appStatus.hapticFeedbackLevel == "heavy" {
+                                let impact = UIImpactFeedbackGenerator(style: .heavy)
+                                impact.impactOccurred()
+                            } else if appStatus.hapticFeedbackLevel == "light" {
+                                let impact = UIImpactFeedbackGenerator(style: .light)
+                                impact.impactOccurred()
+                            }
+                        } else {
+                            showPermissionAlert = true
+                        }
                     }
                 }) {
                     Image("StartButton")
@@ -41,6 +49,18 @@ struct ContentView: View {
                 }
                 .padding(.top, 10.0)
                 .background(.background)
+            }
+            .alert(isPresented: $showPermissionAlert) {
+                Alert(
+                    title: Text("Camera Access Required"),
+                    message: Text("Please enable camera access in Settings to use AR features."),
+                    primaryButton: .default(Text("Settings"), action: {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url)
+                        }
+                    }),
+                    secondaryButton: .cancel()
+                )
             }
         }else{
             MainPage()
@@ -72,6 +92,22 @@ class AppInformation : ObservableObject{
     
     func initializeARSession() {
         sharedARViewModel.startSession()
+    }
+    
+    func checkCameraPermissions(completion: @escaping (Bool) -> Void) {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        switch status {
+        case .authorized:
+            completion(true)
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                DispatchQueue.main.async {
+                    completion(granted)
+                }
+            }
+        default:
+            completion(false)
+        }
     }
 }
 

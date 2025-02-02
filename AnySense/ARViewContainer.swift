@@ -198,6 +198,11 @@ class ARViewModel: ObservableObject{
     }
 
     func startSession() {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+            guard status == .authorized else {
+                print("Camera permissions not granted.")
+                return
+        }
         // Create and configure the AR session configuration
         let configuration = ARWorldTrackingConfiguration()
         

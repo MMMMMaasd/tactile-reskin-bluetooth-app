@@ -41,13 +41,8 @@ mail address: zb2253@nyu.edu
 Substitute address: michkoo@163.com
 
 App designed by NYU CILVR Tactile Research Group:
-Zeyu (Michael) Bian
-Raunaq Bhirangi
-Venkatesh Pattabiraman
-Haritheja Etukuru
-Mahi Shafiullah
-Enes Erciyes
-
+Raunaq Bhirangi, Zeyu (Michael) Bian, Venkatesh Pattabiraman, Haritheja Etukuru, Mehmet Enes Erciyes, Nur Muhammad Mahi Shafiullah, Lerrel Pinto 
+ 
 Special thanks to:
 Professor. Lerrel Pinto
 

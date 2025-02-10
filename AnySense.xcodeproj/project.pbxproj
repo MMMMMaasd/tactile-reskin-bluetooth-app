@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -73,10 +73,6 @@
 		E89530D391651A7B45F138FC /* Pods_ReskinBLEAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReskinBLEAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3F1F260C56E398FCAC64AE0 /* Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig"; path = "Target Support Files/Pods-ReskinBLEApp-ReskinBLEAppUITests/Pods-ReskinBLEApp-ReskinBLEAppUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		B9DD2CBD2D442152008BF128 /* Preview Content */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Preview Content"; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B9104F572BFDE63A000D4DDD /* Frameworks */ = {
@@ -168,7 +164,6 @@
 				B98D69632C04911F00648D95 /* Info.plist */,
 				B9BDD0642C573EA20061475C /* peripheralView.swift */,
 				B9B046AB2C0DE7D000096E8B /* TryReadDataView.swift */,
-				B9DD2CBD2D442152008BF128 /* Preview Content */,
 			);
 			path = AnySense;
 			sourceTree = "<group>";
@@ -189,9 +184,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				B9DD2CBD2D442152008BF128 /* Preview Content */,
 			);
 			name = AnySense;
 			productName = USBInterfaceApp;
@@ -592,7 +584,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"AnySense/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 2S4WVQA973;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -635,7 +627,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"AnySense/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 2S4WVQA973;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;

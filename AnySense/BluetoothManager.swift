@@ -57,15 +57,22 @@ extension BluetoothManager: CBCentralManagerDelegate{
         //centralManager?.scanForPeripherals(withServices: [CBUUIDs.BLEService_UUID])
     }
     func disconnectFromDevice () {
+        if let peripheral = matchedPeripheral {
+            centralManager?.cancelPeripheralConnection(peripheral)
+            matchedPeripheral = nil
+            ifConnected = false
+        }
+        /*
         if matchedPeripheral != nil {
         centralManager?.cancelPeripheralConnection(matchedPeripheral!)
         }
         ifConnected = false
+         */
      }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber){
-        matchedPeripheral = peripheral
-        matchedPeripheral.delegate = self
+        // matchedPeripheral = peripheral
+        // matchedPeripheral.delegate = self
         //print("Peripheral Discovered: \(peripheral)")
         //print("Peripheral name: \(String(describing: peripheral.name))")
         //print ("Advertisement Data : \(advertisementData)")
@@ -81,13 +88,27 @@ extension BluetoothManager: CBCentralManagerDelegate{
     }
     
     func connectToPeripheral(peripheral: CBPeripheral){
+        if matchedPeripheral != nil && matchedPeripheral != peripheral {
+            centralManager?.cancelPeripheralConnection(matchedPeripheral!)
+        }
+        matchedPeripheral = peripheral
+        peripheral.delegate = self
         centralManager?.connect(peripheral, options: nil)
-        ifConnected = true
+        /*
+                           centralManager?.connect(peripheral, options: nil)
+                           ifConnected = true
+                           */
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
        //matchedPeripheral.discoverServices(nil)
+       ifConnected = true
        matchedPeripheral.discoverServices([CBUUIDs.BLEService_UUID])
+    }
+    
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        ifConnected = false
+        matchedPeripheral = nil
     }
 }
 

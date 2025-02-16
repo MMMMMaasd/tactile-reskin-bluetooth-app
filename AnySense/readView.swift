@@ -197,16 +197,8 @@ struct ReadView : View{
                                 showingAlert = true
                                 self.activeAlert = .second
                             }
-                            if(appStatus.hapticFeedbackLevel == "medium") {
-                                let impact = UIImpactFeedbackGenerator(style: .medium)
-                                impact.impactOccurred()
-                            } else if (appStatus.hapticFeedbackLevel == "heavy") {
-                                let impact = UIImpactFeedbackGenerator(style: .heavy)
-                                impact.impactOccurred()
-                            } else if (appStatus.hapticFeedbackLevel == "light") {
-                                let impact = UIImpactFeedbackGenerator(style: .light)
-                                impact.impactOccurred()
-                            }}){
+                            UIImpactFeedbackGenerator(style: appStatus.hapticFeedbackLevel).impactOccurred()
+                        }){
                                 Image(systemName: "square.and.arrow.up.circle.fill")
                                     .resizable()
                                     .frame(height: 40)
@@ -232,16 +224,8 @@ struct ReadView : View{
                                 showingAlert = true
                                 self.activeAlert = .second
                             }
-                            if(appStatus.hapticFeedbackLevel == "medium") {
-                                let impact = UIImpactFeedbackGenerator(style: .medium)
-                                impact.impactOccurred()
-                            } else if (appStatus.hapticFeedbackLevel == "heavy") {
-                                let impact = UIImpactFeedbackGenerator(style: .heavy)
-                                impact.impactOccurred()
-                            } else if (appStatus.hapticFeedbackLevel == "light") {
-                                let impact = UIImpactFeedbackGenerator(style: .light)
-                                impact.impactOccurred()
-                            }}){
+                            UIImpactFeedbackGenerator(style: appStatus.hapticFeedbackLevel).impactOccurred()
+                        }){
                                 Image(systemName: "trash.circle.fill")
                                     .resizable()
                                     .frame(height: 40)
@@ -366,17 +350,7 @@ struct ReadView : View{
                 }
             }
         }
-        
-        if(appStatus.hapticFeedbackLevel == "medium") {
-            let impact = UIImpactFeedbackGenerator(style: .medium)
-            impact.impactOccurred()
-        } else if (appStatus.hapticFeedbackLevel == "heavy") {
-            let impact = UIImpactFeedbackGenerator(style: .heavy)
-            impact.impactOccurred()
-        } else if (appStatus.hapticFeedbackLevel == "light") {
-            let impact = UIImpactFeedbackGenerator(style: .light)
-            impact.impactOccurred()
-        }
+        UIImpactFeedbackGenerator(style: appStatus.hapticFeedbackLevel).impactOccurred()
                     
     }
 
@@ -399,16 +373,7 @@ struct ReadView : View{
             print("Flash is not available")
         }
         openFlash = !openFlash
-        if(appStatus.hapticFeedbackLevel == "medium") {
-            let impact = UIImpactFeedbackGenerator(style: .medium)
-            impact.impactOccurred()
-        } else if (appStatus.hapticFeedbackLevel == "heavy") {
-            let impact = UIImpactFeedbackGenerator(style: .heavy)
-            impact.impactOccurred()
-        } else if (appStatus.hapticFeedbackLevel == "light") {
-            let impact = UIImpactFeedbackGenerator(style: .light)
-            impact.impactOccurred()
-        }
+        UIImpactFeedbackGenerator(style: appStatus.hapticFeedbackLevel).impactOccurred()
     }
 
         

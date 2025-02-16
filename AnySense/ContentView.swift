@@ -29,16 +29,7 @@ struct ContentView: View {
                         if granted {
                             appStatus.initializeARSession()
                             appStatus.ifGoToNextPage = 1
-                            if appStatus.hapticFeedbackLevel == "medium" {
-                                let impact = UIImpactFeedbackGenerator(style: .medium)
-                                impact.impactOccurred()
-                            } else if appStatus.hapticFeedbackLevel == "heavy" {
-                                let impact = UIImpactFeedbackGenerator(style: .heavy)
-                                impact.impactOccurred()
-                            } else if appStatus.hapticFeedbackLevel == "light" {
-                                let impact = UIImpactFeedbackGenerator(style: .light)
-                                impact.impactOccurred()
-                            }
+                            UIImpactFeedbackGenerator(style: appStatus.hapticFeedbackLevel).impactOccurred()
                         } else {
                             showPermissionAlert = true
                         }
@@ -74,7 +65,7 @@ class AppInformation : ObservableObject{
     @Published var ifGoToNextPage = 0
     @Published var ifAllowedRead = 0
     @Published var animationFPS: Double = 30.0
-    @Published var hapticFeedbackLevel: String = "medium"
+    @Published var hapticFeedbackLevel: UIImpactFeedbackGenerator.FeedbackStyle = .medium
     @Published var rgbdVideoStreaming: StreamingMode = .off
     @Published var gridProjectionTrigger: String = "off"
     @Published var colorMapTrigger: Bool = false

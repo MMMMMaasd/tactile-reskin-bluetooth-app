@@ -44,16 +44,7 @@ struct singleBLEPeripheral: View {
                         appStatus.ifTactileConnected = false
                         bluetoothManager.disconnectFromDevice()
                     }
-                    if(appStatus.hapticFeedbackLevel == "medium") {
-                        let impact = UIImpactFeedbackGenerator(style: .medium)
-                        impact.impactOccurred()
-                    } else if (appStatus.hapticFeedbackLevel == "heavy") {
-                        let impact = UIImpactFeedbackGenerator(style: .heavy)
-                        impact.impactOccurred()
-                    } else if (appStatus.hapticFeedbackLevel == "light") {
-                        let impact = UIImpactFeedbackGenerator(style: .light)
-                        impact.impactOccurred()
-                    }
+                    UIImpactFeedbackGenerator(style: appStatus.hapticFeedbackLevel).impactOccurred()
                 }) {
                     if currentDeviceConnectStatus {
                         Text("Disconnect")

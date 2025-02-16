@@ -52,10 +52,9 @@ struct SettingsView : View{
 //                        .padding(.leading, 20)
                         Spacer()
                         Picker("", selection: $appStatus.hapticFeedbackLevel) {
-                            Text("medium").tag("medium")
-                            Text("heavy").tag("heavy")
-                            Text("light").tag("light")
-                            Text("none").tag("none")
+                            Text("medium").tag(UIImpactFeedbackGenerator.FeedbackStyle.medium)
+                            Text("heavy").tag(UIImpactFeedbackGenerator.FeedbackStyle.heavy)
+                            Text("light").tag(UIImpactFeedbackGenerator.FeedbackStyle.light)
                         }
                         .pickerStyle(MenuPickerStyle()) // Dropdown style
                         .frame(width: 110)

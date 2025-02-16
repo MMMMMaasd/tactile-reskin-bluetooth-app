@@ -32,14 +32,10 @@ struct singleBLEPeripheral: View {
                     if !currentDeviceConnectStatus{
                         bluetoothManager.connectToPeripheral(peripheral: peripheral)
                         currentDeviceConnectStatus = true
-                        if(appStatus.sharedBluetoothManager.peripheralUUIDs[peripheral] == [CBUUIDs.BLEService_UUID]){
-                            appStatus.ifTactileConnected = true
-                        }
+                        appStatus.ifTactileConnected = true
                     }else{
                         currentDeviceConnectStatus = false
-                        if(appStatus.sharedBluetoothManager.peripheralUUIDs[peripheral] == [CBUUIDs.BLEService_UUID]){
-                            appStatus.ifTactileConnected = false
-                        }
+                        appStatus.ifTactileConnected = false
                         bluetoothManager.disconnectFromDevice()
                     }
                     if(appStatus.hapticFeedbackLevel == "medium") {

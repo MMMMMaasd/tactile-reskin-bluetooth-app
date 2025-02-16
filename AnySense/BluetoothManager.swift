@@ -54,7 +54,6 @@ extension BluetoothManager: CBCentralManagerDelegate{
     }
     func scan() -> Void{
         centralManager?.scanForPeripherals(withServices: nil)
-        //centralManager?.scanForPeripherals(withServices: [CBUUIDs.BLEService_UUID])
     }
     func disconnectFromDevice () {
         if let peripheral = matchedPeripheral {
@@ -103,7 +102,7 @@ extension BluetoothManager: CBCentralManagerDelegate{
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
        //matchedPeripheral.discoverServices(nil)
        ifConnected = true
-       matchedPeripheral.discoverServices([CBUUIDs.BLEService_UUID])
+       matchedPeripheral.discoverServices(nil)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
@@ -137,25 +136,20 @@ extension BluetoothManager: CBPeripheralDelegate{
           }
 
           print("Found \(characteristics.count) characteristics.")
-
+//        NOTE: We will simply take the first Rx characteristic and use it for reading
           for characteristic in characteristics {
+              if characteristic.properties.contains(.notify) || characteristic.properties.contains(.indicate) {
+                  print("This characteristic is Rx (Receiving data)")
+                  rxCharacteristic = characteristic
+                  peripheral.setNotifyValue(true, for: rxCharacteristic!)
+                  peripheral.readValue(for: characteristic)
 
-            if characteristic.uuid.isEqual(CBUUIDs.BLE_Characteristic_uuid_Rx)  {
-
-              rxCharacteristic = characteristic
-
-              peripheral.setNotifyValue(true, for: rxCharacteristic!)
-              peripheral.readValue(for: characteristic)
-
-              print("RX Characteristic: \(rxCharacteristic.uuid)")
-            }
-
-            if characteristic.uuid.isEqual(CBUUIDs.BLE_Characteristic_uuid_Tx){
-              
-              txCharacteristic = characteristic
-              
-              print("TX Characteristic: \(txCharacteristic.uuid)")
-            }
+                  print("RX Characteristic: \(rxCharacteristic.uuid)")
+              }
+              if characteristic.properties.contains(.write) || characteristic.properties.contains(.writeWithoutResponse) {
+                  print("This characteristic is Tx (Transmitting data)")
+//                  TODO: Code for handling Tx characteristics goes here
+              }
           }
     }
     
@@ -179,13 +173,9 @@ extension BluetoothManager: CBPeripheralManagerDelegate {
             print("Peripheral Is Powered Off.")
         @unknown default:
             print("Error")
+        }
     }
-  }
-    /*
-    func sendDataToRead() -> String? {
-        return recordString
-    }
-    */
+
     func startRecording(targetURL: String, targetFile: String, fps: Double) {
         let url = getDocumentsDirect().appendingPathComponent(targetURL)
         let targeturl = url.appendingPathComponent(targetFile)

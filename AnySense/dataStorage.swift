@@ -59,15 +59,6 @@ struct VideoFile: FileDocument{
         
     // This is called when the system wants to read the previously saved data
     init(configuration: ReadConfiguration) throws {
-        /*
-        if let data = configuration.file.regularFileContents {
-            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("mp4")
-            try data.write(to: tempURL)
-            self.url = tempURL
-        } else {
-            throw CocoaError(.fileReadUnknown)
-        }
-         */
         self.url = URL(fileURLWithPath: "")
     }
         

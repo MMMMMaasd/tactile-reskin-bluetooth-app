@@ -10,6 +10,7 @@ import SwiftUI
 struct MainPage: View {
     @EnvironmentObject private var appStatus : AppInformation
     @EnvironmentObject private var bluetoothManager: BluetoothManager
+    let arViewModel: ARViewModel
     // Start the default page be the read page
     @State private var selection = 1
     
@@ -22,7 +23,7 @@ struct MainPage: View {
                 }
                     .tag(0)
                 
-                ReadView()
+                ReadView(arViewModel: arViewModel)
                     .tabItem {
                         Label("read", systemImage: "dot.scope")
                 }
@@ -44,6 +45,6 @@ struct MainPage: View {
 }
 
 #Preview {
-    MainPage()
+    MainPage(arViewModel: ARViewModel())
         .environmentObject(AppInformation())
 }

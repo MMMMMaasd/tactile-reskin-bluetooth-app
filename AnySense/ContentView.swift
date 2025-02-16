@@ -12,6 +12,7 @@ import AVFoundation
 struct ContentView: View {
     @EnvironmentObject var appStatus : AppInformation
     @EnvironmentObject var bluetoothManager: BluetoothManager
+    @StateObject private var arViewModel = ARViewModel()
     @State private var showPermissionAlert = false
     var body: some View {
         if appStatus.ifGoToNextPage == 0{
@@ -27,7 +28,8 @@ struct ContentView: View {
                 Button(action: {
                     appStatus.checkCameraPermissions { granted in
                         if granted {
-                            appStatus.initializeARSession()
+                            arViewModel.startSession()
+//                            appStatus.initializeARSession()
                             appStatus.ifGoToNextPage = 1
                             UIImpactFeedbackGenerator(style: appStatus.hapticFeedbackLevel).impactOccurred()
                         } else {
@@ -55,9 +57,11 @@ struct ContentView: View {
                 )
             }
         }else{
-            MainPage()
+            MainPage(arViewModel: arViewModel)
         }
     }
+    
+        
 }
 
 
@@ -70,17 +74,7 @@ class AppInformation : ObservableObject{
     @Published var gridProjectionTrigger: String = "off"
     @Published var colorMapTrigger: Bool = false
     @Published var ifTactileConnected: Bool = false
-    @Published var sharedARViewModel: ARViewModel!
     @Published var ifRecordedOnce: Bool = false
-    init() {
-        // Make sure AR model initialized before the app entering main page
-//        self.sharedBluetoothManager = BluetoothManager(appStatus: self)
-        self.sharedARViewModel = ARViewModel()
-    }
-    
-    func initializeARSession() {
-        sharedARViewModel.startSession()
-    }
     
     func checkCameraPermissions(completion: @escaping (Bool) -> Void) {
         let status = AVCaptureDevice.authorizationStatus(for: .video)

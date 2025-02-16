@@ -20,6 +20,7 @@ enum ActiveAlert {
 struct ReadView : View{
     @EnvironmentObject var appStatus : AppInformation
     @EnvironmentObject var bluetoothManager: BluetoothManager
+    @ObservedObject var arViewModel: ARViewModel
     @State private var isReading = false
     @State private var displayLink: CADisplayLink?
     @State var showingAlert : Bool = false
@@ -33,7 +34,7 @@ struct ReadView : View{
     var body : some View{
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         ZStack{
-            ARViewContainer(session: appStatus.sharedARViewModel.session)
+            ARViewContainer(session: arViewModel.session)
                 .edgesIgnoringSafeArea(.all)
                 .frame(width: 400.0, height: 550.0)
                 // .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
@@ -301,8 +302,8 @@ struct ReadView : View{
     }
     
     private func initCode() {
-        appStatus.sharedARViewModel.isColorMapOpened = appStatus.colorMapTrigger
-        appStatus.sharedARViewModel.userFPS = appStatus.animationFPS
+        arViewModel.isColorMapOpened = appStatus.colorMapTrigger
+        arViewModel.userFPS = appStatus.animationFPS
     }
     
     private func handleStreamingModeChange(from oldMode: StreamingMode, to newMode: StreamingMode) {
@@ -311,23 +312,23 @@ struct ReadView : View{
         }
         switch (oldMode, newMode) {
         case (_, .off):
-            appStatus.sharedARViewModel.killUSBStreaming()
+            arViewModel.killUSBStreaming()
             print("Switched to \(newMode): ARView is active.")
 
         case (_, .wifi):
             print("NOT IMPLEMENTED: Switched to \(newMode): ARView removed, streaming started.")
         case (_, .usb):
             print("Switched to \(newMode): ARView is hidden.")
-            appStatus.sharedARViewModel.setupUSBStreaming()
+            arViewModel.setupUSBStreaming()
         }
     }
     
     func toggleRecording(mode: StreamingMode) {
         isReading = !isReading
-        if appStatus.sharedARViewModel.isOpen {
+        if arViewModel.isOpen {
             if mode == .off {
                 if isReading {
-                    fileSetNames = appStatus.sharedARViewModel.startRecording()
+                    fileSetNames = arViewModel.startRecording()
                     if(bluetoothManager.ifConnected){
                         startRecordingBT(targetURL: fileSetNames[6], targetFile: fileSetNames[7])
                     }
@@ -338,15 +339,15 @@ struct ReadView : View{
                         stopRecordingBT()
                         print("This stop recording is when shared bluetooth manager is connected")
                     }
-                    appStatus.sharedARViewModel.stopRecording()
+                    arViewModel.stopRecording()
                     
                 }
             }
             else if mode == .usb {
                 if isReading {
-                    appStatus.sharedARViewModel.startUSBStreaming()
+                    arViewModel.startUSBStreaming()
                 } else {
-                    appStatus.sharedARViewModel.stopUSBStreaming()
+                    arViewModel.stopUSBStreaming()
                 }
             }
         }
@@ -421,7 +422,7 @@ struct ReadView : View{
     
     
     #Preview {
-        ReadView()
+        ReadView(arViewModel: ARViewModel())
             .environmentObject(AppInformation())
     }
     

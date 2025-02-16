@@ -18,18 +18,13 @@ class BluetoothManager :  NSObject, ObservableObject{
     private var BTFileHandle: FileHandle?
     @State public var recordString: String = ""
     @Published var ifConnected: Bool = false
-    @Published var peripheralsNames: [String] = []
-    // Dictionary that mapped CBUUID of each peripheral to scanned peripheral
-    @Published var peripheralUUIDs: [CBPeripheral: [CBUUID]] = [:]
-    
-    private var appStatus: AppInformation
-    
-    init(appStatus: AppInformation){
-        self.appStatus = appStatus
-        //self.appStatus = AppInformation()
+    @Published var discoveredPeripherals: [UUID: CBPeripheral] = [:]
+
+    override init() {
         super.init()
         self.centralManager = CBCentralManager(delegate: self, queue: .main)
     }
+
 }
 
 extension BluetoothManager: CBCentralManagerDelegate{
@@ -70,20 +65,39 @@ extension BluetoothManager: CBCentralManagerDelegate{
      }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber){
-        // matchedPeripheral = peripheral
-        // matchedPeripheral.delegate = self
-        //print("Peripheral Discovered: \(peripheral)")
-        //print("Peripheral name: \(String(describing: peripheral.name))")
-        //print ("Advertisement Data : \(advertisementData)")
-        //centralManager?.stopScan()
+        guard peripheral.name != nil else { return }
+        let peripheralUUID = peripheral.identifier
         
-        if !self.appStatus.peripherals.contains(peripheral) && !peripheralsNames.contains(peripheral.name ?? "unnamed device"){
-            self.appStatus.peripherals.append(peripheral)
-            self.peripheralsNames.append(peripheral.name ?? "unnamed device")
-            if let detectedUUID = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
-                peripheralUUIDs[peripheral] = detectedUUID
-            }
+        if discoveredPeripherals[peripheralUUID] == nil {
+            discoveredPeripherals[peripheralUUID] = peripheral
         }
+
+    }
+    
+    func connectToPeripheral(withUUID uuid: UUID, completion: @escaping (Result<CBPeripheral, Error>) -> Void) {
+        guard let central = centralManager else {
+            completion(.failure(NSError(domain: "Bluetooth", code: 1, userInfo: [NSLocalizedDescriptionKey: "Central Manager is nil"])))
+            return
+        }
+        
+        // Retrieve known peripherals (helps avoid stale references)
+        let knownPeripherals = central.retrievePeripherals(withIdentifiers: [uuid])
+        
+        guard let peripheral = knownPeripherals.first ?? discoveredPeripherals[uuid] else {
+            completion(.failure(NSError(domain: "Bluetooth", code: 2, userInfo: [NSLocalizedDescriptionKey: "Peripheral not found"])))
+            return
+        }
+
+        // Disconnect if already connected to another peripheral
+        if let currentPeripheral = matchedPeripheral, currentPeripheral.identifier != peripheral.identifier {
+            print("🔄 Disconnecting previous peripheral: \(currentPeripheral.name ?? "Unknown")")
+            central.cancelPeripheralConnection(currentPeripheral)
+        }
+        
+        matchedPeripheral = peripheral
+        peripheral.delegate = self
+        
+        central.connect(peripheral, options: nil)
     }
     
     func connectToPeripheral(peripheral: CBPeripheral){
@@ -151,6 +165,13 @@ extension BluetoothManager: CBPeripheralDelegate{
 //                  TODO: Code for handling Tx characteristics goes here
               }
           }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        if let error = error {
+            print("Error updating characteristic: \(error.localizedDescription)")
+            return
+        }
     }
     
 }

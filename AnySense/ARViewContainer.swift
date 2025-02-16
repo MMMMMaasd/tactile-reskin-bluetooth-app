@@ -161,35 +161,42 @@ class ARViewModel: ObservableObject{
         if audioSession.canAddOutput(audioOutput) {
             audioSession.addOutput(audioOutput)
         }
-        
+        var rgb_init = false
+        var depth_init = false
+        let flipTransform = (self.orientation.isPortrait) ? CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1) : .identity
         Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
             if let currentFrame = self.session.currentFrame {
-                timer.invalidate() // Stop the timer once the frame is available
-                let rgbPixelBuffer = currentFrame.capturedImage
-                
-                let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
-                var normalizeTransform = CGAffineTransform(scaleX: 1.0/rgbSize.width, y: 1.0/rgbSize.height)
-                let flipTransform = (self.orientation.isPortrait) ? CGAffineTransform(scaleX: -1, y: -1).translatedBy(x: -1, y: -1) : .identity
-                let displayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: self.viewPortSize)
-                let toViewPortTransform = CGAffineTransform(scaleX: self.viewPortSize.width, y: self.viewPortSize.height)
-
-                self.combinedRGBTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
-                
-                // Retry mechanism for depth map initialization
-                Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { depthTimer in
+//                timer.invalidate() // Stop the timer once the frame is available
+                if !rgb_init{
+                    let rgbPixelBuffer = currentFrame.capturedImage
+                    
+                    let rgbSize = CGSize(width: CVPixelBufferGetWidth(rgbPixelBuffer), height: CVPixelBufferGetHeight(rgbPixelBuffer))
+                    let normalizeTransform = CGAffineTransform(scaleX: 1.0/rgbSize.width, y: 1.0/rgbSize.height)
+                    
+                    let displayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: self.viewPortSize)
+                    let toViewPortTransform = CGAffineTransform(scaleX: self.viewPortSize.width, y: self.viewPortSize.height)
+                    
+                    self.combinedRGBTransform = normalizeTransform.concatenating(flipTransform).concatenating(displayTransform).concatenating(toViewPortTransform)
+                    rgb_init = true
+                }
+                if !depth_init {
                     if let depthPixelBuffer = currentFrame.sceneDepth?.depthMap {
                         // Stop the depth initialization timer once depthMap is available
-                        depthTimer.invalidate()
+//                        depthTimer.invalidate()
+                        if rgb_init {
+                            timer.invalidate()
+                        }
                         
                         let depthSize = CGSize(width: CVPixelBufferGetWidth(depthPixelBuffer), height: CVPixelBufferGetHeight(depthPixelBuffer))
-                        normalizeTransform = CGAffineTransform(scaleX: 1.0 / depthSize.width, y: 1.0 / depthSize.height)
+                        let normalizeTransform = CGAffineTransform(scaleX: 1.0 / depthSize.width, y: 1.0 / depthSize.height)
                         
                         let depthDisplayTransform = currentFrame.displayTransform(for: self.orientation, viewportSize: self.depthViewPortSize)
                         let toDepthViewPortTransform = CGAffineTransform(scaleX: self.depthViewPortSize.width, y: self.depthViewPortSize.height)
                         
                         self.combinedDepthTransform = normalizeTransform.concatenating(flipTransform).concatenating(depthDisplayTransform).concatenating(toDepthViewPortTransform)
+                        depth_init = true
                     } else {
-                        print("Depth map unavailable yet. Retrying initialization")
+                        print("Depth map unavailable. Retrying initialization")
                     }
                 }
             }

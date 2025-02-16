@@ -9,28 +9,34 @@ import SwiftUI
 import CoreBluetooth
 
 struct singleBLEPeripheral: View {
-    @ObservedObject private var bluetoothManager: BluetoothManager
+    @EnvironmentObject var bluetoothManager: BluetoothManager
     @EnvironmentObject var appStatus: AppInformation
     @State private var currentDeviceConnectStatus = false
     @State private var connectAlert : Bool = false
-    @State private var serviceUUID : [CBUUID]
-    let peripheral: CBPeripheral
-    
-    init(peripheral: CBPeripheral, bluetoothManager: BluetoothManager) {
-        self.peripheral = peripheral
-        self.bluetoothManager = bluetoothManager
-        self.serviceUUID = []
-
-    }
+    let name: String
+    let uuid: UUID
+//    let peripheral: CBPeripheral
+//    
+//    init(peripheral: CBPeripheral) {
+//        self.peripheral = peripheral
+//    }
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-                Text(peripheral.name ?? "unnamed device")
+                Text(name)
                     .font(.headline)
                 Spacer()
             if(!appStatus.ifTactileConnected || currentDeviceConnectStatus){
                 Button(action: {
                     if !currentDeviceConnectStatus{
-                        bluetoothManager.connectToPeripheral(peripheral: peripheral)
+//                        bluetoothManager.connectToPeripheral(peripheral: peripheral)
+                        bluetoothManager.connectToPeripheral(withUUID: uuid) { result in
+                            switch result {
+                            case .success(let connectedPeripheral):
+                                print("✅ Successfully connected to: \(connectedPeripheral.name ?? "Unknown Device")")
+                            case .failure(let error):
+                                print("❌ Connection failed: \(error.localizedDescription)")
+                            }
+                        }
                         currentDeviceConnectStatus = true
                         appStatus.ifTactileConnected = true
                     }else{
@@ -66,6 +72,7 @@ struct singleBLEPeripheral: View {
 
 struct PeripheralView: View {
     @EnvironmentObject var appStatus : AppInformation
+    @EnvironmentObject var bluetoothManager: BluetoothManager
     var body: some View {
         VStack{
             Text("Devices Detected")
@@ -75,15 +82,18 @@ struct PeripheralView: View {
                 .foregroundStyle(.deviceWord)
                 .background(.deviceTop)
                 .padding(.top, 5)
-            List(appStatus.peripherals, id: \.name) { peripheral in
-                singleBLEPeripheral(peripheral: peripheral, bluetoothManager: appStatus.sharedBluetoothManager)
+            List(Array(bluetoothManager.discoveredPeripherals.keys), id: \.self) { uuid in
+                if let peripheral = bluetoothManager.discoveredPeripherals[uuid] {
+                    singleBLEPeripheral(
+                        name: peripheral.name ?? "Unknown Device",
+                        uuid: peripheral.identifier
+                    )
+                }
             }
-            
         }
     }
 }
 
 #Preview {
-    PeripheralView()
-        .environmentObject(AppInformation())
+    PeripheralView().environmentObject(AppInformation())
 }

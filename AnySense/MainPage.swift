@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct MainPage: View {
-    @EnvironmentObject var appStatus : AppInformation
+    @EnvironmentObject private var appStatus : AppInformation
+    @EnvironmentObject private var bluetoothManager: BluetoothManager
     // Start the default page be the read page
     @State private var selection = 1
+    
     var body: some View {
         TabView(selection: $selection){
             Group{
@@ -38,7 +40,6 @@ struct MainPage: View {
                 .toolbarBackground(.visible, for: .tabBar)
         }
     }
-
     
 }
 

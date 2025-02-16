@@ -19,6 +19,7 @@ enum ActiveAlert {
 
 struct ReadView : View{
     @EnvironmentObject var appStatus : AppInformation
+    @EnvironmentObject var bluetoothManager: BluetoothManager
     @State private var isReading = false
     @State private var displayLink: CADisplayLink?
     @State var showingAlert : Bool = false
@@ -343,13 +344,13 @@ struct ReadView : View{
             if mode == .off {
                 if isReading {
                     fileSetNames = appStatus.sharedARViewModel.startRecording()
-                    if(appStatus.sharedBluetoothManager.ifConnected){
+                    if(bluetoothManager.ifConnected){
                         startRecordingBT(targetURL: fileSetNames[6], targetFile: fileSetNames[7])
                     }
                     
                     print(fileSetNames)
                 } else {
-                    if(appStatus.sharedBluetoothManager.ifConnected){
+                    if(bluetoothManager.ifConnected){
                         stopRecordingBT()
                         print("This stop recording is when shared bluetooth manager is connected")
                     }
@@ -412,7 +413,7 @@ struct ReadView : View{
 
         
     func startRecordingBT(targetURL:String, targetFile: String) {
-        appStatus.sharedBluetoothManager.startRecording(
+        bluetoothManager.startRecording(
             targetURL: targetURL,
             targetFile: targetFile,
             fps: appStatus.animationFPS
@@ -420,7 +421,7 @@ struct ReadView : View{
     }
 
     func stopRecordingBT() {
-        appStatus.sharedBluetoothManager.stopRecording()
+        bluetoothManager.stopRecording()
     }
     
     
